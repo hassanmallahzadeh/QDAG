@@ -7,7 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C066860124AE565B00594215 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C066860024AE565B00594215 /* main.cpp */; };
+		C09D2A2224AE575100188786 /* DDpackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A1A24AE575100188786 /* DDpackage.cpp */; };
+		C09D2A2324AE575100188786 /* DDcomplex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A1C24AE575100188786 /* DDcomplex.cpp */; };
+		C09D2A2424AE575100188786 /* originalmain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A1E24AE575100188786 /* originalmain.cpp */; };
+		C09D2A2524AE575100188786 /* DDexport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A1F24AE575100188786 /* DDexport.cpp */; };
+		C09D2A2624AE575100188786 /* QFT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A2024AE575100188786 /* QFT.cpp */; };
+		C09D2A2724AE575100188786 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A2124AE575100188786 /* util.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +29,17 @@
 
 /* Begin PBXFileReference section */
 		C06685FD24AE565B00594215 /* QDAG */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = QDAG; sourceTree = BUILT_PRODUCTS_DIR; };
-		C066860024AE565B00594215 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		C09D2A1724AE575100188786 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
+		C09D2A1824AE575100188786 /* QFT.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = QFT.hpp; sourceTree = "<group>"; };
+		C09D2A1924AE575100188786 /* DDcomplex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDcomplex.h; sourceTree = "<group>"; };
+		C09D2A1A24AE575100188786 /* DDpackage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DDpackage.cpp; sourceTree = "<group>"; };
+		C09D2A1B24AE575100188786 /* DDexport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDexport.h; sourceTree = "<group>"; };
+		C09D2A1C24AE575100188786 /* DDcomplex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DDcomplex.cpp; sourceTree = "<group>"; };
+		C09D2A1D24AE575100188786 /* DDpackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDpackage.h; sourceTree = "<group>"; };
+		C09D2A1E24AE575100188786 /* originalmain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = originalmain.cpp; sourceTree = "<group>"; };
+		C09D2A1F24AE575100188786 /* DDexport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DDexport.cpp; sourceTree = "<group>"; };
+		C09D2A2024AE575100188786 /* QFT.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QFT.cpp; sourceTree = "<group>"; };
+		C09D2A2124AE575100188786 /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = util.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +72,17 @@
 		C06685FF24AE565B00594215 /* QDAG */ = {
 			isa = PBXGroup;
 			children = (
-				C066860024AE565B00594215 /* main.cpp */,
+				C09D2A1C24AE575100188786 /* DDcomplex.cpp */,
+				C09D2A1924AE575100188786 /* DDcomplex.h */,
+				C09D2A1F24AE575100188786 /* DDexport.cpp */,
+				C09D2A1B24AE575100188786 /* DDexport.h */,
+				C09D2A1A24AE575100188786 /* DDpackage.cpp */,
+				C09D2A1D24AE575100188786 /* DDpackage.h */,
+				C09D2A1E24AE575100188786 /* originalmain.cpp */,
+				C09D2A2024AE575100188786 /* QFT.cpp */,
+				C09D2A1824AE575100188786 /* QFT.hpp */,
+				C09D2A2124AE575100188786 /* util.cpp */,
+				C09D2A1724AE575100188786 /* util.h */,
 			);
 			path = QDAG;
 			sourceTree = "<group>";
@@ -119,7 +144,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C066860124AE565B00594215 /* main.cpp in Sources */,
+				C09D2A2424AE575100188786 /* originalmain.cpp in Sources */,
+				C09D2A2324AE575100188786 /* DDcomplex.cpp in Sources */,
+				C09D2A2624AE575100188786 /* QFT.cpp in Sources */,
+				C09D2A2224AE575100188786 /* DDpackage.cpp in Sources */,
+				C09D2A2524AE575100188786 /* DDexport.cpp in Sources */,
+				C09D2A2724AE575100188786 /* util.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
