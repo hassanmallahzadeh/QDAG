@@ -13,6 +13,7 @@
 		C09D2A2524AE575100188786 /* DDexport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A1F24AE575100188786 /* DDexport.cpp */; };
 		C09D2A2624AE575100188786 /* QFT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A2024AE575100188786 /* QFT.cpp */; };
 		C09D2A2724AE575100188786 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A2124AE575100188786 /* util.cpp */; };
+		C09D2A2A24AECA3300188786 /* QFT-DDgenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A2824AECA3300188786 /* QFT-DDgenerator.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,6 +41,9 @@
 		C09D2A1F24AE575100188786 /* DDexport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DDexport.cpp; sourceTree = "<group>"; };
 		C09D2A2024AE575100188786 /* QFT.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QFT.cpp; sourceTree = "<group>"; };
 		C09D2A2124AE575100188786 /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = util.cpp; sourceTree = "<group>"; };
+		C09D2A2824AECA3300188786 /* QFT-DDgenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "QFT-DDgenerator.cpp"; sourceTree = "<group>"; };
+		C09D2A2924AECA3300188786 /* QFT-DDgenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "QFT-DDgenerator.hpp"; sourceTree = "<group>"; };
+		C09D2A2B24AECC9800188786 /* commonheaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = commonheaders.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +87,9 @@
 				C09D2A1824AE575100188786 /* QFT.hpp */,
 				C09D2A2124AE575100188786 /* util.cpp */,
 				C09D2A1724AE575100188786 /* util.h */,
+				C09D2A2824AECA3300188786 /* QFT-DDgenerator.cpp */,
+				C09D2A2924AECA3300188786 /* QFT-DDgenerator.hpp */,
+				C09D2A2B24AECC9800188786 /* commonheaders.h */,
 			);
 			path = QDAG;
 			sourceTree = "<group>";
@@ -146,6 +153,7 @@
 			files = (
 				C09D2A2424AE575100188786 /* originalmain.cpp in Sources */,
 				C09D2A2324AE575100188786 /* DDcomplex.cpp in Sources */,
+				C09D2A2A24AECA3300188786 /* QFT-DDgenerator.cpp in Sources */,
 				C09D2A2624AE575100188786 /* QFT.cpp in Sources */,
 				C09D2A2224AE575100188786 /* DDpackage.cpp in Sources */,
 				C09D2A2524AE575100188786 /* DDexport.cpp in Sources */,

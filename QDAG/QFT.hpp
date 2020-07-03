@@ -1,6 +1,6 @@
 //
 //  QFT.hpp
-//  cmakelearn
+//  QDAG
 //
 //  Created by Hassan Mallahzadeh on 2020-06-09.
 //  Copyright © 2020 Hassan Mallahzadeh. All rights reserved.

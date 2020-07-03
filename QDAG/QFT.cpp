@@ -7,6 +7,7 @@
 //
 #include "util.h"
 #include "DDcomplex.h"
+#include "QFT-DDgenerator.hpp"
 #include "QFT.hpp"
 using namespace std::chrono;
 using std::cout;
@@ -189,51 +190,55 @@ dd::Edge dd_QFTV2(dd::Package *dd, int n, dd::Edge state, PERM_POS perm){
 /// QFT in main.
 int main(){
     
-    if(false){//make 'true' to investigate a single QFT (fixed number of bits)
+    if(true){//make 'true' to investigate a single QFT (fixed number of bits)
         auto* dd = new dd::Package;
-        int n = 5;
+        int n = 3;
         
         //
         //         dd::Edge state3 = dd->makeBasisState(2, 3);
         //         dd::Edge state0 = dd->makeBasisState(n, 0);
-        dd::Edge state1 = dd->makeBasisState(n, 1);
+        StateGenerator sg = StateGenerator();
+              
+        dd::Edge state1 = sg.dd_UniformState(n);
         //        dd::Edge state2 = dd->makeBasisState(n, 2);
         //        dd::Edge state3 = dd->makeBasisState(n, 3);
         
         dd::Edge state = state1;
-        cout << "Input vector:\n";
+        cout << "Input vector with size "<< dd->size(state)<< " \n";
         dd->printVector(state);
-        dd->export2Dot(state, "state5before.dot",true, true);
+        dd->export2Dot(state, "state3before.dot",true, true);
         //  dd->printVector(state);
         //  dd::Edge e_swap =permuteOperator(dd,n);//HM: this can be taken out, here for clarity
         state = dd_QFTV2(dd, n, state,NO_PERM);
-        dd->export2Dot(state, "state5after.dot",true, true);
-        cout << "Output vector:\n";
+        dd->export2Dot(state, "state3after.dot",true, true);
+          cout << "Output vector with size "<< dd->size(state)<< " \n";
         dd->printVector(state);
         delete dd;
     }
     
-    if(true){//make 'true' to plot the graph (time and node count) as function of varible number.
-        int N = 20;//points for graph
-        int offset = 2;//starting num of qubits
+    if(false){//make 'true' to plot the graph (time and node count) as function of varible number.
+        int N = 15;//points for graph
+        int offset = 1;//starting num of qubits
         float a_et[2][N];//execution time
         int nodecounter[N];
         for (int i = 0; i < N; ++i){
             //Initialize package
             auto* dd = new dd::Package;
+            int n = i + offset;//number of bits
+            StateGenerator sg = StateGenerator();
             time_point<system_clock> start, end;
             start = system_clock::now();
-            dd::Edge e_state = dd->makeBasisState(offset + i, offset + i - 1);
-//            cout << "Input vector "<<i<<" bits:\n";
+           dd::Edge e_state = sg.dd_UniformState(n);
+//            cout << "Input vector "<<n<<" bits:\n";
 //            dd->printVector(e_state);
-            cout<<dd->size(e_state)<<endl;
-            e_state = dd_QFTV2(dd, offset + i, e_state, NO_PERM);
-//            cout << "Output vector "<<i<<" bits:\n";
+            e_state = dd_QFTV2(dd, n, e_state, BEG_PERM);
+//            cout << "Output vector "<<n<<" bits:\n";
 //            dd->printVector(e_state);
+//            cout << "---\n";
             nodecounter[i] = dd->size(e_state);
             end = system_clock::now();
             duration<float> elapsed_seconds = end - start;
-            a_et[0][i] = offset+i;
+            a_et[0][i] = n;
             a_et[1][i] = elapsed_seconds.count();
             delete dd;
         }
