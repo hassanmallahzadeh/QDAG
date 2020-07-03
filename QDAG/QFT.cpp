@@ -224,8 +224,12 @@ int main(){
             time_point<system_clock> start, end;
             start = system_clock::now();
             dd::Edge e_state = dd->makeBasisState(offset + i, offset + i - 1);
+//            cout << "Input vector "<<i<<" bits:\n";
+//            dd->printVector(e_state);
             cout<<dd->size(e_state)<<endl;
             e_state = dd_QFTV2(dd, offset + i, e_state, NO_PERM);
+//            cout << "Output vector "<<i<<" bits:\n";
+//            dd->printVector(e_state);
             nodecounter[i] = dd->size(e_state);
             end = system_clock::now();
             duration<float> elapsed_seconds = end - start;
