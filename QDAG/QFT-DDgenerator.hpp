@@ -17,5 +17,6 @@ public:
     dd::Edge dd_UniformState(int n);
     dd::Edge dd_Sqrt3State(int n);//if i th digit (before or after fraction point, is divisble by 2 i th bit 0 else 1.
     dd::Edge dd_RandomState(int n);
+    dd::Edge dd_BaseState(int n, int i);
 };
 #endif /* QFT_DDgenerator_hpp */
