@@ -1,1 +1,1 @@
-# QDAG-this is a test.
+# QDAG: Quantum Directed Acyclic Graph.
