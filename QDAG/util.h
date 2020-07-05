@@ -4,7 +4,6 @@
 
 #ifndef DD_PACKAGE_UTIL_H
 #define DD_PACKAGE_UTIL_H
-
 #include "DDpackage.h"
 #include <string>
 #include <cassert>
@@ -17,7 +16,7 @@ constexpr dd::Matrix2x2 Zmat = {{{ 1, 0 }, { 0, 0 } }, {{ 0, 0 }, { -1, 0 } }};
 constexpr dd::Matrix2x2 Ymat = {{{ 0, 0 }, { 0, -1 } }, {{ 0, 1 }, { 0, 0 } }};
 // Hadamard gate matrix
 constexpr dd::Matrix2x2 Hmat = {{{ dd::SQRT_2, 0 }, { dd::SQRT_2,  0 }},
-                                {{ dd::SQRT_2, 0 }, { -dd::SQRT_2, 0 }}};
+                            {{ dd::SQRT_2, 0 }, { -dd::SQRT_2, 0 }}};
 // Hadamard gate matrix
 constexpr dd::Matrix2x2 Hone = {{{ 1, 0 }, { 1, 0 }},
                                 {{ 1, 0 }, { 1, 0 }}};

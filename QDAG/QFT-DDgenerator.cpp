@@ -15,6 +15,8 @@ StateGenerator::StateGenerator(dd::Package* dd) {
 }
 
 
+/// Uniform state generator (1/sqrt(2)^n) |1,1,1,...,1>
+/// @param n number of qubits
 dd::Edge StateGenerator::dd_UniformState(int n) {
     dd::Edge e_state = dd->makeBasisState(n, 0);
     for (int i = 1; i < pow(2,n); ++i){
@@ -25,7 +27,8 @@ dd::Edge StateGenerator::dd_UniformState(int n) {
     e_state.w =dd->cn.mulCached(e_state.w, cx);
     return e_state;
 }
-
+/// Generate 'random' state from square root of 3. digit even:0, digit odd: 1.
+/// @param n number of qubits
 dd::Edge StateGenerator::dd_Sqrt3State(int n){//TODO: fix: function breaks after 9 steps (return negative for integer).
     fp sqrt3 = sqrt(3);
     dd::Edge e_state = dd->makeBasisState(n, 0);//3 gives 1.

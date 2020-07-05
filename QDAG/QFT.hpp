@@ -8,7 +8,15 @@
 
 #ifndef QFT_hpp
 #define QFT_hpp
-
+#include "DDpackage.h"
+#include "QFT-DDgenerator.hpp"
 #include <stdio.h>
-
+class QFT{
+private:
+    dd::Package *dd = nullptr;
+public:
+    QFT(dd::Package *dd);
+    dd::Edge dd_QFTV1(int n,  PERM_POS perm);
+    dd::Edge dd_QFTV2(int n, dd::Edge state, PERM_POS perm);
+};
 #endif /* QFT_hpp */
