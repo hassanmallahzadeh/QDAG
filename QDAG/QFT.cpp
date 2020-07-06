@@ -6,7 +6,7 @@
 //  Copyright © 2020 Hassan Mallahzadeh. All rights reserved.
 //
 #include "util.h"
-#include "DDcomplex.h"
+#include "IIC-JKU/DDcomplex.h"
 #include "QFT-DDgenerator.hpp"
 #include "QFT.hpp"
 using namespace std::chrono;

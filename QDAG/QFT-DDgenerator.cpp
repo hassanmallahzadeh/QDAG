@@ -5,8 +5,8 @@
 //  Created by Hassan Mallahzadeh on 2020-07-02.
 //  Copyright © 2020 Hassan Mallahzadeh. All rights reserved.
 //
-#include "DDpackage.h"
-#include "DDcomplex.h"
+#include "IIC-JKU/DDpackage.h"
+#include "IIC-JKU/DDcomplex.h"
 #include "util.h"
 #include "QFT-DDgenerator.hpp"
 using CN = dd::ComplexNumbers;

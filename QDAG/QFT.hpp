@@ -8,7 +8,7 @@
 
 #ifndef QFT_hpp
 #define QFT_hpp
-#include "DDpackage.h"
+#include "IIC-JKU/DDpackage.h"
 #include "QFT-DDgenerator.hpp"
 #include <stdio.h>
 class QFT{

@@ -8,6 +8,7 @@
 //#include "QFT-DDgenerator.hpp"
 
 #include "QFT.hpp"
+#include "util.h"
 #include <stdio.h>
 using namespace std::chrono;
 using std::cout;

@@ -4,9 +4,9 @@ project(QDAG)
 add_executable(
 QDAG
 QFT.cpp
-DDcomplex.cpp
-DDexport.cpp
-DDpackage.cpp
-originalmain.cpp
+IIC-JKU/DDcomplex.cpp
+IIC-JKU/DDexport.cpp
+IIC-JKU/DDpackage.cpp
 QFT-DDgenerator.cpp
+main.cpp
 )
