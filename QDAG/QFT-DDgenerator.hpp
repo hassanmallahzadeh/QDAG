@@ -11,8 +11,8 @@
 enum PERM_POS//permutation position
 {
     NO_PERM = -1,
-    BEG_PERM,              // apply first on state
-    END_PERN                //apply last on state
+    BEG_PERM,              // apply first on state: original variable order
+    END_PERN                //apply last on state: inverse variable order (?)
 };
 class StateGenerator{
 private:

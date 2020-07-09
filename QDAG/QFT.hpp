@@ -14,9 +14,15 @@
 class QFT{
 private:
     dd::Package *dd = nullptr;
+    enum ORD_C_T{
+        REG_C_T,//figure 3.1 Mermin. regular control/target setting.
+        INV_C_T,//figure 3.2 Mermin. inverse control/target setting.
+    };
+    ORD_C_T m_ord = REG_C_T;//change to invert control/target setting    
 public:
     QFT(dd::Package *dd);
     dd::Edge dd_QFTV1(int n,  PERM_POS perm);
     dd::Edge dd_QFTV2(int n, dd::Edge state, PERM_POS perm);
+    dd::Edge dd_QFTV3(int n,  PERM_POS perm);
 };
 #endif /* QFT_hpp */
