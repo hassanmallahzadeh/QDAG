@@ -115,7 +115,7 @@ dd::Edge GateGenerator::Smatv1(int n, int b1, int b2) {
     dd::Edge temp1 = dd->add(iMatnxn, x_gate);
     dd::Edge temp2 = dd->add(y_gate, z_gate);
     dd::Edge ret = dd->add(temp1, temp2);
-    // ret = ret * 2; HM: TODO: code has to be added for this.
+    // ret = ret * 2; HM: FIXME: code has to be added for this.
     delete[] line;
     return ret;;
 }

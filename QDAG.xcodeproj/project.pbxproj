@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C0436EAC24B16F6E0027F72E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0436EAB24B16F6E0027F72E /* main.cpp */; };
+		C0475BCA24B57281003F5DC0 /* QFT-Measurement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0475BC824B57281003F5DC0 /* QFT-Measurement.cpp */; };
 		C09D2A2224AE575100188786 /* DDpackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A1A24AE575100188786 /* DDpackage.cpp */; };
 		C09D2A2324AE575100188786 /* DDcomplex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A1C24AE575100188786 /* DDcomplex.cpp */; };
 		C09D2A2424AE575100188786 /* IIC-JKUmain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A1E24AE575100188786 /* IIC-JKUmain.cpp */; };
@@ -30,6 +31,8 @@
 
 /* Begin PBXFileReference section */
 		C0436EAB24B16F6E0027F72E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		C0475BC824B57281003F5DC0 /* QFT-Measurement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "QFT-Measurement.cpp"; sourceTree = "<group>"; };
+		C0475BC924B57281003F5DC0 /* QFT-Measurement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "QFT-Measurement.hpp"; sourceTree = "<group>"; };
 		C06685FD24AE565B00594215 /* QDAG */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = QDAG; sourceTree = BUILT_PRODUCTS_DIR; };
 		C09D2A1724AE575100188786 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
 		C09D2A1824AE575100188786 /* QFT.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = QFT.hpp; sourceTree = "<group>"; };
@@ -97,6 +100,8 @@
 				C09D2A2824AECA3300188786 /* QFT-DDgenerator.cpp */,
 				C0436EAB24B16F6E0027F72E /* main.cpp */,
 				C09D2A2924AECA3300188786 /* QFT-DDgenerator.hpp */,
+				C0475BC824B57281003F5DC0 /* QFT-Measurement.cpp */,
+				C0475BC924B57281003F5DC0 /* QFT-Measurement.hpp */,
 				C09D2A2B24AECC9800188786 /* commonheaders.h */,
 			);
 			path = QDAG;
@@ -112,6 +117,7 @@
 				C06685F924AE565B00594215 /* Sources */,
 				C06685FA24AE565B00594215 /* Frameworks */,
 				C06685FB24AE565B00594215 /* CopyFiles */,
+				C08EBC7D24BACB3E0051E3EB /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -154,6 +160,26 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		C08EBC7D24BACB3E0051E3EB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nTAGS=\"TODO:|FIXME:\"\nERRORTAG=\"ERROR:\"\nfind \"${SRCROOT}\" \\( -name \"*.hpp\" -or -name \"*.m\" -or -name \"*.cpp\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$|($ERRORTAG).*\\$\" | perl -p -e \"s/($TAGS)/ warning: \\$1/\" | perl -p -e \"s/($ERRORTAG)/ error: \\$1/\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C06685F924AE565B00594215 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -161,6 +187,7 @@
 			files = (
 				C09D2A2424AE575100188786 /* IIC-JKUmain.cpp in Sources */,
 				C09D2A2324AE575100188786 /* DDcomplex.cpp in Sources */,
+				C0475BCA24B57281003F5DC0 /* QFT-Measurement.cpp in Sources */,
 				C09D2A2A24AECA3300188786 /* QFT-DDgenerator.cpp in Sources */,
 				C09D2A2624AE575100188786 /* QFT.cpp in Sources */,
 				C0436EAC24B16F6E0027F72E /* main.cpp in Sources */,
@@ -284,6 +311,7 @@
 		C066860524AE565B00594215 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -292,6 +320,7 @@
 		C066860624AE565B00594215 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

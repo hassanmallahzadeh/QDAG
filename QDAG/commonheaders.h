@@ -8,4 +8,12 @@
 
 #ifndef commonheaders_h
 #define commonheaders_h
+#include <vector>
+#include <string>
+#include <cassert>
+#include <list>
+using std::vector;
+using std::array;
+using std::list;
+
 #endif /* commonheaders_h */

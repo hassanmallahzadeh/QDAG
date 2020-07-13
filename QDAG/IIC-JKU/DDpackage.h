@@ -122,8 +122,7 @@ namespace dd {
     class Package {
 
     	static Node terminal;
-	    constexpr static Node* terminalNode{&terminal};        // pointer to terminal node
-
+	   
 
         NodePtr nodeAvail{};                 // pointer to available space chain
 	    ListElementPtr listAvail{ };           // pointer to available list elements for breadth first searches
@@ -190,6 +189,7 @@ namespace dd {
 	    ListElementPtr newListElement();
 
     public:
+        constexpr static Node* terminalNode{&terminal};        // pointer to terminal node
         constexpr static Edge DDone{ terminalNode, ComplexNumbers::ONE };
         constexpr static Edge DDzero{ terminalNode, ComplexNumbers::ZERO };            // edges pointing to zero and one DD constants
         unsigned long activeNodeCount = 0;             // number of active nodes

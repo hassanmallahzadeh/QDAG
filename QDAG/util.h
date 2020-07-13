@@ -5,8 +5,6 @@
 #ifndef DD_PACKAGE_UTIL_H
 #define DD_PACKAGE_UTIL_H
 #include "IIC-JKU/DDpackage.h"
-#include <string>
-#include <cassert>
 
 // X gate matrix
 constexpr dd::Matrix2x2 Xmat = {{{ 0, 0 }, { 1, 0 } }, {{ 1, 0 }, { 0, 0 } }};
