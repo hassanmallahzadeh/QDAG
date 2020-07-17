@@ -7,101 +7,261 @@
 //
 #include "commonheaders.h"
 #include "QFT-Measurement.hpp"
+#include "util.h"
+#include <random>
 //FIXME: replace all at() with [] after test.
 
-Measurement::Measurement(dd::Package *dd, const dd::Edge &e_root) {
+Measurement::Measurement(dd::Package *dd) {
     this->dd = dd;
-    this->e_root = e_root;
 }
+vector<int> Measurement::Measure(dd::Edge &e_root, int n, vector<int> vixs){
+    this->e_root = e_root;
+    vector<int> v_ans;
+    PopulateUpProbDiagram(e_root);
+    PopulateDownProbDiagram(e_root);
+    for (int i = 0; i < vixs.size(); ++i){
+        array<fp,dd::RADIX> probs = QubitMeasurementProbs(vixs[i]);
+        int res = QubitMeasurementOutcome(probs);
+        v_ans.push_back(res);
+        vector<mqinfo> v = {{vixs[i], res, probs[res]}};//FIXME: vector to be moved out of loop.
+        StateCollapseRestrict(v);
+        //  StateCollapseMatMul(v, n);
+        //  StateCollapseMatMul(v, n);
+    }
+    return v_ans;
+}
+/// Upstream probabilities for all dd nodes. recureively each node usp is its childs usp weighted by their edge weights (val squared) each.
+/// @param edge root edge
 fp Measurement::PopulateUpProbDiagram(const dd::Edge& edge){
     
-    if(upmap.find(edge.p) != upmap.end()){//HM: already calculated so just return from umap
+    if(upmap.find(edge.p) != upmap.end()){// already calculated so just return from umap
         return upmap.at(edge.p);
     }
-    if(edge.p == dd::Package::DDone.p){//HM: base case
+    if(edge.p == dd::Package::DDone.p){// base case
         upmap.insert(make_pair(edge.p, 1));
         return 1;
     }
-    if (edge.p == dd::Package::DDzero.p){//HM: base case
+    if (edge.p == dd::Package::DDzero.p){// base case
         upmap.insert(make_pair(edge.p, 0));
         return 0;
     }
-    {//HM: else: not already calculated
+    {// else: not already calculated
         fp val = 0;
         for (int k = 0; k < dd::NEDGE; ++k) {
-            if (k % dd::RADIX != 0) continue;//HM: not a vector edge.
+            if (k % dd::RADIX != 0) continue;// not a vector edge.
             val += CN::mag2(edge.p->e[k].w) * PopulateUpProbDiagram(edge.p->e[k]);
         }
         upmap.insert(make_pair(edge.p,val));
     }
     return upmap.at(edge.p);
 }
+/// Canlculate downstream probabilities. For each node dsp is sum of parent's dsp weighted by corresponding edge weights (val squared) each.
+/// @param edge root edge
 void Measurement::PopulateDownProbDiagram(const dd::Edge &edge){
     list<dd::NodePtr> l;
-    assert(edge.p);//HM: make sure not null
+    assert(edge.p);// make sure not null
     dd::NodePtr curnode = edge.p;
     l.push_back(curnode);
     downmap.insert(make_pair(curnode,CN::mag2(edge.w)));
-    while(!l.empty()){//HM: breath first search
+    // DDone.p, DDone.pnot are not neccessary to add to downmap. added for sake of tradition.
+    downmap.insert(make_pair(dd::Package::DDone.p, 1));
+    downmap.insert(make_pair(dd::Package::DDzero.p, 0));
+    while(!l.empty()){// breath first search
         curnode = l.front();
         l.pop_front();
+        
         for(int i = 0; i < dd::NEDGE; ++i){
-            if (i % dd::RADIX != 0) continue;//HM: not a vector edge
-            if(downmap.find(curnode->e[i].p) != downmap.end()){//HM: if in downmap modify value
-                downmap.at(curnode->e[i].p) += downmap.at(curnode) * CN::mag2(edge.w);
+            if (i % dd::RADIX != 0) continue;// not a vector edge
+            if(curnode->e[i].p == dd::Package::DDone.p){// base case
+                continue;
             }
-            else{
-                downmap.insert(make_pair(curnode->e[i].p, downmap.at(curnode) * CN::mag2(edge.w)));
+            if (curnode->e[i].p == dd::Package::DDzero.p){// base case
+                continue;
             }
-            if(!curnode->e[i].p) continue;//HM: base case. will be null for terminal childs.
-            l.push_back(curnode->e[i].p);
+            if(downmap.find(curnode->e[i].p) != downmap.end()){// if already in downmap modify value
+                downmap.at(curnode->e[i].p) += downmap.at(curnode) * CN::mag2(curnode->e[i].w);
+            }
+            else{// else insert
+                downmap.insert(make_pair(curnode->e[i].p, downmap.at(curnode) * CN::mag2(curnode->e[i].w)));
+                l.push_back(curnode->e[i].p);
+            }
         }
         
     }
 }
 
+/// Measure probability of each outcome to measure qubit v.
+/// @param v qubit index
 array<fp,dd::RADIX> Measurement::QubitMeasurementProbs(int v) {
     //TODO: last prob in array: 1-(sum of others) do after test.
     list<dd::NodePtr> l;
-    array<fp,dd::RADIX> a = {};//HM: holds probabilities.
+    array<fp,dd::RADIX> a = {};// holds probabilities.
     dd::NodePtr curnode = e_root.p;
+    dd::NodePtr lastnode = nullptr;// track parent.
+    //traverseset.clear();
+    traverseset.insert(dd::Package::DDone.p);//base case
+    traverseset.insert(dd::Package::DDzero.p);//base case
     l.push_back(curnode);
-    while(!l.empty()){//HM: breath first search
+    while(!l.empty()){// breath first search
+        
         curnode = l.front();
         l.pop_front();
+        if(traverseset.find(curnode) != traverseset.cend())
+            continue;
+        traverseset.insert(curnode);
         
         for(int i = 0; i < dd::NEDGE; ++i){
-            if (i % dd::RADIX != 0) continue;//HM: not a vector edge
-            if(curnode->v == v){
-                if (i % dd::RADIX != 0) continue;//HM: not a vector edge
-                a[i] +=  downmap.at(curnode) * CN::mag2(curnode->e[i].w)* upmap.at(curnode->e[i].p)/upmap.at(curnode);
+            if (i % dd::RADIX != 0) continue;// not a vector edge
+            if(curnode->v > v){//above targer.
+                l.push_back(curnode->e[i].p);
             }
-            else if(curnode->v > v){//HM: if node missed due to reduced graph.
-                //TODO: this should not happen as there is a node in each layer each path. Should be included anyway as we stive for reduced bdd.
-                //                for (int i = 0; i < dd::RADIX; ++i){
-                //                    a[i] += 0.5 * downmap.at(curnode->e[i].p);
-                //                }
+            else if(curnode->v == v){// in target layer
+                a[i / dd::RADIX] +=  downmap.at(curnode) * CN::mag2(curnode->e[i].w)* upmap.at(curnode->e[i].p);
             }
-            else{
-                l.push_back(curnode->e[i].p);//HM: nodes on upper layers.
+            else{////  below target level:  if node missed due to reduced graph. NOTE: won't happen with current IIC-JKU package.
+                assert(0);//temp
+                assert(curnode->v >= 0);//make sure we dont get here because of terminal nodes. they shall be blocked by if(traverseset.find(curnode) != traverseset.cend())
+                a[i / dd::RADIX] +=  downmap.at(lastnode) * 0.5;
             }
         }
     }
     return a;
 }
-//TODO: replace with C++11 random generator.
 int Measurement::QubitMeasurementOutcome(array<fp, dd::RADIX> a) {
-    array<fp, dd::RADIX> aincsum;//HM: array incremental summations :)
+    array<fp, dd::RADIX> aincsum;// array incremental summations :)
     aincsum[0] = a[0];
+    std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_real_distribution<fp> dis(0.0, 1.0);
+    
     for(int i = 1; i < dd::RADIX; ++i){
         aincsum[i] = aincsum[i-1] + a[i];
     }
-    srand (static_cast<unsigned int>(time(nullptr)));
-    fp randnum = (double) rand() / (RAND_MAX);
-    for (int i = 0; dd::RADIX; ++i){
-        if(randnum <= aincsum[i])
+    assert(aincsum[dd::RADIX-1] > 0.99 && aincsum[dd::RADIX-1] < 1.01);//if state not normalized to 1.
+    
+    fp randnum = dis(gen);
+    for (int i = 0; i < dd::RADIX; ++i){
+        if(randnum <= aincsum[i]){
             return i;
+        }
     }
+    assert(0);//should not get here.
+    return -1;//error
+}
+
+/// Collapsed state after bits, use matrix multiplication. Wont work for radix != 2
+/// @param mqi measured qubits info
+/// @param n total number of quibits
+void Measurement::StateCollapseMatMul(vector<mqinfo> mqi, int n) {
+    assert(0);//function does not work. Likely since the matrix is not unitary.(returns identity)
+    assert(dd::RADIX == 2);
+    short* line = new short[n]{};
+    for(int i = 0; i < n; ++i){
+        line[i] = -1;
+    }
+    dd::Edge e_gate;
+    for (int i = 0; i < mqi.size(); ++i){
+        line[mqi[i].ix] = 2;
+        if(mqi[i].val == 0)
+            e_gate = dd->makeGateDD(N0mat, n, line);
+        else
+            e_gate = dd->makeGateDD(N1mat, n, line);
+        
+        dd::ComplexValue c{sqrt(1/mqi[i].pr), 0.0 };//used to normalize the state.
+        dd::Complex cx = dd->cn.getTempCachedComplex(c.r,c.i);
+        e_gate.w = dd->cn.mulCached(e_gate.w, cx);
+        e_root = dd->multiply(e_gate, e_root);
+        line[mqi[i].ix] = -1;//reset
+    };
+    delete[] line;
+}
+
+void Measurement::MissedNodeOnCollapse(dd::NodePtr curnode, const dd::Complex &cx, int i, int j, vector<Measurement::mqinfo> &mqi) {
+    assert(0);//temp
+    assert(curnode->v >= 0);//make sure we dont get here because of terminal
+    dd::Edge e[dd::NEDGE] = {};
+    for (int k = 0; k < dd::NEDGE; ++k){
+        if(k == mqi[i].val * dd::RADIX){// equal to measured value.
+            e[k].w = cx;
+            e[k].p = curnode;
+        }
+        else{// else set to zero.
+            e[k].w = CN::ZERO;
+            e[k].p = dd::Package::DDzero.p;
+        }
+    }
+    dd::Edge ge  = dd->makeNonterminal(i, e);// ge: generated edge.
+    curnode->e[j] = ge;
+}
+
+void Measurement::OnLayerStateCollapse(dd::NodePtr curnode, const dd::Complex &cx, int i, int j, vector<Measurement::mqinfo> &mqi) {
+    if(j == mqi[i].val * dd::RADIX){// equal to measured value.
+//           std::cout<<"before:"<<std::endl;
+//             std::cout<<curnode->e[j].w.r->val<<std::endl;
+//
+        static bool applied = false;
+        if(applied == false){
+            e_root.w = dd->cn.mulCached(e_root.w, cx);
+            applied = true;
+        }
+//        if(curnode->e[j].w == CN::ZERO)
+//            return;
+        curnode->e[j].w = dd->cn.mulCached(curnode->e[j].w, cx); //NOTE:  this can be moved to root. I pass since makes the code somewhat more complicated.
+//        if(curnode->e[j].w == CN::ZERO){
+//            dd->cn.releaseCached(curnode->e[j].w);
+//
+//        }
+//        std::cout<<"after:"<<std::endl;
+//        std::cout<<curnode->e[j].w.r->val<<std::endl;
+//        std::cout<<curnode<<std::endl;
+    }
+    else{// else set to zero.
+        curnode->e[j].p = dd::Package::DDzero.p;
+        curnode->e[j].w = CN::ZERO;
+    }
+}
+
+/// Collapsed state after bits, use direct RESTRICT algorithm. "Bryant's Restrict algortithm".
+/// @param mqi measured qubits info
+void Measurement::StateCollapseRestrict(vector<mqinfo> mqi) {
+    traverseset.clear();//clear act of QubitMeasurementProbs;
+    for (int i = 0; i < mqi.size(); ++i){
+        
+        dd::ComplexValue c{sqrt(1/mqi[i].pr), 0.0 };//used to normalize the state.
+        dd::Complex cx = dd->cn.getTempCachedComplex(c.r,c.i);
+        
+        list<dd::NodePtr> l;
+        dd::NodePtr curnode = e_root.p;
+        l.push_back(curnode);
+        traverseset.insert(dd::Package::DDone.p);//base case,likely not needed.
+        traverseset.insert(dd::Package::DDzero.p);//base case
+        while(!l.empty()){// breath first search
+            curnode = l.front();
+            l.pop_front();
+            if(traverseset.find(curnode) != traverseset.cend())
+                continue;
+            traverseset.insert(curnode);
+            for(int j = 0; j < dd::NEDGE; ++j){
+                if(j % dd::RADIX != 0) continue;//not a vector edge.
+                if(curnode->v > mqi[i].ix){//above target.
+                    if(curnode->e[j].p->v >= 0){//no terminal
+//                   if(traverseset.find(curnode->e[j].p) != traverseset.cend()) continue;//if child already explored.
+                        l.push_back(curnode->e[j].p);
+//
+                    }
+                }
+                else if(curnode->v == mqi[i].ix){//in target layer
+
+                    OnLayerStateCollapse(curnode, cx, i, j, mqi);
+                }
+                else{////  below target level: if node missed due to reduced graph. NOTE: won't happen with current IIC-JKU package.
+                    MissedNodeOnCollapse(curnode, cx, i, j, mqi);
+                }
+            }
+        }
+    }
+    dd->garbageCollect();
+    dd->normalize(e_root, false);// false?
 }
 
 

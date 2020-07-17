@@ -9,11 +9,12 @@
 #include "IIC-JKU/DDcomplex.h"
 #include "util.h"
 #include "QFT-DDgenerator.hpp"
-using CN = dd::ComplexNumbers;
+#include <random>
+#include "commonheaders.h"
+/*---BEGIN STATE GENERATOR DEFINITIONS---*/
 StateGenerator::StateGenerator(dd::Package* dd) {
     this->dd = dd;
 }
-
 
 /// Uniform state generator (1/sqrt(2)^n) |1,1,1,...,1>
 /// @param n number of qubits
@@ -44,16 +45,26 @@ dd::Edge StateGenerator::dd_Sqrt3State(int n){//TODO: fix: function breaks after
     return e_state;
 }
 
-/// Generate Random State. TODO: replace with c++11 random number generator.
+/// Generate Random State.
 /// @param n num qubits
 dd::Edge StateGenerator::dd_RandomState(int n){
-    dd::Edge e_state = dd->makeBasisState(n, 0);//assume first one is 1 (TODO: fix)
-    srand (static_cast<unsigned int>(time(nullptr)));
-    for (int i = 1; i < pow(2,n); ++i){
-        if(rand() % 2)//bit is 1, so add
+     std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_int_distribution<> dis0(0.0, n);
+    std::uniform_int_distribution<> dis(0.0, 1.0);
+    int r0 = dis0(gen);
+    dd::Edge e_state = dd->makeBasisState(n, r0);//at least one of the basis has to have non-zero coefficient.
+    int nonzerocount = 1;
+    for (int i = 0; i < pow(2,n); ++i){
+        if(i == r0)
+        continue;
+        int r = dis(gen);
+        if(r){//bit is 1, so add
+            ++nonzerocount;
             e_state = dd->add(e_state, dd->makeBasisState(n, i));
+        }
     }
-    dd::ComplexValue c{1/std::sqrt(pow(2,n)), 0.0 };//normalize the state.
+    dd::ComplexValue c{1/std::sqrt(nonzerocount), 0.0 };//normalize the state.
     dd::Complex cx = dd->cn.getTempCachedComplex(c.r,c.i);
     e_state.w =dd->cn.mulCached(e_state.w, cx);
     return e_state;
@@ -66,6 +77,34 @@ dd::Edge StateGenerator::dd_BaseState(int n, int i) {
     assert( i >= 0 & i < pow(2,n));
     return dd->makeBasisState(n, i);
 }
+
+dd::Edge StateGenerator::dd_CustomState(vector<dd::ComplexValue> v) {
+    int n = log2(static_cast<int>(v.size()));
+//    int sum = std::accumulate(v.begin(), v.end(), 0, [](dd::ComplexValue//TODO: go after this! item){dd->cn.addCached(<#const Complex &a#>, <#const Complex &b#>)});
+    dd::Edge state {nullptr, {nullptr, nullptr}};//skeleton to start with.
+    dd::Edge temp;
+    for (int i = 0; i < v.size(); ++i){
+        if(dd::operator != (v[i], {0, 0})){// FIXME: i am not sure this is the best way to deal with complex numebrs. Look for tolerances. does not matter here I believe.
+            dd::Complex vx = dd->cn.getTempCachedComplex(v[i].r,v[i].i);
+            temp = dd->makeBasisState(n, i);
+            temp.w = dd->cn.mulCached(temp.w, vx);
+            if(!state.p){
+                state = temp;
+            }
+            else{
+            state = dd->add(temp, state);
+            }
+        }
+    }
+//TODO: normalize state.
+    return state;
+}
+
+
+/*---END STATE GENERATOR DEFINITIONS---*/
+
+/*---BEGIN GATE GENERATOR DEFINITIONS---*/
+
 /// set 'line' for controlled gates.
 /// @param line linearray
 /// @param t target index
@@ -158,3 +197,4 @@ dd::Edge GateGenerator::permuteOperator(int n) {
     }
     return e_swap;;
 }
+/*---END GATE GENERATOR DEFINITIONS---*/

@@ -12,8 +12,10 @@
 #include <string>
 #include <cassert>
 #include <list>
+#include <map>
 using std::vector;
 using std::array;
 using std::list;
+using std::map;
 
 #endif /* commonheaders_h */

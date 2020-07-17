@@ -11,8 +11,10 @@
 #include "IIC-JKU/DDpackage.h"
 #include "IIC-JKU/DDcomplex.h"
 #include <unordered_map>
+#include <unordered_set>
 #include <stdio.h>
 using std::unordered_map;
+using std::unordered_set;
 using std::make_pair;
 class Measurement{
 private:
@@ -20,13 +22,25 @@ private:
     dd::Package* dd = nullptr;
     unordered_map<dd::NodePtr, fp> upmap;
     unordered_map<dd::NodePtr, fp> downmap;
+    unordered_set<dd::NodePtr> traverseset;
     fp PopulateUpProbDiagram(const dd::Edge &edge);
     void PopulateDownProbDiagram(const dd::Edge &edge);
+
+    struct mqinfo{//measured qubit info
+        int ix = -1;// index
+        int val = -1;// measured value
+        fp pr = -1;// probability of measured outcome(before conductiong measurement).
+    };
+        void MissedNodeOnCollapse(dd::NodePtr curnode, const dd::Complex &cx, int i, int j, vector<Measurement::mqinfo> &mqi);
     array<fp,dd::RADIX> QubitMeasurementProbs(int v);
-    int QubitMeasurementOutcome(array<fp,dd::RADIX>);
+    int QubitMeasurementOutcome(array<fp, dd::RADIX>);
+    void OnLayerStateCollapse(dd::NodePtr curnode, const dd::Complex &cx, int i, int j, vector<Measurement::mqinfo> &mqi);
+    
+    void StateCollapseRestrict(vector<mqinfo>);
+    void StateCollapseMatMul(vector<mqinfo>, int n);
 public:
-    Measurement(dd::Package* dd, const dd::Edge &e_root);
-    ~Measurement();
+    Measurement(dd::Package* dd);
+   vector<int> Measure(dd::Edge &edge, int n, vector<int> vixs /* qubit indices */);
 };
 
 #endif /* QFT_Measurement_hpp */
