@@ -30,34 +30,39 @@ dd::Edge StateGenerator::dd_UniformState(int n) {
 }
 /// Generate 'random' state from square root of 3. digit even:0, digit odd: 1.
 /// @param n number of qubits
-dd::Edge StateGenerator::dd_Sqrt3State(int n){//TODO: fix: function breaks after 9 steps (return negative for integer).
-    fp sqrt3 = sqrt(3);
-    dd::Edge e_state = dd->makeBasisState(n, 0);//3 gives 1.
-    sqrt3 = sqrt3 * 10;
-    for (int i = 1; i < pow(2,n); ++i){
-        if((int)sqrt3 % 2)//bit is 1, so add
+dd::Edge StateGenerator::dd_Sqrt3State(int n){
+    int countodd = 0;
+    dd::Edge e_state {nullptr, {nullptr,nullptr}};
+    string sqrt3frac = "732050807568877193176604123436845839024";
+    for (int i = 0; i < n; ++i){
+        if((stoi(std::to_string(sqrt3frac[i])) % 2)){
+            ++countodd;
+            if(e_state.p == nullptr){
+                e_state = dd->makeBasisState(n, i);
+                continue;
+            }
             e_state = dd->add(e_state, dd->makeBasisState(n, i));
-        sqrt3 = sqrt3 * 10;
+        }
     }
-    dd::ComplexValue c{1/std::sqrt(pow(2,n)), 0.0 };//normalize the state.
-    dd::Complex cx = dd->cn.getTempCachedComplex(c.r,c.i);
-    e_state.w =dd->cn.mulCached(e_state.w, cx);
+    dd::ComplexValue c{1/sqrt(countodd), 0.0 };//normalize the state.
+    dd::Complex cx = dd->cn.getTempCachedComplex(c.r, c.i);
+    dd->cn.mul(e_state.w, e_state.w, cx);
     return e_state;
 }
 
 /// Generate Random State.
 /// @param n num qubits
 dd::Edge StateGenerator::dd_RandomState(int n){
-     std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<> dis0(0.0, n);
-    std::uniform_int_distribution<> dis(0.0, 1.0);
-    int r0 = dis0(gen);
+    std::uniform_int_distribution<long> dis0(0.0, pow(2,n));
+    std::uniform_int_distribution<int> dis(0.0, 1.0);
+    long r0 = dis0(gen);
     dd::Edge e_state = dd->makeBasisState(n, r0);//at least one of the basis has to have non-zero coefficient.
     int nonzerocount = 1;
     for (int i = 0; i < pow(2,n); ++i){
         if(i == r0)
-        continue;
+            continue;
         int r = dis(gen);
         if(r){//bit is 1, so add
             ++nonzerocount;
@@ -66,7 +71,7 @@ dd::Edge StateGenerator::dd_RandomState(int n){
     }
     dd::ComplexValue c{1/std::sqrt(nonzerocount), 0.0 };//normalize the state.
     dd::Complex cx = dd->cn.getTempCachedComplex(c.r,c.i);
-    e_state.w =dd->cn.mulCached(e_state.w, cx);
+    dd->cn.mul(e_state.w, e_state.w, cx);
     return e_state;
 }
 
@@ -78,25 +83,30 @@ dd::Edge StateGenerator::dd_BaseState(int n, int i) {
     return dd->makeBasisState(n, i);
 }
 
-dd::Edge StateGenerator::dd_CustomState(vector<dd::ComplexValue> v) {
-    int n = log2(static_cast<int>(v.size()));
-//    int sum = std::accumulate(v.begin(), v.end(), 0, [](dd::ComplexValue//TODO: go after this! item){dd->cn.addCached(<#const Complex &a#>, <#const Complex &b#>)});
+dd::Edge StateGenerator::dd_CustomState(vector<dd::ComplexValue> v, int n) {
+    assert (n == log2(static_cast<int>(v.size())));
+    //    int sum = std::accumulate(v.begin(), v.end(), 0, [](dd::ComplexValue//TODO: go after this! item){dd->cn.addCached(<#const Complex &a#>, <#const Complex &b#>)});
     dd::Edge state {nullptr, {nullptr, nullptr}};//skeleton to start with.
     dd::Edge temp;
     for (int i = 0; i < v.size(); ++i){
-        if(dd::operator != (v[i], {0, 0})){// FIXME: i am not sure this is the best way to deal with complex numebrs. Look for tolerances. does not matter here I believe.
+        if(dd::operator != (v[i], {0, 0})){
             dd::Complex vx = dd->cn.getTempCachedComplex(v[i].r,v[i].i);
             temp = dd->makeBasisState(n, i);
             temp.w = dd->cn.mulCached(temp.w, vx);
+            
             if(!state.p){
                 state = temp;
             }
             else{
-            state = dd->add(temp, state);
+                state = dd->add(temp, state);
             }
         }
     }
-//TODO: normalize state.
+    //normalize the state:
+    fp summag2 = 0;
+    std::for_each(v.begin(), v.end(), [&summag2](dd::ComplexValue x){ summag2 = summag2 +  pow(x.i,2) + pow(x.r,2);});
+    dd::Complex tempc = dd->cn.getTempCachedComplex(1/sqrt(summag2), 0);
+    dd->cn.mul(state.w, state.w, tempc);
     return state;
 }
 

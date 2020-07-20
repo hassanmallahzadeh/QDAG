@@ -6,18 +6,45 @@
 //  Copyright © 2020 Hassan Mallahzadeh. All rights reserved.
 //
 //#include "QFT-DDgenerator.hpp"
-
+#include "commonheaders.h"
 #include "QFT.hpp"
+#include "QFT-Measurement.hpp"
 #include "util.h"
 #include <stdio.h>
 using namespace std::chrono;
 using std::cout;
 using std::endl;
 int main(){
-          
-    if(/* DISABLES CODE */ (true)){//make 'true' to investigate a single QFT (fixed number of bits)
+    auto* dd = new dd::Package;
+    int n = 3;
+    //    short line[2] = {2,-1};
+    //    dd::Edge d_test = dd->makeGateDD(Hmat, 2, line);
+    StateGenerator gg = StateGenerator(dd);
+  //  vector<dd::ComplexValue> vs = {{0.5,0},{0.5,0},{0,0},{0.5,0},{0,0},{0,0},{0.5,0},{0,0}};
+    vector<dd::ComplexValue> vs = {{0,0},{4*0.5,0},{3*0.5,0},{0.5,0},{0.5,0},{0,0},{0,0},{0,0}};
+//    //dd::Edge d_test =  gg.dd_Sqrt3State(n);
+    dd::Edge d_test =  gg.dd_CustomState(vs,n);
+    cout<<"input state:"<<endl;
+    dd->printVector(d_test);
+    dd->export2Dot(d_test, "d_testinput.dot", true, true);
+     
+    vector<int> vin = {1};
+    Measurement mm = Measurement(dd);
+    vector<int> vout = mm.Measure(d_test, n, vin);
+    cout<<"measurement outcome"<<endl;
+    for (int i = 0; i < vin.size(); ++i){
+        cout<< "bit "<< vin[i] <<": "<< vout[i] <<endl;
+    }
+    cout<<"output state:"<<endl;
+    dd->printVector(d_test);
+    dd->export2Dot(d_test, "d_testoutput.dot", true, true);
+    
+    
+    // d_test = dd->normalize(d_test, false);
+  //  dd->export2Dot(d_test, "d_test.dot", true, true);
+    if(/* DISABLES CODE */ (false)){//make 'true' to investigate a single QFT (fixed number of bits)
         auto* dd = new dd::Package;
-        int n = 3;        
+        int n = 3;
         QFT qft = QFT(dd);
         dd::Edge d_qft =  qft.dd_QFTV3(n, END_PERN);
         dd->export2Dot(d_qft, "qftinverse3.dot",false, true);
@@ -31,7 +58,7 @@ int main(){
         int nodecounter[N];
         for (int i = 0; i < N; ++i){
             //Initialize package
-            auto* dd = new dd::Package;            
+            auto* dd = new dd::Package;
             int n = i + offset;//number of bits
             QFT qft = QFT(dd);
             time_point<system_clock> start, end;

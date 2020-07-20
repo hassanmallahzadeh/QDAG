@@ -8,5 +8,6 @@ IIC-JKU/DDcomplex.cpp
 IIC-JKU/DDexport.cpp
 IIC-JKU/DDpackage.cpp
 QFT-DDgenerator.cpp
+QFT-Measurement.cpp
 main.cpp
 )
