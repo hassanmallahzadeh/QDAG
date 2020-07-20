@@ -85,8 +85,7 @@ dd::Edge StateGenerator::dd_BaseState(int n, int i) {
 
 dd::Edge StateGenerator::dd_CustomState(vector<dd::ComplexValue> v, int n) {
     assert (n == log2(static_cast<int>(v.size())));
-    //    int sum = std::accumulate(v.begin(), v.end(), 0, [](dd::ComplexValue//TODO: go after this! item){dd->cn.addCached(<#const Complex &a#>, <#const Complex &b#>)});
-    dd::Edge state {nullptr, {nullptr, nullptr}};//skeleton to start with.
+   dd::Edge state {nullptr, {nullptr, nullptr}};//skeleton to start with.
     dd::Edge temp;
     for (int i = 0; i < v.size(); ++i){
         if(dd::operator != (v[i], {0, 0})){
