@@ -115,7 +115,7 @@ namespace dd {
         return {l.r->val, l.i->val};
     }
 
-    void Package::printVector(const Edge& e) {
+    void Package::printVector(const Edge& e, unsigned limit) {
         unsigned long long element = 2u << invVarOrder[e.p->v];
         for (unsigned long long i = 0; i < element; i++) {
             ComplexValue amplitude = getVectorElement(e, i);
@@ -123,7 +123,13 @@ namespace dd {
                 std::cout << ((i >> j) & 1u);
             }
             std::cout << ": " << amplitude << "\n";
+            if (i == limit) {
+                std::cout << "Printing terminated after " << limit << " vertices\n";
+                std::cout << std::flush;
+                return;
+            }
         }
+        
         std::cout << std::flush;
     }
 

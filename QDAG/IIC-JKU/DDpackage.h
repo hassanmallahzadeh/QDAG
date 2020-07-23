@@ -300,7 +300,7 @@ namespace dd {
 	    Edge TTlookup(unsigned short n, unsigned short m, unsigned short t, const short line[]);
 
 	    // printing
-	    void printVector(const Edge& e);
+	    void printVector(const Edge& e, unsigned int limit = -1);//HM
 	    void printActive(int n);
 	    void printDD(const Edge& e, unsigned int limit);
 	    void printUniqueTable(unsigned short n);

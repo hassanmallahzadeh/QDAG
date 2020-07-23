@@ -19,14 +19,19 @@ StateGenerator::StateGenerator(dd::Package* dd) {
 /// Uniform state generator (1/sqrt(2)^n) |1,1,1,...,1>
 /// @param n number of qubits
 dd::Edge StateGenerator::dd_UniformState(int n) {
-    dd::Edge e_state = dd->makeBasisState(n, 0);
-    for (int i = 1; i < pow(2,n); ++i){
-        e_state = dd->add(e_state, dd->makeBasisState(n, i));
-    }
     dd::ComplexValue c{1/std::sqrt(pow(2,n)), 0.0 };
-    dd::Complex cx = dd->cn.getTempCachedComplex(c.r,c.i);
-    e_state.w =dd->cn.mulCached(e_state.w, cx);
-    return e_state;
+    dd::Complex cx = dd->cn.getCachedComplex(c.r,c.i);
+    return dd->makeTerminal(cx);
+    //    e_state.w =dd->cn.mulCached(e_state.w, cx);
+    
+//    dd::Edge e_state = dd->makeBasisState(n, 0);
+//    for (int i = 1; i < pow(2,n); ++i){
+//        e_state = dd->add(e_state, dd->makeBasisState(n, i));
+//    }
+//    dd::ComplexValue c{1/std::sqrt(pow(2,n)), 0.0 };
+//    dd::Complex cx = dd->cn.getTempCachedComplex(c.r,c.i);
+//    e_state.w =dd->cn.mulCached(e_state.w, cx);
+//    return e_state;
 }
 /// Generate 'random' state from square root of 3. digit even:0, digit odd: 1.
 /// @param n number of qubits
@@ -92,7 +97,7 @@ dd::Edge StateGenerator::dd_CustomState(vector<dd::ComplexValue> v, int n) {
             dd::Complex vx = dd->cn.getTempCachedComplex(v[i].r,v[i].i);
             temp = dd->makeBasisState(n, i);
             temp.w = dd->cn.mulCached(temp.w, vx);
-            
+          //  dd->cn.mul(temp.w, temp.w, vx);TODO: this corrupts data (if used instead of temp.w = dd->cn.mulCached(temp.w, vx)). Understand why.
             if(!state.p){
                 state = temp;
             }
@@ -114,7 +119,7 @@ dd::Edge StateGenerator::dd_CustomState(vector<dd::ComplexValue> v, int n) {
 
 /*---BEGIN GATE GENERATOR DEFINITIONS---*/
 
-/// set 'line' for controlled gates.
+/// set 'line' for controlled gates.//NOTE: Just for base 2
 /// @param line linearray
 /// @param t target index
 /// @param c control index
@@ -124,7 +129,7 @@ void GateGenerator::lineSet(short *line, int t, int c) {
     if(c >= 0)
         line[c] = 1;
 }
-/// reset 'line' for controlled gates.
+/// reset 'line' for controlled gates.//NOTE: Just for base 2
 /// @param line linearray
 /// @param t target index
 /// @param c control index

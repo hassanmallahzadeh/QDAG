@@ -9,23 +9,28 @@
 #include "QFT-Measurement.hpp"
 #include "util.h"
 #include <random>
-
+std::random_device rd;  //Will be used to obtain a seed for the random number engine
+std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+std::uniform_real_distribution<fp> dis(0.0, 1.0);
+   
 Measurement::Measurement(dd::Package *dd) {
     this->dd = dd;
 }
-vector<int> Measurement::Measure(dd::Edge &e_root, int n, vector<int> vixs){
+/// The 'gate' to Measurment class.
+///
+/// @return measurement outcome (0 to radix)
+/// @param e_root root of bdd for measurement
+/// @param n number of qubits
+/// @param n_target targeted qubit index
+int Measurement::Measure(dd::Edge &e_root, int n/*for StateCollapseMatMul*/, int n_target){
     this->e_root = e_root;
-    vector<int> v_ans;
     PopulateUpProbDiagram(e_root);
     PopulateDownProbDiagram(e_root);
-    for (int i = 0; i < vixs.size(); ++i){
-        array<fp,dd::RADIX> probs = QubitMeasurementProbs(vixs[i]);
-        int res = QubitMeasurementOutcome(probs);
-        v_ans.push_back(res);
-        vector<mqinfo> v = {{vixs[i], res, probs[res]}};
-        StateCollapseRestrict(v);
-    }
-    return v_ans;
+    array<fp,dd::RADIX> probs = QubitMeasurementProbs(n_target);
+    int res = QubitMeasurementOutcome(probs);
+    Mqinfo mqinfo = {n_target, res, probs[res]};
+    StateCollapseRestrict(mqinfo);
+    return res;
 }
 /// Upstream probabilities for all dd nodes. recureively each node usp is its childs usp weighted by their edge weights (val squared) each.
 /// @param edge root edge
@@ -139,10 +144,7 @@ array<fp,dd::RADIX> Measurement::QubitMeasurementProbs(int v) {
 int Measurement::QubitMeasurementOutcome(array<fp, dd::RADIX> a) {
     array<fp, dd::RADIX> aincsum;// array incremental summations :)
     aincsum[0] = a[0];
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_real_distribution<fp> dis(0.0, 1.0);
-    
+
     for(int i = 1; i < dd::RADIX; ++i){
         aincsum[i] = aincsum[i-1] + a[i];
     }
@@ -161,7 +163,7 @@ int Measurement::QubitMeasurementOutcome(array<fp, dd::RADIX> a) {
 /// Collapsed state after bits, use matrix multiplication. Wont work for radix != 2
 /// @param mqi measured qubits info
 /// @param n total number of quibits
-void Measurement::StateCollapseMatMul(vector<mqinfo> mqi, int n) {
+void Measurement::StateCollapseMatMul(Mqinfo mqinfo, int n) {
     assert(0);//function does not work. Likely since the matrix is not unitary.(returns identity)
     assert(dd::RADIX == 2);
     short* line = new short[n]{};
@@ -169,28 +171,26 @@ void Measurement::StateCollapseMatMul(vector<mqinfo> mqi, int n) {
         line[i] = -1;
     }
     dd::Edge e_gate;
-    for (int i = 0; i < mqi.size(); ++i){
-        line[mqi[i].ix] = 2;
-        if(mqi[i].val == 0)
-            e_gate = dd->makeGateDD(N0mat, n, line);
-        else
-            e_gate = dd->makeGateDD(N1mat, n, line);
-        
-        dd::ComplexValue c{sqrt(1/mqi[i].pr), 0.0 };//used to normalize the state.
-        dd::Complex cx = dd->cn.getCachedComplex(c.r,c.i);
-        e_gate.w = dd->cn.mulCached(e_gate.w, cx);
-        e_root = dd->multiply(e_gate, e_root);
-        line[mqi[i].ix] = -1;//reset
-    };
+    line[mqinfo.ix] = 2;
+    if(mqinfo.val == 0)
+        e_gate = dd->makeGateDD(N0mat, n, line);
+    else
+        e_gate = dd->makeGateDD(N1mat, n, line);
+    
+    dd::ComplexValue c{sqrt(1/mqinfo.pr), 0.0 };//used to normalize the state.
+    dd::Complex cx = dd->cn.getCachedComplex(c.r,c.i);
+    e_gate.w = dd->cn.mulCached(e_gate.w, cx);
+    e_root = dd->multiply(e_gate, e_root);
+    line[mqinfo.ix] = -1;//reset
     delete[] line;
 }
 
-void Measurement::ExtractedBelowLayerOnCollapse(dd::NodePtr curnode, const dd::Complex &cx, int i, int j, vector<Measurement::mqinfo> &mqi) {
+void Measurement::ExtractedBelowLayerOnCollapse(dd::NodePtr curnode, const dd::Complex &cx, int j, Mqinfo &mqinfo) {
     assert(0);//temp
     assert(curnode->v >= 0);//make sure we dont get here because of terminal
     dd::Edge e[dd::NEDGE] = {};
     for (int k = 0; k < dd::NEDGE; ++k){
-        if(k == mqi[i].val * dd::RADIX){// equal to measured value.
+        if(k == mqinfo.val * dd::RADIX){// equal to measured value.
             e[k].w = cx;
             e[k].p = curnode;
         }
@@ -199,12 +199,12 @@ void Measurement::ExtractedBelowLayerOnCollapse(dd::NodePtr curnode, const dd::C
             e[k].p = dd::Package::DDzero.p;
         }
     }
-    dd::Edge ge  = dd->makeNonterminal(i, e);// ge: generated edge.
+    dd::Edge ge  = dd->makeNonterminal(mqinfo.ix, e);// ge: generated edge.
     curnode->e[j] = ge;
 }
 
-void Measurement::ExtractedOnLayerStateCollapse(dd::NodePtr curnode, const dd::Complex &cx, int i, int j, vector<Measurement::mqinfo> &mqi) {
-    if(j == mqi[i].val * dd::RADIX){// equal to measured value.
+void Measurement::ExtractedOnLayerStateCollapse(dd::NodePtr curnode, const dd::Complex &cx, int j, Mqinfo &mqifo) {
+    if(j == mqifo.val * dd::RADIX){// equal to measured value.
         if(!CN::equalsZero(curnode->e[j].w)){
             if(!CN::equalsZero(curnode->e[j].w)){
                 curnode->e[j].w = dd->cn.mulCached(curnode->e[j].w, cx);
@@ -230,11 +230,10 @@ void Measurement::ExtractedAboveLayerOnCollapse(dd::NodePtr curnode, int j, list
 
 /// Collapsed state after bits, use direct RESTRICT algorithm. "Bryant's Restrict algortithm".
 /// @param mqi measured qubits info
-void Measurement::StateCollapseRestrict(vector<mqinfo> mqi) {
+void Measurement::StateCollapseRestrict(Mqinfo mqinfo) {
     traverseset.clear();//clear act of QubitMeasurementProbs;
-    for (int i = 0; i < mqi.size(); ++i){
         
-        dd::ComplexValue c{sqrt(1/mqi[i].pr), 0.0 };//used to normalize the state.
+        dd::ComplexValue c{sqrt(1/mqinfo.pr), 0.0 };//used to normalize the state.
         dd::Complex cx = dd->cn.getCachedComplex(c.r,c.i);
         
         list<dd::NodePtr> l;
@@ -250,20 +249,18 @@ void Measurement::StateCollapseRestrict(vector<mqinfo> mqi) {
             traverseset.insert(curnode);
             for(int j = 0; j < dd::NEDGE; ++j){
                 if(j % dd::RADIX != 0) continue;//not a vector edge.
-                if(curnode->v > mqi[i].ix){//above target.
+                if(curnode->v > mqinfo.ix){//above target.
                     ExtractedAboveLayerOnCollapse(curnode, j, l);
                 }
-                else if(curnode->v == mqi[i].ix){//in target layer
+                else if(curnode->v == mqinfo.ix){//in target layer
                     
-                    ExtractedOnLayerStateCollapse(curnode, cx, i, j, mqi);
+                    ExtractedOnLayerStateCollapse(curnode, cx, j, mqinfo);
                 }
                 else{////  below target level: if node missed due to reduced graph. NOTE: won't happen with current IIC-JKU package.
-                    ExtractedBelowLayerOnCollapse(curnode, cx, i, j, mqi);
+                    ExtractedBelowLayerOnCollapse(curnode, cx, j, mqinfo);
                 }
             }
         }
-    }
     dd->garbageCollect();
-//    dd->normalize(e_root, true);// false?
 }
 

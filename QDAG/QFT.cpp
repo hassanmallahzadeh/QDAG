@@ -9,10 +9,15 @@
 #include "IIC-JKU/DDcomplex.h"
 #include "QFT-DDgenerator.hpp"
 #include "QFT.hpp"
+#include "QFT-Measurement.hpp"
 using namespace std::chrono;
 using std::cout;
 using std::endl;
+
+const int QFT::posControl = 1;//can be 0, 1 or 2 for base 3, etc.
+
 QFT::QFT(dd::Package* dd){
+    assert(dd::RADIX == 2);//parts of this code are not properly made for base != 2.
     this->dd = dd;
 }
 /// QFT, make the overal operator (interminnet 'line' gates constructed, applied to answer incrementally)
@@ -21,18 +26,18 @@ QFT::QFT(dd::Package* dd){
 /// @param n number of qubits
 /// @param perm where and if apply permutation gate.
 dd::Edge QFT::dd_QFTV1(int n, PERM_POS perm) {
-    dd::Edge e_ans = dd->makeIdent(0, n-1);//HM: this can be taken out, here for clarity
+    dd::Edge e_ans = dd->makeIdent(0, n-1);// this can be taken out, here for clarity
     GateGenerator  gg = GateGenerator(dd);
     
-    short *line = new short[n]{};//HM: set 'line' for dd->makeGateDD
+    short *line = new short[n]{};// set 'line' for dd->makeGateDD
     for (int i = 0; i < n; ++i){
         line[i] = -1;
     }
     
-    for (int i = 0; i < n; ++i){//HM: for each of n qubits do:
+    for (int i = 0; i < n; ++i){// for each of n qubits do:
         gg.lineSet(line,i,-1);
-        dd::Edge e_line = dd->makeGateDD(Hmat, n, line);//HM: start by hadamard as in circuit
-        dd::Matrix2x2 Rmat;//HM: put rotation gates in place
+        dd::Edge e_line = dd->makeGateDD(Hmat, n, line);// start by hadamard as in circuit
+        dd::Matrix2x2 Rmat;// put rotation gates in place
         int j = 0;
         for (; j < n - i - 1; ++j){
             {
@@ -53,8 +58,8 @@ dd::Edge QFT::dd_QFTV1(int n, PERM_POS perm) {
             }
             
         }
-        e_ans = dd->multiply(e_line, e_ans);//HM: apply current line to final operator
-        gg.lineReset(line,i,n - i - 1);//HM: reset line array
+        e_ans = dd->multiply(e_line, e_ans);// apply current line to final operator
+        gg.lineReset(line,i,n - i - 1);// reset line array
     }
     if(perm == BEG_PERM){
         e_ans = dd->multiply(e_ans, gg.permuteOperator(n));
@@ -76,15 +81,15 @@ dd::Edge QFT::dd_QFTV2(int n, dd::Edge state, PERM_POS perm) {
     if(perm == BEG_PERM){
         e_ans = dd->multiply(gg.permuteOperator(n),e_ans);
     }
-    short *line = new short[n]{};//HM: set 'line' for dd->makeGateDD
+    short *line = new short[n]{};// set 'line' for dd->makeGateDD
     for (int i = 0; i < n; ++i){
         line[i] = -1;
     }
-    for (int i = 0; i < n; ++i){//HM: for each of n qubits do:
+    for (int i = 0; i < n; ++i){// for each of n qubits do:
         gg.lineSet(line,i,-1);
-        dd::Edge e_line = dd->makeGateDD(Hmat, n, line);//HM: start by hadamard as in circuit
+        dd::Edge e_line = dd->makeGateDD(Hmat, n, line);// start by hadamard as in circuit
         e_ans = dd->multiply(e_line ,e_ans);
-        dd::Matrix2x2 Rmat;//HM: put rotation gates in place
+        dd::Matrix2x2 Rmat;// put rotation gates in place
         for (int j = 0; j < n - i - 1; ++j){
             if(m_ord == REG_C_T)
                 gg.lineSet(line, i, i + j + 1);
@@ -97,7 +102,7 @@ dd::Edge QFT::dd_QFTV2(int n, dd::Edge state, PERM_POS perm) {
             else
                 gg.lineReset(line, i + j + 1, i);
         }
-        gg.lineReset(line,i,n - i - 1);//HM: reset line array
+        gg.lineReset(line, i ,n - i - 1);// reset line array
     }
     if(perm == END_PERN)
         e_ans = dd->multiply(gg.permuteOperator(n),e_ans);
@@ -107,23 +112,24 @@ dd::Edge QFT::dd_QFTV2(int n, dd::Edge state, PERM_POS perm) {
 }
 /// QFT, make the overal operator, then apply on input state. (interminnet 'line' gates not constructed, multiply all gates in order of appearing)
 /// uncomment export2Dot and cout lines to monitor bdd structure evolution. comment to disable
+/// @return overall QFT decition diagram.
 /// @param n number of qubits
 /// @param perm where and if apply permutation gate.
 dd::Edge QFT::dd_QFTV3(int n , PERM_POS perm){
-    dd::Edge e_ans = dd->makeIdent(0, n-1);//HM: this can be taken out, here for clarity
+    dd::Edge e_ans = dd->makeIdent(0, n-1);// this can be taken out, here for clarity
     GateGenerator  gg = GateGenerator(dd);
     if(perm == BEG_PERM){
         e_ans = dd->multiply(e_ans, gg.permuteOperator(n));
     }
-    short *line = new short[n]{};//HM: set 'line' for dd->makeGateDD
+    short *line = new short[n]{};// set 'line' for dd->makeGateDD
     for (int i = 0; i < n; ++i){
         line[i] = -1;
     }
     
-    for (int i = 0; i < n; ++i){//HM: for each of n qubits do:
+    for (int i = 0; i < n; ++i){// for each of n qubits do:
         gg.lineSet(line,i,-1);
-        e_ans = dd->multiply(dd->makeGateDD(Hmat, n, line), e_ans);//HM: start by hadamard as in circuit
-        dd::Matrix2x2 Rmat;//HM: put rotation gates in place
+        e_ans = dd->multiply(dd->makeGateDD(Hmat, n, line), e_ans);// start by hadamard as in circuit
+        dd::Matrix2x2 Rmat;// put rotation gates in place
         //        dd->export2Dot(e_ans, "qft-h-"+std::to_string(i)+".dot",false, true);
         
         int j = 0;
@@ -141,7 +147,7 @@ dd::Edge QFT::dd_QFTV3(int n , PERM_POS perm){
                 gg.lineReset(line, i + j + 1, i);
             
         }
-        gg.lineReset(line,i,n - i - 1);//HM: reset line array
+        gg.lineReset(line,i,n - i - 1);// reset line array
     }
     if(perm == END_PERN){
         e_ans = dd->multiply(gg.permuteOperator(n),e_ans);//this is equivanent to reversing variable order.
@@ -149,3 +155,91 @@ dd::Edge QFT::dd_QFTV3(int n , PERM_POS perm){
     delete[] line;
     return e_ans;
 }
+
+/// QFT with Griffiths-Niu scheme.
+/// @return state after act of QFT.
+/// @param n number of qubits
+/// @param state input state root edge
+/// @param perm where and if apply the permutation operator.
+dd::Edge QFT::dd_QFTGNV1(int n, dd::Edge state, PERM_POS perm) {
+    assert(m_ord == INV_C_T);
+            
+    GateGenerator  gg = GateGenerator(dd);
+    dd::Edge e_ans = state;
+    Measurement mm = Measurement(dd);
+    if(perm == BEG_PERM){
+        e_ans = dd->multiply(gg.permuteOperator(n), e_ans);
+    }
+    short *line = new short[n]{};// set 'line' for dd->makeGateDD
+    for (int i = 0; i < n; ++i){
+        line[i] = -1;
+    }
+    for (int i = 0; i < n; ++i){// for each of n qubits do:
+        gg.lineSet(line, i, -1);
+        e_ans = dd->multiply(dd->makeGateDD(Hmat, n, line) ,e_ans); //start by hadamard as in circuit
+        gg.lineReset(line, i, -1);
+        int res = mm.Measure(e_ans, n, i);
+        if(res == posControl){
+            dd::Matrix2x2 Rmat;// put rotation gates in place
+            for (int j = 0; j < n - i - 1; ++j){
+                //activate rotation gates
+                gg.lineSet(line, i + j + 1, -1);
+                gg.RmatGenerator(Rmat, j+2);
+                e_ans = dd->multiply(dd->makeGateDD(Rmat, n, line), e_ans);
+                gg.lineReset(line, i + j + 1, -1);
+            }
+            gg.lineReset(line, i, n - i - 1);// reset line array
+        }
+        /*
+        std::cout<<"intermediate state:"<<std::endl;
+        dd->printVector(e_ans);
+        dd->export2Dot(e_ans, "qftgn"+std::to_string(i)+".dot", true, true);
+         */
+    }
+    if(perm == END_PERN)
+        e_ans = dd->multiply(gg.permuteOperator(n),e_ans);
+    
+    delete[] line;
+    return e_ans;
+}
+
+/// QFT with Griffiths-Niu scheme.
+/// @return state after act of QFT.
+/// @param n number of qubits
+/// @param state input state root edge
+dd::Edge QFT::dd_QFTGNV2(int n, dd::Edge state) {
+    assert(m_ord == INV_C_T);
+            
+    GateGenerator  gg = GateGenerator(dd);
+    dd::Edge e_ans = state;
+    Measurement mm = Measurement(dd);
+    short *line = new short[n]{};// set 'line' for dd->makeGateDD
+    for (int i = 0; i < n; ++i){
+        line[i] = -1;
+    }
+    for (int i = n - 1; i >= 0; --i){// for each of n qubits do:
+        gg.lineSet(line, i, -1);
+        e_ans = dd->multiply(dd->makeGateDD(Hmat, n, line) ,e_ans); //start by hadamard as in circuit
+        gg.lineReset(line, i, -1);
+        int res = mm.Measure(e_ans, n, i);
+        if(res == posControl){
+            dd::Matrix2x2 Rmat;// put rotation gates in place
+            for (int j = i - 1; j >= 0; --j){
+                //activate rotation gates
+                gg.lineSet(line, j, -1);
+                gg.RmatGenerator(Rmat, i - j + 1);
+                e_ans = dd->multiply(dd->makeGateDD(Rmat, n, line), e_ans);
+                gg.lineReset(line, j, -1);
+            }
+          //  gg.lineReset(line, i, -1);// reset line array
+        }
+        /*
+        std::cout<<"intermediate state:"<<std::endl;
+        dd->printVector(e_ans);
+        dd->export2Dot(e_ans, "qftgn"+std::to_string(i)+".dot", true, true);
+         */
+    }
+    delete[] line;
+    return e_ans;
+}
+

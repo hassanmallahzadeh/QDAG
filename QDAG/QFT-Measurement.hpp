@@ -26,14 +26,14 @@ private:
     fp PopulateUpProbDiagram(const dd::Edge &edge);
     void PopulateDownProbDiagram(const dd::Edge &edge);
 
-    struct mqinfo{//measured qubit info
+    struct Mqinfo{//measured qubit info
         int ix = -1;// index
         int val = -1;// measured value
         fp pr = -1;// probability of measured outcome(before conductiong measurement).
     };
     
-    void ExtractedBelowLayerOnCollapse(dd::NodePtr curnode, const dd::Complex &cx, int i, int j, vector<Measurement::mqinfo> &mqi);
-    void ExtractedOnLayerStateCollapse(dd::NodePtr curnode, const dd::Complex &cx, int i, int j, vector<Measurement::mqinfo> &mqi);
+    void ExtractedBelowLayerOnCollapse(dd::NodePtr curnode, const dd::Complex &cx, int j, Mqinfo &mqi);
+    void ExtractedOnLayerStateCollapse(dd::NodePtr curnode, const dd::Complex &cx, int j, Mqinfo &mqi);
     void ExtractedAboveLayerOnCollapse(dd::NodePtr curnode, int j, list<dd::NodePtr> &l);
     
     void ExtractedQubitMeasProbsOnLayer(array<fp, dd::RADIX> &a, dd::NodePtr curnode, int i);
@@ -44,11 +44,11 @@ private:
     
     array<fp,dd::RADIX> QubitMeasurementProbs(int v);
     int QubitMeasurementOutcome(array<fp, dd::RADIX>);
-    void StateCollapseRestrict(vector<mqinfo>);
-    void StateCollapseMatMul(vector<mqinfo>, int n);
+    void StateCollapseRestrict(Mqinfo mqinfo);
+    void StateCollapseMatMul(Mqinfo mqinfo, int n);
 public:
     Measurement(dd::Package* dd);
-    vector<int> Measure(dd::Edge &edge, int n, vector<int> vixs /* qubit indices */);
+    int Measure(dd::Edge &edge, int n, int n_target);
 };
 
 #endif /* QFT_Measurement_hpp */

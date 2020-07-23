@@ -14,6 +14,7 @@
 #include <list>
 #include <map>
 #include <string>
+#include <ctime>
 using std::vector;
 using std::array;
 using std::list;
