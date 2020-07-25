@@ -9,9 +9,6 @@
 #include "QFT-Measurement.hpp"
 #include "util.h"
 #include <random>
-std::random_device rd;  //Will be used to obtain a seed for the random number engine
-std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-std::uniform_real_distribution<fp> dis(0.0, 1.0);
    
 Measurement::Measurement(dd::Package *dd) {
     this->dd = dd;
@@ -114,7 +111,6 @@ array<fp,dd::RADIX> Measurement::QubitMeasurementProbs(int v) {
     array<fp,dd::RADIX> a = {};// holds probabilities.
     dd::NodePtr curnode = e_root.p;
     dd::NodePtr lastnode = nullptr;// track parent.
-    //traverseset.clear();
     traverseset.insert(dd::Package::DDone.p);//base case
     traverseset.insert(dd::Package::DDzero.p);//base case
     l.push_back(curnode);
@@ -142,6 +138,8 @@ array<fp,dd::RADIX> Measurement::QubitMeasurementProbs(int v) {
     return a;
 }
 int Measurement::QubitMeasurementOutcome(array<fp, dd::RADIX> a) {
+    std::random_device rd;
+    std::uniform_real_distribution<fp> dis(0.0, 1.0);
     array<fp, dd::RADIX> aincsum;// array incremental summations :)
     aincsum[0] = a[0];
 
@@ -150,7 +148,7 @@ int Measurement::QubitMeasurementOutcome(array<fp, dd::RADIX> a) {
     }
     assert(aincsum[dd::RADIX-1] > 0.99 && aincsum[dd::RADIX-1] < 1.01);//if state not normalized to 1.
     
-    fp randnum = dis(gen);
+    fp randnum = dis(rd);
     for (int i = 0; i < dd::RADIX; ++i){
         if(randnum <= aincsum[i]){
             return i;

@@ -42,37 +42,33 @@ int main(){
     }
         
     if(/* DISABLES CODE */ (true)){//make 'true' to investigate a single QFT (fixed number of bits)
-        auto* dd = new dd::Package;
-        int ntrials = 100;//
-        int n = 2;
-        QFT qft = QFT(dd);
-        StateGenerator sg = StateGenerator(dd);
-        dd::Edge state = sg.dd_BaseState(n, 1);
-//        cout<<"input state: \n";
-//        dd->printVector(state);
-//        time_point<system_clock> start, end;
-//                  start = system_clock::now();
+        int ntrials = 8 * 1024;//
+        int n = 3;
+        
+        //        cout<<"input state: \n";
+        //        dd->printVector(state);
+        //        time_point<system_clock> start, end;
+        //        start = system_clock::now();
         map<string,int> m;
         for(int i = 0; i < ntrials; ++i){
-        state =  qft.dd_QFTGNV1(n, state, BEG_PERM);
+            auto* dd = new dd::Package;
+            QFT qft = QFT(dd);
+            StateGenerator sg = StateGenerator(dd);
+            dd::Edge state = sg.dd_BaseState(n, 0);
+            state =  qft.dd_QFTGNV1(n, state, BEG_PERM);
             dd::NodePtr p = state.p;
-            bool reachedend = true;
             string s = "";
-            do{
-                reachedend = true;
+            while(p != dd->terminalNode){
                 for(int i = 0; i < dd::NEDGE; ++i){
-            
                     if(i%dd::RADIX!=0)
                         continue;
-                    if(!dd->isTerminal(p->e[i])){
+                    if(!dd->cn.equalsZero(p->e[i].w)){
                         p = p->e[i].p;
                         s = s + std::to_string(i/dd::RADIX);
-                        reachedend = false;
                         break;
                     }
                 }
             }
-            while(!reachedend);
             
             if(m.find(s) == m.cend()){
                 m.insert(make_pair(s,1));
@@ -80,23 +76,23 @@ int main(){
             else{
                 m[s] = m[s] + 1;
             }
+        delete dd;
         }
         //qft.dd_QFTGN(n, state, NO_PERM);
-//        end = system_clock::now();
-//                       duration<float> elapsed_seconds = end - start;
-//
-//        cout<<"output state: \n";
-//        dd->printVector(state);
-//        cout<< "execution time: "<< elapsed_seconds.count()<<endl;
+        //        end = system_clock::now();
+        //                       duration<float> elapsed_seconds = end - start;
+        //
+        //        cout<<"output state: \n";
+        //        dd->printVector(state);
+        //        cout<< "execution time: "<< elapsed_seconds.count()<<endl;
         //  dd->export2Dot(state, "\DD_Graphs\d_outoutqft2.dot",true, true);
         for(auto it = m.cbegin(); it != m.cend(); ++it){
             cout<<it->first <<": "<<it->second<<endl;
         }
-        delete dd;
     }
     
     if(/* DISABLES CODE */ false){//make 'true' to plot the graph (time and node count) as function of varible number.
-        int N = 31;//points for graph
+        int N = 30;//points for graph
         int ntrials = 1;//how many times run simulations for averaging.
         int offset = 1;//starting num of qubits
         float nodecounter[N];//type float for averaging
@@ -120,7 +116,7 @@ int main(){
                 QFT qft = QFT(dd);
                 time_point<system_clock> start, end;
                 start = system_clock::now();
-                state = qft.dd_QFTGNV1(n, state, BEG_PERM);
+                state = qft.dd_QFTV2(n, state, NO_PERM);
                 nodecounter[i] += dd->size(state);
                 end = system_clock::now();
                 duration<float> elapsed_seconds = end - start;
