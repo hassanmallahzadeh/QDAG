@@ -8,6 +8,7 @@
 
 #ifndef commonheaders_h
 #define commonheaders_h
+
 #include <vector>
 #include <string>
 #include <cassert>
@@ -15,6 +16,8 @@
 #include <map>
 #include <string>
 #include <ctime>
+#include<random>
+typedef std::mt19937 engine;
 using std::vector;
 using std::array;
 using std::list;

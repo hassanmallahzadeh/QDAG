@@ -5,10 +5,8 @@
 //  Created by Hassan Mallahzadeh on 2020-07-07.
 //  Copyright © 2020 Hassan Mallahzadeh. All rights reserved.
 //
-#include "commonheaders.h"
 #include "QFT-Measurement.hpp"
 #include "util.h"
-#include <random>
    
 Measurement::Measurement(dd::Package *dd) {
     this->dd = dd;
@@ -19,12 +17,12 @@ Measurement::Measurement(dd::Package *dd) {
 /// @param e_root root of bdd for measurement
 /// @param n number of qubits
 /// @param n_target targeted qubit index
-int Measurement::Measure(dd::Edge &e_root, int n/*for StateCollapseMatMul*/, int n_target){
+int Measurement::Measure(dd::Edge &e_root, int n/*for StateCollapseMatMul*/, int n_target, engine& unrg){
     this->e_root = e_root;
     PopulateUpProbDiagram(e_root);
     PopulateDownProbDiagram(e_root);
     array<fp,dd::RADIX> probs = QubitMeasurementProbs(n_target);
-    int res = QubitMeasurementOutcome(probs);
+    int res = QubitMeasurementOutcome(probs, unrg);
     Mqinfo mqinfo = {n_target, res, probs[res]};
     StateCollapseRestrict(mqinfo);
     return res;
@@ -137,8 +135,7 @@ array<fp,dd::RADIX> Measurement::QubitMeasurementProbs(int v) {
     }
     return a;
 }
-int Measurement::QubitMeasurementOutcome(array<fp, dd::RADIX> a) {
-    std::random_device rd;
+int Measurement::QubitMeasurementOutcome(array<fp, dd::RADIX> a, engine& unrg) {
     std::uniform_real_distribution<fp> dis(0.0, 1.0);
     array<fp, dd::RADIX> aincsum;// array incremental summations :)
     aincsum[0] = a[0];
@@ -148,7 +145,7 @@ int Measurement::QubitMeasurementOutcome(array<fp, dd::RADIX> a) {
     }
     assert(aincsum[dd::RADIX-1] > 0.99 && aincsum[dd::RADIX-1] < 1.01);//if state not normalized to 1.
     
-    fp randnum = dis(rd);
+    fp randnum = dis(unrg);
     for (int i = 0; i < dd::RADIX; ++i){
         if(randnum <= aincsum[i]){
             return i;
@@ -159,7 +156,7 @@ int Measurement::QubitMeasurementOutcome(array<fp, dd::RADIX> a) {
 }
 
 /// Collapsed state after bits, use matrix multiplication. Wont work for radix != 2
-/// @param mqi measured qubits info
+/// @param mqinfo measured qubits info
 /// @param n total number of quibits
 void Measurement::StateCollapseMatMul(Mqinfo mqinfo, int n) {
     assert(0);//function does not work. Likely since the matrix is not unitary.(returns identity)
@@ -227,7 +224,7 @@ void Measurement::ExtractedAboveLayerOnCollapse(dd::NodePtr curnode, int j, list
 }
 
 /// Collapsed state after bits, use direct RESTRICT algorithm. "Bryant's Restrict algortithm".
-/// @param mqi measured qubits info
+/// @param mqinfo measured qubits info
 void Measurement::StateCollapseRestrict(Mqinfo mqinfo) {
     traverseset.clear();//clear act of QubitMeasurementProbs;
         

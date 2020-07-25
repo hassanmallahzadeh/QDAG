@@ -10,6 +10,7 @@
 #define QFT_Measurement_hpp
 #include "IIC-JKU/DDpackage.h"
 #include "IIC-JKU/DDcomplex.h"
+#include "commonheaders.h"
 #include <unordered_map>
 #include <unordered_set>
 #include <stdio.h>
@@ -43,12 +44,12 @@ private:
     void ExtractedQubitMeasProbsLayer(array<fp, dd::RADIX> &a, dd::NodePtr curnode, int i, dd::NodePtr lastnode);
     
     array<fp,dd::RADIX> QubitMeasurementProbs(int v);
-    int QubitMeasurementOutcome(array<fp, dd::RADIX>);
+    int QubitMeasurementOutcome(array<fp, dd::RADIX>, engine&);
     void StateCollapseRestrict(Mqinfo mqinfo);
     void StateCollapseMatMul(Mqinfo mqinfo, int n);
 public:
     Measurement(dd::Package* dd);
-    int Measure(dd::Edge &edge, int n, int n_target);
+    int Measure(dd::Edge &edge, int n, int n_target, engine& unrg);
 };
 
 #endif /* QFT_Measurement_hpp */
