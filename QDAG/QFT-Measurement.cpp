@@ -109,8 +109,7 @@ array<fp,dd::RADIX> Measurement::QubitMeasurementProbs(int v) {
     array<fp,dd::RADIX> a = {};// holds probabilities.
     dd::NodePtr curnode = e_root.p;
     dd::NodePtr lastnode = nullptr;// track parent.
-    traverseset.insert(dd::Package::DDone.p);//base case
-    traverseset.insert(dd::Package::DDzero.p);//base case
+    traverseset.insert(dd::Package::terminalNode);//base case
     l.push_back(curnode);
     while(!l.empty()){// breath first search
         
@@ -256,6 +255,6 @@ void Measurement::StateCollapseRestrict(Mqinfo mqinfo) {
                 }
             }
         }
-    dd->garbageCollect();
+  //  dd->garbageCollect();
 }
 

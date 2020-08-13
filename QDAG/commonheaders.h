@@ -10,6 +10,7 @@
 #define commonheaders_h
 
 #include <vector>
+#include <array>
 #include <string>
 #include <cassert>
 #include <list>
@@ -17,6 +18,8 @@
 #include <string>
 #include <ctime>
 #include<random>
+#include <iostream>
+typedef unsigned long long int lli;
 typedef std::mt19937 engine;
 using std::vector;
 using std::array;

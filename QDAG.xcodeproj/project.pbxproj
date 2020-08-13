@@ -9,12 +9,16 @@
 /* Begin PBXBuildFile section */
 		C0436EAC24B16F6E0027F72E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0436EAB24B16F6E0027F72E /* main.cpp */; };
 		C0475BCA24B57281003F5DC0 /* QFT-Measurement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0475BC824B57281003F5DC0 /* QFT-Measurement.cpp */; };
+		C073EBB824DF0A8400B88991 /* Bob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C073EBB624DF0A8400B88991 /* Bob.cpp */; };
 		C09D2A2224AE575100188786 /* DDpackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A1A24AE575100188786 /* DDpackage.cpp */; };
 		C09D2A2324AE575100188786 /* DDcomplex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A1C24AE575100188786 /* DDcomplex.cpp */; };
 		C09D2A2424AE575100188786 /* IIC-JKUmain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A1E24AE575100188786 /* IIC-JKUmain.cpp */; };
 		C09D2A2524AE575100188786 /* DDexport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A1F24AE575100188786 /* DDexport.cpp */; };
 		C09D2A2624AE575100188786 /* QFT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A2024AE575100188786 /* QFT.cpp */; };
 		C09D2A2A24AECA3300188786 /* QFT-DDgenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A2824AECA3300188786 /* QFT-DDgenerator.cpp */; };
+		C0B4E5BB24DF340A00D6A640 /* Alice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0B4E5B924DF340900D6A640 /* Alice.cpp */; };
+		C0B4E5BE24DF56A900D6A640 /* shorutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0B4E5BC24DF56A900D6A640 /* shorutil.cpp */; };
+		C0B4E5C124DF97FB00D6A640 /* PeriodFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0B4E5BF24DF97FB00D6A640 /* PeriodFinder.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +38,8 @@
 		C0475BC824B57281003F5DC0 /* QFT-Measurement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "QFT-Measurement.cpp"; sourceTree = "<group>"; };
 		C0475BC924B57281003F5DC0 /* QFT-Measurement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "QFT-Measurement.hpp"; sourceTree = "<group>"; };
 		C06685FD24AE565B00594215 /* QDAG */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = QDAG; sourceTree = BUILT_PRODUCTS_DIR; };
+		C073EBB624DF0A8400B88991 /* Bob.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Bob.cpp; sourceTree = "<group>"; };
+		C073EBB724DF0A8400B88991 /* Bob.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Bob.hpp; sourceTree = "<group>"; };
 		C09D2A1724AE575100188786 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
 		C09D2A1824AE575100188786 /* QFT.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = QFT.hpp; sourceTree = "<group>"; };
 		C09D2A1924AE575100188786 /* DDcomplex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDcomplex.h; sourceTree = "<group>"; };
@@ -47,6 +53,12 @@
 		C09D2A2824AECA3300188786 /* QFT-DDgenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "QFT-DDgenerator.cpp"; sourceTree = "<group>"; };
 		C09D2A2924AECA3300188786 /* QFT-DDgenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "QFT-DDgenerator.hpp"; sourceTree = "<group>"; };
 		C09D2A2B24AECC9800188786 /* commonheaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = commonheaders.h; sourceTree = "<group>"; };
+		C0B4E5B924DF340900D6A640 /* Alice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Alice.cpp; sourceTree = "<group>"; };
+		C0B4E5BA24DF340900D6A640 /* Alice.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Alice.hpp; sourceTree = "<group>"; };
+		C0B4E5BC24DF56A900D6A640 /* shorutil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = shorutil.cpp; sourceTree = "<group>"; };
+		C0B4E5BD24DF56A900D6A640 /* shorutil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = shorutil.hpp; sourceTree = "<group>"; };
+		C0B4E5BF24DF97FB00D6A640 /* PeriodFinder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PeriodFinder.cpp; sourceTree = "<group>"; };
+		C0B4E5C024DF97FB00D6A640 /* PeriodFinder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PeriodFinder.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,12 +111,28 @@
 				C09D2A1724AE575100188786 /* util.h */,
 				C0436EAB24B16F6E0027F72E /* main.cpp */,
 				C09D2A2824AECA3300188786 /* QFT-DDgenerator.cpp */,
+				C073EBB524DF09EB00B88991 /* ShorAlgorithm */,
 				C09D2A2924AECA3300188786 /* QFT-DDgenerator.hpp */,
 				C0475BC824B57281003F5DC0 /* QFT-Measurement.cpp */,
 				C0475BC924B57281003F5DC0 /* QFT-Measurement.hpp */,
 				C09D2A2B24AECC9800188786 /* commonheaders.h */,
 			);
 			path = QDAG;
+			sourceTree = "<group>";
+		};
+		C073EBB524DF09EB00B88991 /* ShorAlgorithm */ = {
+			isa = PBXGroup;
+			children = (
+				C073EBB624DF0A8400B88991 /* Bob.cpp */,
+				C073EBB724DF0A8400B88991 /* Bob.hpp */,
+				C0B4E5BC24DF56A900D6A640 /* shorutil.cpp */,
+				C0B4E5BD24DF56A900D6A640 /* shorutil.hpp */,
+				C0B4E5B924DF340900D6A640 /* Alice.cpp */,
+				C0B4E5BA24DF340900D6A640 /* Alice.hpp */,
+				C0B4E5BF24DF97FB00D6A640 /* PeriodFinder.cpp */,
+				C0B4E5C024DF97FB00D6A640 /* PeriodFinder.hpp */,
+			);
+			name = ShorAlgorithm;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -185,10 +213,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0B4E5C124DF97FB00D6A640 /* PeriodFinder.cpp in Sources */,
+				C0B4E5BB24DF340A00D6A640 /* Alice.cpp in Sources */,
 				C09D2A2424AE575100188786 /* IIC-JKUmain.cpp in Sources */,
 				C09D2A2324AE575100188786 /* DDcomplex.cpp in Sources */,
 				C0475BCA24B57281003F5DC0 /* QFT-Measurement.cpp in Sources */,
+				C073EBB824DF0A8400B88991 /* Bob.cpp in Sources */,
 				C09D2A2A24AECA3300188786 /* QFT-DDgenerator.cpp in Sources */,
+				C0B4E5BE24DF56A900D6A640 /* shorutil.cpp in Sources */,
 				C09D2A2624AE575100188786 /* QFT.cpp in Sources */,
 				C0436EAC24B16F6E0027F72E /* main.cpp in Sources */,
 				C09D2A2224AE575100188786 /* DDpackage.cpp in Sources */,

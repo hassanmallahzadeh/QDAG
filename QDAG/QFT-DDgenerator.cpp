@@ -31,25 +31,6 @@ dd::Edge StateGenerator::dd_UniformState(int n) {
      dd::Complex cx = dd->cn.getCachedComplex(c.r,c.i);
      f.w =dd->cn.mulCached(f.w, cx);
     return f;
-//    dd::ComplexValue c{1, 0.0 };
-//    dd::Complex cx = dd->cn.getCachedComplex(c.r,c.i);
-//    dd::Edge edge = dd->makeTerminal(cx);
-//    for (int i = 0; i < n ; ++i){
-//        
-//    }
-//    dd::ComplexValue c{1/std::sqrt(pow(2,n)), 0.0 };
-//    dd::Complex cx = dd->cn.getCachedComplex(c.r,c.i);
-//    return dd->makeTerminal(cx);
-    //e_state.w =dd->cn.mulCached(e_state.w, cx);
-    
-//    dd::Edge e_state = dd->makeBasisState(n, 0);
-//    for (int i = 1; i < pow(2,n); ++i){
-//        e_state = dd->add(e_state, dd->makeBasisState(n, i));
-//    }
-//    dd::ComplexValue c{1/std::sqrt(pow(2,n)), 0.0 };
-//    dd::Complex cx = dd->cn.getTempCachedComplex(c.r,c.i);
-//    e_state.w =dd->cn.mulCached(e_state.w, cx);
-//    return e_state;
 }
 /// Generate 'random' state from square root of 3. digit even:0, digit odd: 1.
 /// @param n number of qubits
@@ -111,13 +92,17 @@ dd::Edge StateGenerator::dd_RandomState(int n, int seed){
 /// return base state. put here to have a central state generator. it just returns the DDpackage base vector.
 /// @param n num qubits
 /// @param i base index. 0 to 2^n - 1;
-dd::Edge StateGenerator::dd_BaseState(int n, int i) {
-    assert( i >= 0 & i < pow(2,n));
+dd::Edge StateGenerator::dd_BaseState(int n, lli i) {
+   // assert( i >= 0 & i < pow(2,n));
     return dd->makeBasisState(n, i);
 }
 
+/// Custom state builder. Function normalizes the final state.
+/// @param v complex amplitudes of qubits
+/// @param n number of qubits(added as safety feature, likely should not have been).
 dd::Edge StateGenerator::dd_CustomState(vector<dd::ComplexValue> v, int n) {
     assert (n == log2(static_cast<int>(v.size())));
+    //FIXME: this needs to be made 'manually'
    dd::Edge state {nullptr, {nullptr, nullptr}};//skeleton to start with.
     dd::Edge temp;
     for (int i = 0; i < v.size(); ++i){
@@ -197,7 +182,7 @@ dd::Edge GateGenerator::Smatv1(int n, int b1, int b2) {
     dd::Edge temp2 = dd->add(y_gate, z_gate);
     dd::Edge ret = dd->add(temp1, temp2);
     dd::ComplexValue c{0.5, 0.0 };//used to normalize the state.
-    dd::Complex cx = dd->cn.getCachedComplex(c.r,c.i);
+    dd::Complex cx = dd->cn.getTempCachedComplex(c.r,c.i);
     ret.w = dd->cn.mulCached(ret.w, cx);
     delete[] line;
     return ret;;
@@ -237,25 +222,19 @@ void GateGenerator::RmatGenerator(dd::Matrix2x2 &m, int k) {
 dd::Edge GateGenerator::permuteOperator(int n) {
         dd::Edge e_swap = dd->makeIdent(0, n-1);
         for(int i = 0; i < n/2; ++i){//apply n/2 swap gates.
-            e_swap = dd->multiply(Smatv1(n, i, n - i - 1), e_swap);
+            dd::Edge smat = Smatv1(n, i, n - i - 1);
+            e_swap = dd->multiply(smat, e_swap);
         }
-        return e_swap;;
-//    dd::Edge f = dd::Package::DDone;
-//      dd::Edge edges[4];
-//      edges[0] = edges[3] = dd::Package::DDzero;
-//
-//      for (short p = 0; p < n; ++p) {
-//              edges[1] = f;
-//              edges[2] = f;
-//          f = dd->makeNonterminal(p, edges);
-//      }
- //     return f;
+        return e_swap;
 }
-//dd::Edge GateGenerator::permuteOperator(int n) {
-//    dd::Edge e_swap = dd->makeIdent(0, n-1);
-//    for(int i = 0; i < n/2; ++i){//apply n/2 swap gates.
-//        e_swap = dd->multiply(Smatv1(n, i, n - i - 1), e_swap);
-//    }
-//    return e_swap;;
-//}
+
+/// permute operator, apply swap gates, one by one to the input state
+/// @param n number of qubits
+/// @param state input state root.
+dd::Edge GateGenerator::permuteOperatorV2(int n, dd::Edge state){
+          for(int i = 0; i < n/2; ++i){//apply n/2 swap gates.
+              state = dd->multiply(Smatv1(n, i, n - i - 1), state);
+          }
+          return state;
+};
 /*---END GATE GENERATOR DEFINITIONS---*/
