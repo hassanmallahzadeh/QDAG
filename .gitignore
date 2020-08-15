@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/QDAG/.vs/QDAG/v16
+/QDAG/QDAG.vcxproj.user
+/QDAG/QDAG.vcxproj.filters
+/QDAG/QDAG.vcxproj
+/QDAG/QDAG.sln
+/.vs

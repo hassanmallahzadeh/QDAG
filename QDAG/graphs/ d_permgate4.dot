@@ -1,0 +1,72 @@
+digraph "DD" {
+graph [center=true, ordering=out];
+node [shape=circle, center=true];
+"T" [ shape = box, label="1" ];
+"R" [label="", shape=point];
+"0" [ label="q3" ,style=filled, fillcolor=lightgray ];
+"0h0"  [label="", shape=point];
+"0h2"  [label="", shape=point];
+"1" [ label="q2" ,style=filled, fillcolor=lightgray ];
+"1h0"  [label="", shape=point];
+"1h2"  [label="", shape=point];
+"2" [ label="q2" ,style=filled, fillcolor=lightgray ];
+"2h0"  [label="", shape=point];
+"2h2"  [label="", shape=point];
+"3" [ label="q1" ,style=filled, fillcolor=lightgray ];
+"3h0"  [label="", shape=point];
+"3h2"  [label="", shape=point , fillcolor=red, color=red];
+"4" [ label="q1" ,style=filled, fillcolor=lightgray ];
+"4h0"  [label="", shape=point , fillcolor=red, color=red];
+"4h2"  [label="", shape=point , fillcolor=red, color=red];
+"5" [ label="q1" ,style=filled, fillcolor=lightgray ];
+"5h0"  [label="", shape=point];
+"5h2"  [label="", shape=point , fillcolor=red, color=red];
+"6" [ label="q1" ,style=filled, fillcolor=lightgray ];
+"6h0"  [label="", shape=point , fillcolor=red, color=red];
+"6h2"  [label="", shape=point , fillcolor=red, color=red];
+"7" [ label="q0" ,style=filled, fillcolor=lightgray ];
+"7h0"  [label="", shape=point ];
+"7h2"  [label="", shape=point , fillcolor=red, color=red];
+"8" [ label="q0" ,style=filled, fillcolor=lightgray ];
+"8h0"  [label="", shape=point , fillcolor=red, color=red];
+"8h2"  [label="", shape=point , fillcolor=red, color=red];
+
+"R" -> "0"
+{rank=same; "0h0" "0h2"}
+"0" -> "0h0" [arrowhead=none,color=darkgreen];
+"0h0" -> "1";
+"0" -> "0h2" [arrowhead=none,color=red];
+"0h2" -> "2";
+{rank=same; "1h0" "1h2"}
+"1" -> "1h0" [arrowhead=none,color=darkgreen];
+"1h0" -> "3";
+"1" -> "1h2" [arrowhead=none,color=red];
+"1h2" -> "4";
+{rank=same; "2h0" "2h2"}
+"2" -> "2h0" [arrowhead=none,color=darkgreen];
+"2h0" -> "5";
+"2" -> "2h2" [arrowhead=none,color=red];
+"2h2" -> "6";
+{rank=same; "3h0" "3h2"}
+"3" -> "3h0" [arrowhead=none,color=darkgreen];
+"3h0" -> "7";
+"3" -> "3h2" [arrowhead=none,color=red];
+{rank=same; "4h0" "4h2"}
+"4" -> "4h0" [arrowhead=none,color=darkgreen];
+"4" -> "4h2" [arrowhead=none,color=red];
+{rank=same; "5h0" "5h2"}
+"5" -> "5h0" [arrowhead=none,color=darkgreen];
+"5h0" -> "8";
+"5" -> "5h2" [arrowhead=none,color=red];
+{rank=same; "6h0" "6h2"}
+"6" -> "6h0" [arrowhead=none,color=darkgreen];
+"6" -> "6h2" [arrowhead=none,color=red];
+{rank=same; "7h0" "7h2"}
+"7" -> "7h0" [arrowhead=none,color=darkgreen];
+"7h0"-> "T";
+"7" -> "7h2" [arrowhead=none,color=red];
+{rank=same; "8h0" "8h2"}
+"8" -> "8h0" [arrowhead=none,color=darkgreen];
+"8" -> "8h2" [arrowhead=none,color=red];
+
+}
