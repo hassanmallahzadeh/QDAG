@@ -68,7 +68,7 @@ dd::Edge StateGenerator::dd_RandomState(int n, int seed){
     for (short p = 0; p < n; ++p) {
         bool r = dis(gen);
         bool r0masked = ((r0 >> p) & 1);
-        if(r0masked && r){
+        if(r0masked & r){
             edges[2] = f;
             edges[0] = dd::Package::DDzero;
         }

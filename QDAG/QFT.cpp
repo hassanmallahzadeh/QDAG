@@ -210,14 +210,14 @@ dd::Edge QFT::dd_QFTV4(int n, dd::Edge state, PERM_POS perm) {
 /// @param state input state root edge
 /// @param perm where and if apply the permutation operator.
 dd::Edge QFT::dd_QFTGNV1(int n, dd::Edge state, PERM_POS perm, engine& unrg){
-assert(m_ord == INV_C_T);
+//assert(m_ord == INV_C_T);
 
     GateGenerator  gg = GateGenerator(dd);
     dd::Edge e_ans = state;
     Measurement mm = Measurement(dd);
     if(perm == BEG_PERM){
         e_ans = gg.permuteOperatorV2(n, e_ans);
-        dd->garbageCollect();//without garbage collect crash happens on more than 17 qubits on my computer.//TODO: go after finding why crash happens.
+dd->garbageCollect();//without garbage collect crash happens on more than 17 qubits on my computer.//TODO: go after finding why crash happens.
     }
     
     short *line = new short[n]{};// set 'line' for dd->makeGateDD

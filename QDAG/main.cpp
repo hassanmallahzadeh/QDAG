@@ -81,7 +81,7 @@ void QFTexecutionTimes(){
     //make 'true' to plot the graph (time and node count) as function of varible number.
     std::random_device rd;
     int N = 64;//points for graph
-    int ntrials = 50;//how many times run simulations for averaging.
+    int ntrials = 100;//how many times run simulations for averaging.
     int offset = 1;//starting num of qubits
     float nodecounter[N];//type float for averaging
     float a_et[2][N];//dd size, execution time.
@@ -98,12 +98,14 @@ void QFTexecutionTimes(){
             auto* dd = new dd::Package;
             int n = i + offset;//number of bits
             StateGenerator sg = StateGenerator(dd);
-            dd::Edge state = sg.dd_BaseState(n,shor::modexp(2, n, std::numeric_limits<lli>::max())-1);
+//            dd::Edge state = sg.dd_BaseState(n,shor::modexp(2, n, std::numeric_limits<lli>::max())-1);
+            dd::Edge state = sg.dd_RandomState(n, rd());
+         //   dd::Edge state = sg.dd_UniformState(n);
             QFT qft = QFT(dd);
             time_point<system_clock> start, end;
             start = system_clock::now();
             engine eng(rd());
-            state = qft.dd_QFTV2(n, state, NO_PERM);
+            state = qft.dd_QFTGNV1(n, state, BEG_PERM, eng);
             nodecounter[i] += dd->size(state);
             end = system_clock::now();
             duration<float> elapsed_seconds = end - start;

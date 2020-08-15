@@ -48,7 +48,7 @@ namespace dd {
 	    NodePtr p;
 	    Complex w;
     };
-
+   // Edge nulledge = {nullptr, {nullptr, nullptr}};//HM
     struct Node {
 	    NodePtr next;         // link for unique table and available space chain
 	    Edge e[NEDGE];     // edges out of this node
