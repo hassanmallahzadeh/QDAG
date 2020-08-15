@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <random>
 #include "shorutil.hpp"
+#include <chrono>
 using namespace std::chrono;
 using std::cout;
 using std::endl;
@@ -80,7 +81,7 @@ void UniformityTest(){
 void QFTexecutionTimes(){
     //make 'true' to plot the graph (time and node count) as function of varible number.
     std::random_device rd;
-    int N = 64;//points for graph
+    const int N = 62;//points for graph
     int ntrials = 50;//how many times run simulations for averaging.
     int offset = 1;//starting num of qubits
     float nodecounter[N];//type float for averaging
