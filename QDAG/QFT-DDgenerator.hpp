@@ -39,6 +39,7 @@ public:
     dd::Edge Smatv2(int n, int b1, int b2);
     void RmatGenerator(dd::Matrix2x2 &m, int k);
     dd::Edge permuteOperator(int n);
-    dd::Edge permuteOperatorV2(int n, dd::Edge state);
+    dd::Edge permuteOperatorOnState(int n, dd::Edge state);
+    dd::Edge permuteOperatorOnState(int nt, int ni, int no, int na, dd::Edge state);
 };
 #endif /* QFT_DDgenerator_hpp */

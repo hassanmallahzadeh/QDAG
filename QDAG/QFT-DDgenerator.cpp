@@ -228,10 +228,26 @@ dd::Edge GateGenerator::permuteOperator(int n) {
         return e_swap;
 }
 
+/// permute operator, apply swap gates, one by one to the input state, used in     RegisterFactory::ExponentiateOutReg(). Refer to figure 6 of PRA S1050-2947(96)05707-1.
+/// @param n toral number of variables
+/// @param ni input register variables
+/// @param no output register vairables
+/// @param state state for operator to be appiled to.
+dd::Edge GateGenerator::permuteOperatorOnState(int nt, int ni, int no, int na, dd::Edge state) {
+    assert (no == ni);
+    assert(nt == ni + no + na);
+    int n0 = ni + 1;
+    int n1 = ni + na + 1;
+    for(int i = n0; i < n1; ++i){//apply no == na swap gates.
+        state = dd->multiply(Smatv1(nt, i, i + no), state);
+    }
+    return state;
+}
+
 /// permute operator, apply swap gates, one by one to the input state
 /// @param n number of qubits
 /// @param state input state root.
-dd::Edge GateGenerator::permuteOperatorV2(int n, dd::Edge state){
+dd::Edge GateGenerator::permuteOperatorOnState(int n, dd::Edge state){
           for(int i = 0; i < n/2; ++i){//apply n/2 swap gates.
               state = dd->multiply(Smatv1(n, i, n - i - 1), state);
           }

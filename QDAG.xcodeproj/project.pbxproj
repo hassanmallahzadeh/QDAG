@@ -19,6 +19,7 @@
 		C0B4E5BB24DF340A00D6A640 /* Alice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0B4E5B924DF340900D6A640 /* Alice.cpp */; };
 		C0B4E5BE24DF56A900D6A640 /* shorutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0B4E5BC24DF56A900D6A640 /* shorutil.cpp */; };
 		C0B4E5C124DF97FB00D6A640 /* PeriodFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0B4E5BF24DF97FB00D6A640 /* PeriodFinder.cpp */; };
+		C0DBF41624F09BC2008B9216 /* RegisterFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0DBF41424F09BC2008B9216 /* RegisterFactory.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -59,6 +60,8 @@
 		C0B4E5BD24DF56A900D6A640 /* shorutil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = shorutil.hpp; sourceTree = "<group>"; };
 		C0B4E5BF24DF97FB00D6A640 /* PeriodFinder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PeriodFinder.cpp; sourceTree = "<group>"; };
 		C0B4E5C024DF97FB00D6A640 /* PeriodFinder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PeriodFinder.hpp; sourceTree = "<group>"; };
+		C0DBF41424F09BC2008B9216 /* RegisterFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RegisterFactory.cpp; sourceTree = "<group>"; };
+		C0DBF41524F09BC2008B9216 /* RegisterFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RegisterFactory.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +134,8 @@
 				C0B4E5BA24DF340900D6A640 /* Alice.hpp */,
 				C0B4E5BF24DF97FB00D6A640 /* PeriodFinder.cpp */,
 				C0B4E5C024DF97FB00D6A640 /* PeriodFinder.hpp */,
+				C0DBF41424F09BC2008B9216 /* RegisterFactory.cpp */,
+				C0DBF41524F09BC2008B9216 /* RegisterFactory.hpp */,
 			);
 			name = ShorAlgorithm;
 			sourceTree = "<group>";
@@ -221,6 +226,7 @@
 				C073EBB824DF0A8400B88991 /* Bob.cpp in Sources */,
 				C09D2A2A24AECA3300188786 /* QFT-DDgenerator.cpp in Sources */,
 				C0B4E5BE24DF56A900D6A640 /* shorutil.cpp in Sources */,
+				C0DBF41624F09BC2008B9216 /* RegisterFactory.cpp in Sources */,
 				C09D2A2624AE575100188786 /* QFT.cpp in Sources */,
 				C0436EAC24B16F6E0027F72E /* main.cpp in Sources */,
 				C09D2A2224AE575100188786 /* DDpackage.cpp in Sources */,

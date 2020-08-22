@@ -48,7 +48,6 @@ namespace dd {
 	    NodePtr p;
 	    Complex w;
     };
-   // Edge nulledge = {nullptr, {nullptr, nullptr}};//HM
     struct Node {
 	    NodePtr next;         // link for unique table and available space chain
 	    Edge e[NEDGE];     // edges out of this node
@@ -192,6 +191,7 @@ namespace dd {
         constexpr static Node* terminalNode{&terminal};        // pointer to terminal node
         constexpr static Edge DDone{ terminalNode, ComplexNumbers::ONE };
         constexpr static Edge DDzero{ terminalNode, ComplexNumbers::ZERO };            // edges pointing to zero and one DD constants
+        constexpr static Edge DDnull{nullptr, {nullptr, nullptr}};
         unsigned long activeNodeCount = 0;             // number of active nodes
 		unsigned long maxActive = 0;
         unsigned long gc_calls{};

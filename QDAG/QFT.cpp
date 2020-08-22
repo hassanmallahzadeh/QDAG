@@ -62,10 +62,10 @@ dd::Edge QFT::dd_QFTV1(int n, PERM_POS perm) {
         gg.lineReset(line,i,n - i - 1);// reset line array
     }
     if(perm == BEG_PERM){
-        e_ans = gg.permuteOperatorV2(n, e_ans);
+        e_ans = gg.permuteOperatorOnState(n, e_ans);
     }
     else if(perm == END_PERM){
-        e_ans = gg.permuteOperatorV2(n, e_ans);//this is equivanent to reversing variable order.
+        e_ans = gg.permuteOperatorOnState(n, e_ans);//this is equivanent to reversing variable order.
     }
     delete[] line;
     return e_ans;
@@ -79,7 +79,7 @@ dd::Edge QFT::dd_QFTV2(int n, dd::Edge state, PERM_POS perm) {
     GateGenerator  gg = GateGenerator(dd);
     dd::Edge e_ans = state;
     if(perm == BEG_PERM){
-        e_ans = gg.permuteOperatorV2(n, e_ans);
+        e_ans = gg.permuteOperatorOnState(n, e_ans);
     }
     else if(perm == END_PERM)
         cout<<"Warning: permutation gate has to be applied at beginning for correct result.\n";
@@ -106,7 +106,7 @@ dd::Edge QFT::dd_QFTV2(int n, dd::Edge state, PERM_POS perm) {
         }
     }
     if(perm == END_PERM){
-        e_ans = gg.permuteOperatorV2(n, e_ans);
+        e_ans = gg.permuteOperatorOnState(n, e_ans);
     }
     
     delete[] line;
@@ -121,7 +121,7 @@ dd::Edge QFT::dd_QFTV3(int n , PERM_POS perm){
     dd::Edge e_ans = dd->makeIdent(0, n-1);// this can be taken out, here for clarity
     GateGenerator  gg = GateGenerator(dd);
     if(perm == BEG_PERM){
-        e_ans = gg.permuteOperatorV2(n, e_ans);
+        e_ans = gg.permuteOperatorOnState(n, e_ans);
     }
     short *line = new short[n]{};// set 'line' for dd->makeGateDD
     for (int i = 0; i < n; ++i){
@@ -152,7 +152,7 @@ dd::Edge QFT::dd_QFTV3(int n , PERM_POS perm){
         gg.lineReset(line,i,n - i - 1);// reset line array
     }
     if(perm == END_PERM){
-        e_ans = gg.permuteOperatorV2(n, e_ans);//this is equivanent to reversing variable order.
+        e_ans = gg.permuteOperatorOnState(n, e_ans);//this is equivanent to reversing variable order.
     }
     delete[] line;
     return e_ans;
@@ -169,7 +169,7 @@ dd::Edge QFT::dd_QFTV4(int n, dd::Edge state, PERM_POS perm) {
     dd::Edge e_ans = state;
     
     if(perm == BEG_PERM){
-        e_ans = gg.permuteOperatorV2(n, e_ans);
+        e_ans = gg.permuteOperatorOnState(n, e_ans);
         cout<<"Warning: permutation gate has to be applied at end for correct result.\n";
     }
     short *line = new short[n]{};// set 'line' for dd->makeGateDD
@@ -196,7 +196,7 @@ dd::Edge QFT::dd_QFTV4(int n, dd::Edge state, PERM_POS perm) {
         }
     }
     if(perm == END_PERM)
-        e_ans = gg.permuteOperatorV2(n, e_ans);
+        e_ans = gg.permuteOperatorOnState(n, e_ans);
     
     delete[] line;
     return e_ans;
@@ -216,7 +216,7 @@ dd::Edge QFT::dd_QFTGNV1(int n, dd::Edge state, PERM_POS perm, engine& unrg){
     dd::Edge e_ans = state;
     Measurement mm = Measurement(dd);
     if(perm == BEG_PERM){
-        e_ans = gg.permuteOperatorV2(n, e_ans);
+        e_ans = gg.permuteOperatorOnState(n, e_ans);
 dd->garbageCollect();//without garbage collect crash happens on more than 17 qubits on my computer.//TODO: go after finding why crash happens.
     }
     
@@ -243,7 +243,7 @@ dd->garbageCollect();//without garbage collect crash happens on more than 17 qub
     }
     if(perm == END_PERM){
         dd->garbageCollect();
-      e_ans = gg.permuteOperatorV2(n, e_ans);
+      e_ans = gg.permuteOperatorOnState(n, e_ans);
     cout<<"Warning: permutation gate has to be applied at the beginning for correct result.\n";
     }
 
@@ -261,7 +261,7 @@ dd::Edge QFT::dd_QFTGNV2(int n, dd::Edge state, PERM_POS perm ,engine& unrg) {
     GateGenerator  gg = GateGenerator(dd);
     dd::Edge e_ans = state;
     if(perm == BEG_PERM){
-          e_ans = gg.permuteOperatorV2(n , e_ans);
+          e_ans = gg.permuteOperatorOnState(n , e_ans);
           cout<<"Warning: permutation gate has to be applied at end for correct result.\n";
       }
     Measurement mm = Measurement(dd);
@@ -287,7 +287,7 @@ dd::Edge QFT::dd_QFTGNV2(int n, dd::Edge state, PERM_POS perm ,engine& unrg) {
         }
     }
     if(perm == END_PERM){
-           e_ans = gg.permuteOperatorV2(n, e_ans);
+           e_ans = gg.permuteOperatorOnState(n, e_ans);
        }
     delete[] line;
     return e_ans;

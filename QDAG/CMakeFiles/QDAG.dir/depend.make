@@ -43,5 +43,6 @@ CMakeFiles/QDAG.dir/main.cpp.o: QFT-Measurement.hpp
 CMakeFiles/QDAG.dir/main.cpp.o: QFT.hpp
 CMakeFiles/QDAG.dir/main.cpp.o: commonheaders.h
 CMakeFiles/QDAG.dir/main.cpp.o: main.cpp
+CMakeFiles/QDAG.dir/main.cpp.o: shorutil.hpp
 CMakeFiles/QDAG.dir/main.cpp.o: util.h
 

@@ -10,7 +10,7 @@ namespace dd {
 	Node Package::terminal{ nullptr, {{ nullptr, CN::ZERO}, { nullptr, CN::ZERO }, { nullptr, CN::ZERO }, { nullptr, CN::ZERO }}, 0, -1, true, true};
 	constexpr Edge Package::DDzero;
 	constexpr Edge Package::DDone;
-
+    constexpr Edge Package::DDnull;
     void Package::debugnode(NodePtr p) const {
        if (p == DDzero.p) {
             std::cout << "terminal\n";

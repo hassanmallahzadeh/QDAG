@@ -15,13 +15,12 @@
 #include <bit>
 class PeriodFinder{
     lli N;
-    lli b;
+    lli a;
     int ni = -1;//input register size
     int no = -1;//output register size
     dd::Package *dd = nullptr;
     dd::Edge inputRegister = {nullptr, {nullptr, nullptr}};
     dd::Edge outputRegister = {nullptr, {nullptr, nullptr}};
-    void DetermineRegSizes();
     void InitializeRegisters();
 public:
     PeriodFinder(lli N, lli b);

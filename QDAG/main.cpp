@@ -21,13 +21,13 @@ void TempTest();
 void UniformityTest();
 void QFTexecutionTimes();
 int main(){
-    if( false ){
+    if( true ){
         TempTest();
     }
     if(/* DISABLES CODE */ (false)){//make 'true' to investigate a single QFT (fixed number of bits)
         UniformityTest();
     }
-    if(/* DISABLES CODE */ true){
+    if(/* DISABLES CODE */ false){
         QFTexecutionTimes();
     }
     return 0;
@@ -35,9 +35,13 @@ int main(){
 
 void TempTest(){
     auto* dd = new dd::Package();
-    auto gg =  GateGenerator(dd);
-    auto gate = gg.permuteOperator(2);
-  //  dd->export2Dot(gate, "perm_3.dot");
+    auto sg = StateGenerator(dd);
+    auto gate0 = sg.dd_BaseState(4, 1);
+    dd->export2Dot(gate0, "add4bit1.dot");
+    auto gate1 = sg.dd_BaseState(4, 3);
+    dd->export2Dot(gate1, "add4bit3.dot");
+    auto gateadd = dd->add(gate0, gate1);
+    dd->export2Dot(gateadd, "add4bit13.dot");
 }
 void UniformityTest(){
     //examine uniformity of probabilities.
