@@ -135,22 +135,28 @@ dd::Edge StateGenerator::dd_CustomState(vector<dd::ComplexValue> v, int n) {
 /// set 'line' for controlled gates.//NOTE: Just for base 2
 /// @param line linearray
 /// @param t target index
-/// @param c control index
-void GateGenerator::lineSet(short *line, int t, int c) { 
+/// @param c0 control index
+/// @param c1 control index
+void GateGenerator::lineSet(short *line, int t, int c0, int c1) {
     if(t >= 0)
         line[t] = 2;
-    if(c >= 0)
-        line[c] = 1;
+    if(c0 >= 0)
+        line[c0] = 1;
+    if(c1 >= 0)
+        line[c1] = 1;
 }
 /// reset 'line' for controlled gates.//NOTE: Just for base 2
 /// @param line linearray
 /// @param t target index
-/// @param c control index
-void GateGenerator::lineReset(short *line, int t, int c) { 
+/// @param c0 control index
+/// @param c1 control index
+void GateGenerator::lineReset(short *line, int t, int c0, int c1) {
     if(t >= 0)
         line[t] = -1;
-    if(c >= 0)
-        line[c] = -1;;
+    if(c0 >= 0)
+        line[c0] = -1;
+    if(c1 >= 0)
+        line[c1] = -1;
 }
 
 GateGenerator::GateGenerator(dd::Package *dd) { 
@@ -229,17 +235,14 @@ dd::Edge GateGenerator::permuteOperator(int n) {
 }
 
 /// permute operator, apply swap gates, one by one to the input state, used in     RegisterFactory::ExponentiateOutReg(). Refer to figure 6 of PRA S1050-2947(96)05707-1.
-/// @param n toral number of variables
-/// @param ni input register variables
-/// @param no output register vairables
+/// @param nt total number of variables
+/// @param v1 vector containing first group of qubits for swap
+/// @param v2 vector containing second group of qubits for swap
 /// @param state state for operator to be appiled to.
-dd::Edge GateGenerator::permuteOperatorOnState(int nt, int ni, int no, int na, dd::Edge state) {
-    assert (no == ni);
-    assert(nt == ni + no + na);
-    int n0 = ni + 1;
-    int n1 = ni + na + 1;
-    for(int i = n0; i < n1; ++i){//apply no == na swap gates.
-        state = dd->multiply(Smatv1(nt, i, i + no), state);
+dd::Edge GateGenerator::permuteOperatorOnState(int nt, vector<int> v1, vector<int> v2, dd::Edge state) {
+    assert (v1.size() == v2.size());
+    for(int i = 0; i < v1.size(); ++i){
+        state = dd->multiply(Smatv1(nt, v1[i], v2[i]), state);
     }
     return state;
 }
@@ -253,4 +256,45 @@ dd::Edge GateGenerator::permuteOperatorOnState(int n, dd::Edge state){
           }
           return state;
 };
+/// Create Toffoli gate if not computed already.
+/// @param line gategenerator line
+/// @param c0 first control index
+/// @param c1 second control index
+/// @param t target index
+/// @param nt max index
+dd::Edge GateGenerator::ToffoliGenerator(short* line, int t, int c0, int c1, int nt){
+    dd::Edge e;
+    lineSet(line, t, c0, c1);
+    e = dd->TTlookup(c0, c1, t, line);
+    if(!e.p){
+    e = dd->makeGateDD(Xmat, nt, line);
+        dd->TTinsert(c0, c1, t, line, e);
+    }
+    lineReset(line, t, c0, c1);
+    return e;
+}
+
+/// Create C-Not gate//Can be combined with ToffoliGenerator(), left for code readability.
+/// @param line gate generator line
+/// @param t target index
+/// @param c control index
+/// @param nt max indix
+dd::Edge GateGenerator::CNotGenerator(short* line, int t, int c, int nt){
+    //TODO: compute table for CNOT.
+    lineSet(line, t, c);
+    dd::Edge e = dd->makeGateDD(Xmat, nt, line);
+    lineReset(line, t, c);
+    return e;
+}
+
+/// Create Not-gate//Can be combined with CNotGenerator() or ToffoliGenerator(), left for code readability.
+/// @param line gate generator line
+/// @param t target index
+/// @param nt max index
+dd::Edge GateGenerator::NotGenerator(short* line, int t, int nt){
+    lineSet(line, t);
+    dd::Edge e = dd->makeGateDD(Xmat, nt, line);
+    lineReset(line, t);
+    return e;
+}
 /*---END GATE GENERATOR DEFINITIONS---*/

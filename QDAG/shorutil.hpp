@@ -13,6 +13,6 @@
 namespace shor{
 lli gcd(lli f, lli c);
 lli modexp( lli x,  lli a,  lli n);
-
+lli modInverse(lli a, lli m);
 }
 #endif /* shorutil_hpp */

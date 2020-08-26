@@ -32,14 +32,17 @@ class GateGenerator{
 private:
     dd::Package* dd;
 public:
-    void lineSet(short* line, int t, int c = -1);
-    void lineReset(short* line, int t, int c = -1);
+    void lineSet(short* line, int t, int c0 = -1, int c1 = -1);
+    void lineReset(short* line, int t, int c0 = -1, int c1 = -1);
     GateGenerator(dd::Package* dd);
     dd::Edge Smatv1(int n, int b1, int b2);
     dd::Edge Smatv2(int n, int b1, int b2);
     void RmatGenerator(dd::Matrix2x2 &m, int k);
     dd::Edge permuteOperator(int n);
     dd::Edge permuteOperatorOnState(int n, dd::Edge state);
-    dd::Edge permuteOperatorOnState(int nt, int ni, int no, int na, dd::Edge state);
+    dd::Edge permuteOperatorOnState(int nt, vector<int> v1, vector<int> v2, dd::Edge state);
+    dd::Edge ToffoliGenerator(short* line, int, int, int, int);
+    dd::Edge CNotGenerator(short* line, int, int, int);
+    dd::Edge NotGenerator(short* line, int, int);
 };
 #endif /* QFT_DDgenerator_hpp */
