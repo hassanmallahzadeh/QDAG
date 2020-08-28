@@ -9,7 +9,7 @@
 #ifndef RegisterFactoryInterface_hpp
 #define RegisterFactoryInterface_hpp
 #include "commonheaders.h"
-#include "DDpackage.h"
+#include "IIC-JKU/DDpackage.h"
 #include "QFT-DDgenerator.hpp"
 #include <stdio.h>
 class RegisterFactory{
@@ -33,6 +33,7 @@ private:
     vector<int> v_in;
     vector<int> v_addmod_temp;
     vector<int> v_mod_temp;
+
     void DetermineRegSizes();
     void AllocateRegVectors();
     void MakeInitialState();
@@ -45,11 +46,12 @@ private:
     void ModuloNAdderInv(vector<int>, vector<int>);
     void TempNResetter();
     void extractedMapToTemp(vector<int>, int c1, int c2, lli cl);
-    
     void CMulModN(int c, lli cfa);
     void CMulModNInv(int c, lli cfa);
 public:
     RegisterFactory(lli N, lli a, dd::Package *dd);
+    dd::Edge RippleAdderDebug(vector<int> num1, vector<int> num2);
+    dd::Edge RippleAdder(vector<dd::ComplexValue> num1, vector<dd::ComplexValue> num2, int n);
     ~RegisterFactory();
     dd::Edge CExponentiation();
 };

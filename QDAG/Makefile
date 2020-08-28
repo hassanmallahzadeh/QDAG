@@ -224,6 +224,33 @@ IIC-JKU/DDpackage.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/IIC-JKU/DDpackage.cpp.s
 .PHONY : IIC-JKU/DDpackage.cpp.s
 
+PeriodFinder.o: PeriodFinder.cpp.o
+
+.PHONY : PeriodFinder.o
+
+# target to build an object file
+PeriodFinder.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/PeriodFinder.cpp.o
+.PHONY : PeriodFinder.cpp.o
+
+PeriodFinder.i: PeriodFinder.cpp.i
+
+.PHONY : PeriodFinder.i
+
+# target to preprocess a source file
+PeriodFinder.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/PeriodFinder.cpp.i
+.PHONY : PeriodFinder.cpp.i
+
+PeriodFinder.s: PeriodFinder.cpp.s
+
+.PHONY : PeriodFinder.s
+
+# target to generate assembly for a file
+PeriodFinder.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/PeriodFinder.cpp.s
+.PHONY : PeriodFinder.cpp.s
+
 QFT-DDgenerator.o: QFT-DDgenerator.cpp.o
 
 .PHONY : QFT-DDgenerator.o
@@ -305,6 +332,33 @@ QFT.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/QFT.cpp.s
 .PHONY : QFT.cpp.s
 
+RegisterFactory.o: RegisterFactory.cpp.o
+
+.PHONY : RegisterFactory.o
+
+# target to build an object file
+RegisterFactory.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/RegisterFactory.cpp.o
+.PHONY : RegisterFactory.cpp.o
+
+RegisterFactory.i: RegisterFactory.cpp.i
+
+.PHONY : RegisterFactory.i
+
+# target to preprocess a source file
+RegisterFactory.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/RegisterFactory.cpp.i
+.PHONY : RegisterFactory.cpp.i
+
+RegisterFactory.s: RegisterFactory.cpp.s
+
+.PHONY : RegisterFactory.s
+
+# target to generate assembly for a file
+RegisterFactory.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/RegisterFactory.cpp.s
+.PHONY : RegisterFactory.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -332,6 +386,33 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+shorutil.o: shorutil.cpp.o
+
+.PHONY : shorutil.o
+
+# target to build an object file
+shorutil.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/shorutil.cpp.o
+.PHONY : shorutil.cpp.o
+
+shorutil.i: shorutil.cpp.i
+
+.PHONY : shorutil.i
+
+# target to preprocess a source file
+shorutil.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/shorutil.cpp.i
+.PHONY : shorutil.cpp.i
+
+shorutil.s: shorutil.cpp.s
+
+.PHONY : shorutil.s
+
+# target to generate assembly for a file
+shorutil.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/shorutil.cpp.s
+.PHONY : shorutil.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -350,6 +431,9 @@ help:
 	@echo "... IIC-JKU/DDpackage.o"
 	@echo "... IIC-JKU/DDpackage.i"
 	@echo "... IIC-JKU/DDpackage.s"
+	@echo "... PeriodFinder.o"
+	@echo "... PeriodFinder.i"
+	@echo "... PeriodFinder.s"
 	@echo "... QFT-DDgenerator.o"
 	@echo "... QFT-DDgenerator.i"
 	@echo "... QFT-DDgenerator.s"
@@ -359,9 +443,15 @@ help:
 	@echo "... QFT.o"
 	@echo "... QFT.i"
 	@echo "... QFT.s"
+	@echo "... RegisterFactory.o"
+	@echo "... RegisterFactory.i"
+	@echo "... RegisterFactory.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... shorutil.o"
+	@echo "... shorutil.i"
+	@echo "... shorutil.s"
 .PHONY : help
 
 

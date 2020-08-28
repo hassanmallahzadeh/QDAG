@@ -99,7 +99,7 @@ dd::Edge StateGenerator::dd_BaseState(int n, lli i) {
 
 /// Custom state builder. Function normalizes the final state.
 /// @param v complex amplitudes of qubits
-/// @param n number of qubits(added as safety feature, likely should not have been).
+/// @param n number of qubits(added as safety feature).
 dd::Edge StateGenerator::dd_CustomState(vector<dd::ComplexValue> v, int n) {
     assert (n == log2(static_cast<int>(v.size())));
     //FIXME: this needs to be made 'manually'
@@ -159,6 +159,11 @@ void GateGenerator::lineReset(short *line, int t, int c0, int c1) {
         line[c1] = -1;
 }
 
+void GateGenerator::lineClear(short *line, int n){
+    for(int i = 0; i < n; ++i){
+        line[i] = -1;
+    }
+}
 GateGenerator::GateGenerator(dd::Package *dd) { 
     this->dd = dd;
 }
@@ -234,12 +239,12 @@ dd::Edge GateGenerator::permuteOperator(int n) {
         return e_swap;
 }
 
-/// permute operator, apply swap gates, one by one to the input state, used in     RegisterFactory::ExponentiateOutReg(). Refer to figure 6 of PRA S1050-2947(96)05707-1.
+/// apply swap gates, one by one to the input state, used in     RegisterFactory::ExponentiateOutReg(). Refer to figure 6 of PRA S1050-2947(96)05707-1.
 /// @param nt total number of variables
 /// @param v1 vector containing first group of qubits for swap
 /// @param v2 vector containing second group of qubits for swap
 /// @param state state for operator to be appiled to.
-dd::Edge GateGenerator::permuteOperatorOnState(int nt, vector<int> v1, vector<int> v2, dd::Edge state) {
+dd::Edge GateGenerator::swapRegistersOnState(int nt, vector<int> v1, vector<int> v2, dd::Edge state) {
     assert (v1.size() == v2.size());
     for(int i = 0; i < v1.size(); ++i){
         state = dd->multiply(Smatv1(nt, v1[i], v2[i]), state);
@@ -262,7 +267,8 @@ dd::Edge GateGenerator::permuteOperatorOnState(int n, dd::Edge state){
 /// @param c1 second control index
 /// @param t target index
 /// @param nt max index
-dd::Edge GateGenerator::ToffoliGenerator(short* line, int t, int c0, int c1, int nt){
+/// @param state optional state value for gate to be applied to before return.
+dd::Edge GateGenerator::ToffoliGenOrApply(short* line, int t, int c0, int c1, int nt, dd::Edge* state){
     dd::Edge e;
     lineSet(line, t, c0, c1);
     e = dd->TTlookup(c0, c1, t, line);
@@ -271,6 +277,9 @@ dd::Edge GateGenerator::ToffoliGenerator(short* line, int t, int c0, int c1, int
         dd->TTinsert(c0, c1, t, line, e);
     }
     lineReset(line, t, c0, c1);
+    if(state){
+        *state = dd->multiply(e, *state);
+    }
     return e;
 }
 
@@ -279,11 +288,15 @@ dd::Edge GateGenerator::ToffoliGenerator(short* line, int t, int c0, int c1, int
 /// @param t target index
 /// @param c control index
 /// @param nt max indix
-dd::Edge GateGenerator::CNotGenerator(short* line, int t, int c, int nt){
+/// @param state optional state value for gate to be applied to before return.
+dd::Edge GateGenerator::CNotGenOrApply(short* line, int t, int c, int nt, dd::Edge* state){
     //TODO: compute table for CNOT.
     lineSet(line, t, c);
     dd::Edge e = dd->makeGateDD(Xmat, nt, line);
     lineReset(line, t, c);
+    if(state){
+           *state = dd->multiply(e, *state);
+       }
     return e;
 }
 
@@ -291,10 +304,28 @@ dd::Edge GateGenerator::CNotGenerator(short* line, int t, int c, int nt){
 /// @param line gate generator line
 /// @param t target index
 /// @param nt max index
-dd::Edge GateGenerator::NotGenerator(short* line, int t, int nt){
+/// @param state optional state value for gate to be applied to before return.
+dd::Edge GateGenerator::NotGenOrApply(short* line, int t, int nt, dd::Edge* state){
     lineSet(line, t);
     dd::Edge e = dd->makeGateDD(Xmat, nt, line);
     lineReset(line, t);
+    if(state){
+             *state = dd->multiply(e, *state);
+         }
     return e;
+}
+/// Create Hadamard. be combined with CNotGenerator() or ToffoliGenerator(), left for code readability.
+/// @param line gate generator line
+/// @param t target index
+/// @param nt max index
+/// @param state optional state value for gate to be applied to before return.
+dd::Edge GateGenerator::HadGenOrApply(short *line, int t, int nt, dd::Edge* state){
+    lineSet(line, t);
+      dd::Edge e = dd->makeGateDD(Hmat, nt, line);
+      lineReset(line, t);
+    if(state){
+             *state = dd->multiply(e, *state);
+         }
+      return e;
 }
 /*---END GATE GENERATOR DEFINITIONS---*/

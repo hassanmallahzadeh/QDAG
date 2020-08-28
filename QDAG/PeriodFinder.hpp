@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include "commonheaders.h"
-#include "DDpackage.h"
+#include "IIC-JKU/DDpackage.h"
 #include <bit>
 class PeriodFinder{
     lli N;

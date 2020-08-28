@@ -76,6 +76,16 @@ QFT-DDgenerator.hpp
 stdio.h
 -
 
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.hpp
+commonheaders.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
+IIC-JKU/DDpackage.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
+QFT-DDgenerator.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
+stdio.h
+-
+
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
 vector
 -
@@ -113,6 +123,8 @@ random
 -
 shorutil.hpp
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp
+RegisterFactory.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.hpp
 chrono
 -
 

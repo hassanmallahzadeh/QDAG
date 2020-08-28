@@ -2,10 +2,13 @@ file(REMOVE_RECURSE
   "CMakeFiles/QDAG.dir/IIC-JKU/DDcomplex.cpp.o"
   "CMakeFiles/QDAG.dir/IIC-JKU/DDexport.cpp.o"
   "CMakeFiles/QDAG.dir/IIC-JKU/DDpackage.cpp.o"
+  "CMakeFiles/QDAG.dir/PeriodFinder.cpp.o"
   "CMakeFiles/QDAG.dir/QFT-DDgenerator.cpp.o"
   "CMakeFiles/QDAG.dir/QFT-Measurement.cpp.o"
   "CMakeFiles/QDAG.dir/QFT.cpp.o"
+  "CMakeFiles/QDAG.dir/RegisterFactory.cpp.o"
   "CMakeFiles/QDAG.dir/main.cpp.o"
+  "CMakeFiles/QDAG.dir/shorutil.cpp.o"
   "QDAG"
   "QDAG.pdb"
 )
