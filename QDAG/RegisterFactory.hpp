@@ -12,6 +12,7 @@
 #include "IIC-JKU/DDpackage.h"
 #include "QFT-DDgenerator.hpp"
 #include <stdio.h>
+using std::bitset;
 class RegisterFactory{
 private:
     lli N = -1;
@@ -23,8 +24,10 @@ private:
     int n_mul = -1;// auxiliary register for modular multiplication
     int n_mod = -1;// auxiliary register (for quantum temp values) size in modular exponentiation.
     int n_tot = -1;// total number of qubits (input + output + auxiliary)
-    dd::Edge state = dd::Package::DDnull;
+    int n = -1;//NEW to replace above numbers
+     dd::Edge state = dd::Package::DDnull;
     dd::Package *dd = nullptr;
+    vector<bool> base2N;//base2 representation of N.
     short* line = nullptr;//holds 'line'for setting basic gates.
     GateGenerator gg;
     vector<int> v_car;
@@ -36,7 +39,6 @@ private:
 
     void DetermineRegSizes();
     void AllocateRegVectors();
-    void MakeInitialState();
     void Carry(int c0,int a0, int b0, int c1);
     void CarryInv(int c0,int a0, int b0, int c1);
     void Sum(int c0,int a0, int b0);
@@ -51,7 +53,10 @@ private:
 public:
     RegisterFactory(lli N, lli a, dd::Package *dd);
     dd::Edge RippleAdderDebug(vector<int> num1, vector<int> num2);
-    dd::Edge RippleAdder(vector<dd::ComplexValue> num1, vector<dd::ComplexValue> num2, int n);
+    dd::Edge RippleAdderGeneral(dd::Edge state, int n);
+    dd::Edge RippleAdderHalfClassicDebug(lli cl, vector<int> num);
+    dd::Edge RippleAdderHalfClassicGeneral(lli cnum, dd::Edge state, int n);
+    dd::Edge ModuloNAdderDebug(vector<int>, vector<int>);
     ~RegisterFactory();
     dd::Edge CExponentiation();
 };

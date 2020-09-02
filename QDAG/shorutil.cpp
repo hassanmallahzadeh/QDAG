@@ -23,7 +23,7 @@ lli gcd(lli f, lli c){
     while(c > 0){
         ftemp = f;
         f = c;
-     //   c = ftemp - floor(ftemp/c) * c;
+        //   c = ftemp - floor(ftemp/c) * c;
         c = ftemp % c;
     }
     return f;
@@ -66,15 +66,53 @@ lli modInverse(lli f, lli c){
 /// @param a exponent
 /// @param n mod
 lli modexp( lli x,  lli a,  lli n) {
-   lli value = 1;
-   lli tmp = x % n;
-  while (a > 0) {
-    if (a & 1) {
-      value = (value * tmp) % n;
+    lli value = 1;
+    lli tmp = x % n;
+    while (a > 0) {
+        if (a & 1) {
+            value = (value * tmp) % n;
+        }
+        tmp = tmp * tmp % n;
+        a>>=1;
     }
-    tmp = tmp * tmp % n;
-    a>>=1;
-  }
-  return value;
+    return value;
 }
+
+int bddNumVar(dd::Edge edge, bool isVector){
+    list<dd::NodePtr> l;
+    assert(edge.p);// make sure not null
+    dd::NodePtr curnode = edge.p;
+    l.push_back(curnode);
+    int max = 0;
+    while(!l.empty()){// breath first search
+        curnode = l.front();
+        if(curnode->v > max){
+            max = curnode->v;
+        }
+        l.pop_front();
+        for(int i = 0; i < dd::NEDGE; ++i){
+            if(isVector && i % dd::RADIX != 0) continue;
+            if(curnode->e[i].p == dd::Package::terminalNode){// base case
+                continue;
+            }
+            else{
+                l.push_back(curnode->e[i].p);
+            }
+        }
+    }
+    return max + 1;
+}
+//returns base 2 representation. returns in reverse by default.
+vector<bool> base2rep(lli N, bool inversed){
+    vector<bool> v;
+    while(N > 0){
+        v.push_back(N & 1);
+        N >>= 1;
+    }
+    if(!inversed)
+    std::reverse(v.begin(), v.end());
+    
+    return v;
+}
+
 }

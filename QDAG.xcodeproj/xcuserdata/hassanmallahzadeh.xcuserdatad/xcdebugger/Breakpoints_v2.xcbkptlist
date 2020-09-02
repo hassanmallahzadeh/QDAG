@@ -14,8 +14,8 @@
             filePath = "QDAG/RegisterFactory.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "336"
-            endingLineNumber = "336"
+            startingLineNumber = "342"
+            endingLineNumber = "342"
             landmarkName = "RegisterFactory::RippleAdderDebug(num1, num2)"
             landmarkType = "7">
             <Locations>
@@ -62,9 +62,25 @@
             filePath = "QDAG/RegisterFactory.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "314"
-            endingLineNumber = "314"
+            startingLineNumber = "320"
+            endingLineNumber = "320"
             landmarkName = "RegisterFactory::RippleAdderDebug(num1, num2)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8A3294C9-BCC3-4A9F-BFDA-F45CA2954492"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "QDAG/RegisterFactory.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "416"
+            endingLineNumber = "416"
+            landmarkName = "RegisterFactory::RippleAdderHalfClassicDebug(cl, num)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

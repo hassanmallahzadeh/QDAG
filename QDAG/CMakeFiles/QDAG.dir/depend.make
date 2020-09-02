@@ -64,6 +64,8 @@ CMakeFiles/QDAG.dir/main.cpp.o: main.cpp
 CMakeFiles/QDAG.dir/main.cpp.o: shorutil.hpp
 CMakeFiles/QDAG.dir/main.cpp.o: util.h
 
+CMakeFiles/QDAG.dir/shorutil.cpp.o: IIC-JKU/DDcomplex.h
+CMakeFiles/QDAG.dir/shorutil.cpp.o: IIC-JKU/DDpackage.h
 CMakeFiles/QDAG.dir/shorutil.cpp.o: commonheaders.h
 CMakeFiles/QDAG.dir/shorutil.cpp.o: shorutil.cpp
 CMakeFiles/QDAG.dir/shorutil.cpp.o: shorutil.hpp

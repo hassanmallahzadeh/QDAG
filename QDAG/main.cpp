@@ -37,11 +37,14 @@ int main(){
 void TempTest(){
     auto* dd = new dd::Package();
     RegisterFactory rf = RegisterFactory(0, 0, dd);
-    vector<int> num1{0,1};
-    vector<int> num2{2,2};
-    dd::Edge state = rf.RippleAdderDebug(num1, num2);
-    dd->export2Dot(state, "rippleadd6.dot");
-   // dd->printVector(state);
+   
+    vector<int> num2{2,0};/*((|0>+|1>)/√2)|0>*/
+   // vector<int> num1{1,1};/*|1>|1>*/
+    lli num1 = 3;/*|1>|1>*/
+    dd::Edge state = rf.RippleAdderHalfClassicDebug(num1, num2);
+    //dd::Edge state = rf.RippleAdderDebug(num1, num2);
+    dd->export2Dot(state, "ripplehcladd0.dot");
+    //dd->printVector(state);
 }
 void UniformityTest(){
     //examine uniformity of probabilities.
