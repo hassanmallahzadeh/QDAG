@@ -54,9 +54,17 @@ public:
     RegisterFactory(lli N, lli a, dd::Package *dd);
     dd::Edge RippleAdderDebug(vector<int> num1, vector<int> num2);
     dd::Edge RippleAdderGeneral(dd::Edge state, int n);
+    std::function<void (int, int)> ExtractedStateInitializer(short *line, int nt, dd::Edge &state);
+    
     dd::Edge RippleAdderHalfClassicDebug(lli cl, vector<int> num);
-    dd::Edge RippleAdderHalfClassicGeneral(lli cnum, dd::Edge state, int n);
+    void ExtractedRippleAdderHalfClassicV1(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, vector<bool> a0clb2, short *line, int n, int nt, dd::Edge &state);
+      void ExtractedRippleAdderHalfClassicV2(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, int t, short *line, int n, int nt, dd::Edge &state);
+    dd::Edge RippleAdderHalfClassicGeneral(lli cnum, dd::Edge state);
+    void ExtractedRippleSubtractorHalfClassic(vector<bool> &a0clb2, const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state);
+    
+    dd::Edge RippleSubtractorHalfClassicGeneral(lli cnum, dd::Edge state, bool awhc = true);
     dd::Edge ModuloNAdderDebug(vector<int>, vector<int>);
+    dd::Edge ModuloNAdderHalfClassicDebug(lli cnum, vector<int> qnum);
     ~RegisterFactory();
     dd::Edge CExponentiation();
 };

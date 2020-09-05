@@ -137,14 +137,25 @@ dd::Edge StateGenerator::dd_CustomState(vector<dd::ComplexValue> v, int n) {
 /// @param t target index
 /// @param c0 control index
 /// @param c1 control index
-void GateGenerator::lineSet(short *line, int t, int c0, int c1) {
+/// @param c0p true means c0 is positive control
+/// @param c1p true means c1 is positive control
+void GateGenerator::lineSet(short *line, int t, int c0, int c1, bool c0p, bool c1p) {
     if(t >= 0)
         line[t] = 2;
-    if(c0 >= 0)
+    if(c0 >= 0){
+        if(c0p)
         line[c0] = 1;
-    if(c1 >= 0)
+        else
+        line[c0] = 0;
+    }
+    if(c1 >= 0){
+        if(c1p)
         line[c1] = 1;
+        else
+        line[c1] = 0;
+    }
 }
+
 /// reset 'line' for controlled gates.//NOTE: Just for base 2
 /// @param line linearray
 /// @param t target index
@@ -266,16 +277,13 @@ dd::Edge GateGenerator::permuteOperatorOnState(int n, dd::Edge state){
 /// @param c0 first control index
 /// @param c1 second control index
 /// @param t target index
-/// @param nt max index
+/// @param nt max index(exclusive)
 /// @param state optional state value for gate to be applied to before return.
-dd::Edge GateGenerator::ToffoliGenOrApply(short* line, int t, int c0, int c1, int nt, dd::Edge* state){
-    dd::Edge e;
-    lineSet(line, t, c0, c1);
-    e = dd->TTlookup(c0, c1, t, line);
-    if(!e.p){
-    e = dd->makeGateDD(Xmat, nt, line);
-        dd->TTinsert(c0, c1, t, line, e);
-    }
+/// @param c0p true means c0 is positive control
+/// @param c1p true means c1 is positive control
+dd::Edge GateGenerator::ToffoliGenOrApply(short* line, int t, int c0, int c1, int nt, dd::Edge* state, bool c0p, bool c1p){
+    lineSet(line, t, c0, c1, c0p, c1p);
+    dd::Edge e = dd->makeGateDD(Xmat, nt, line);
     lineReset(line, t, c0, c1);
     if(state){
         *state = dd->multiply(e, *state);
@@ -287,11 +295,11 @@ dd::Edge GateGenerator::ToffoliGenOrApply(short* line, int t, int c0, int c1, in
 /// @param line gate generator line
 /// @param t target index
 /// @param c control index
-/// @param nt max indix
+/// @param nt max indix(exclusive)
 /// @param state optional state value for gate to be applied to before return.
-dd::Edge GateGenerator::CNotGenOrApply(short* line, int t, int c, int nt, dd::Edge* state){
-    //TODO: compute table for CNOT.
-    lineSet(line, t, c);
+/// @param cp true means control is positive
+dd::Edge GateGenerator::CNotGenOrApply(short* line, int t, int c, int nt, dd::Edge* state,  bool cp){
+    lineSet(line, t, c, -1, cp);
     dd::Edge e = dd->makeGateDD(Xmat, nt, line);
     lineReset(line, t, c);
     if(state){
@@ -303,7 +311,7 @@ dd::Edge GateGenerator::CNotGenOrApply(short* line, int t, int c, int nt, dd::Ed
 /// Create Not-gate//Can be combined with CNotGenerator() or ToffoliGenerator(), left for code readability.
 /// @param line gate generator line
 /// @param t target index
-/// @param nt max index
+/// @param nt max index(exclusive)
 /// @param state optional state value for gate to be applied to before return.
 dd::Edge GateGenerator::NotGenOrApply(short* line, int t, int nt, dd::Edge* state){
     lineSet(line, t);
@@ -317,7 +325,7 @@ dd::Edge GateGenerator::NotGenOrApply(short* line, int t, int nt, dd::Edge* stat
 /// Create Hadamard. be combined with CNotGenerator() or ToffoliGenerator(), left for code readability.
 /// @param line gate generator line
 /// @param t target index
-/// @param nt max index
+/// @param nt max index(exclusive)
 /// @param state optional state value for gate to be applied to before return.
 dd::Edge GateGenerator::HadGenOrApply(short *line, int t, int nt, dd::Edge* state){
     lineSet(line, t);

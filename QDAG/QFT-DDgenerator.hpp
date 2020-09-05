@@ -32,7 +32,7 @@ class GateGenerator{
 private:
     dd::Package* dd;
 public:
-    void lineSet(short* line, int t, int c0 = -1, int c1 = -1);
+    void lineSet(short* line, int t, int c0 = -1, int c1 = -1, bool c0p = true, bool c1p = true);
     void lineReset(short* line, int t, int c0 = -1, int c1 = -1);
     static void lineClear(short* line, int n);
     GateGenerator(dd::Package* dd);
@@ -42,8 +42,8 @@ public:
     dd::Edge permuteOperator(int n);
     dd::Edge permuteOperatorOnState(int n, dd::Edge state);
     dd::Edge swapRegistersOnState(int nt, vector<int> v1, vector<int> v2, dd::Edge state);
-    dd::Edge ToffoliGenOrApply(short* line, int, int, int, int, dd::Edge* state = nullptr);
-    dd::Edge CNotGenOrApply(short* line, int, int, int, dd::Edge* state = nullptr);
+    dd::Edge ToffoliGenOrApply(short* line, int, int, int, int, dd::Edge* state = nullptr ,bool = true, bool = true);
+    dd::Edge CNotGenOrApply(short* line, int, int, int, dd::Edge* state = nullptr, bool = true);
     dd::Edge NotGenOrApply(short* line, int, int, dd::Edge* state = nullptr);
     dd::Edge HadGenOrApply(short* line, int, int, dd::Edge* state = nullptr);
 };

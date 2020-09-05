@@ -103,15 +103,23 @@ int bddNumVar(dd::Edge edge, bool isVector){
     return max + 1;
 }
 //returns base 2 representation. returns in reverse by default.
-vector<bool> base2rep(lli N, bool inversed){
+/// Constructs base2 representation of N, n digits. If n > log_2(N) + 1, pad with zeros
+/// @param N Number for which base2 rep is to be found
+/// @param n number of digits (bits) available. most be n > log_2(N).
+vector<bool> base2rep(lli N,int n){
     vector<bool> v;
+    int dc = 0;//digit counter
     while(N > 0){
         v.push_back(N & 1);
         N >>= 1;
+        ++dc;
     }
-    if(!inversed)
-    std::reverse(v.begin(), v.end());
-    
+    if(n > 0){
+    assert(n >= dc);
+    for(int i = 0; i < n - dc; ++i){
+        v.push_back(0);
+    }
+    }
     return v;
 }
 

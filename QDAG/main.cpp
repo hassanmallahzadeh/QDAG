@@ -25,7 +25,7 @@ int main(){
     if( true ){
         TempTest();
     }
-    if(/* DISABLES CODE */ (false)){//make 'true' to investigate a single QFT (fixed number of bits)
+    if(/* DISABLES CODE */ false){//make 'true' to investigate a single QFT (fixed number of bits)
         UniformityTest();
     }
     if(/* DISABLES CODE */ false){
@@ -36,15 +36,17 @@ int main(){
 
 void TempTest(){
     auto* dd = new dd::Package();
-    RegisterFactory rf = RegisterFactory(0, 0, dd);
+    RegisterFactory rf = RegisterFactory(1, 1, dd);
    
-    vector<int> num2{2,0};/*((|0>+|1>)/√2)|0>*/
-   // vector<int> num1{1,1};/*|1>|1>*/
-    lli num1 = 3;/*|1>|1>*/
+    vector<int> num2{0,2};/*((|0>+|1>)/√2)|0>*///most significant on right
+   // vector<int> num1{1,1};/*|1>|1>*///most significant on right
+    lli num1 = 0;/*|1>|1>*/
     dd::Edge state = rf.RippleAdderHalfClassicDebug(num1, num2);
-    //dd::Edge state = rf.RippleAdderDebug(num1, num2);
-    dd->export2Dot(state, "ripplehcladd0.dot");
-    //dd->printVector(state);
+    state = rf.RippleSubtractorHalfClassicGeneral(2, state);
+  //  dd::Edge state = rf.RippleAdderDebug(num1, num2);
+    dd->export2Dot(state, "before.dot");
+//    state = rf.RippleSubtractorHalfClassicGeneral(3, state, false);
+//    dd->export2Dot(state, "after.dot");
 }
 void UniformityTest(){
     //examine uniformity of probabilities.
