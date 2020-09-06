@@ -57,10 +57,10 @@ public:
     std::function<void (int, int)> ExtractedStateInitializer(short *line, int nt, dd::Edge &state);
     
     dd::Edge RippleAdderHalfClassicDebug(lli cl, vector<int> num);
-    void ExtractedRippleAdderHalfClassicV1(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, vector<bool> a0clb2, short *line, int n, int nt, dd::Edge &state);
-      void ExtractedRippleAdderHalfClassicV2(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, int t, short *line, int n, int nt, dd::Edge &state);
+    void ExtractedRippleAdderHalfClassic(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, const std::function<int (int)> &a0indice, short *line, int n, int nt, dd::Edge &state);
+    void ExtractedControlledRippleAdderHalfClassic(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, const std::function<int (int)> &a0indice, int t, short *line, int n, int nt, dd::Edge &state);
     dd::Edge RippleAdderHalfClassicGeneral(lli cnum, dd::Edge state);
-    void ExtractedRippleSubtractorHalfClassic(vector<bool> &a0clb2, const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state);
+    void ExtractedRippleSubtractorHalfClassic(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, const std::function<int (int)> &a0indice, short *line, int nt, dd::Edge &state);
     
     dd::Edge RippleSubtractorHalfClassicGeneral(lli cnum, dd::Edge state, bool awhc = true);
     dd::Edge ModuloNAdderDebug(vector<int>, vector<int>);

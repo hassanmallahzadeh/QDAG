@@ -38,15 +38,11 @@ void TempTest(){
     auto* dd = new dd::Package();
     RegisterFactory rf = RegisterFactory(1, 1, dd);
    
-    vector<int> num2{0,2};/*((|0>+|1>)/√2)|0>*///most significant on right
+    vector<int> num2{0,0};/*((|0>+|1>)/√2)|0>*///most significant on right
    // vector<int> num1{1,1};/*|1>|1>*///most significant on right
     lli num1 = 0;/*|1>|1>*/
-    dd::Edge state = rf.RippleAdderHalfClassicDebug(num1, num2);
-    state = rf.RippleSubtractorHalfClassicGeneral(2, state);
-  //  dd::Edge state = rf.RippleAdderDebug(num1, num2);
+    dd::Edge state = rf.ModuloNAdderHalfClassicDebug(num1, num2);
     dd->export2Dot(state, "before.dot");
-//    state = rf.RippleSubtractorHalfClassicGeneral(3, state, false);
-//    dd->export2Dot(state, "after.dot");
 }
 void UniformityTest(){
     //examine uniformity of probabilities.
