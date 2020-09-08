@@ -568,7 +568,8 @@ dd::Edge RegisterFactory::ModuloNAdderDebug(vector<int> num1, vector<int> num2){
     return state;
 }
 dd::Edge RegisterFactory::ModuloNAdderHalfClassicDebug(lli cnum, vector<int> qnum){
-    n = static_cast<int>(qnum.size());
+    n = static_cast<int>(base2N.size());
+    assert(n == qnum.size());//assumed quantum number represented in n base2 digits.
     short* line = new short[n];
     gg.lineClear(line, n);
     vector<bool> a0clb2 = shor::base2rep(cnum, n);//classical value in base 2
@@ -577,24 +578,31 @@ dd::Edge RegisterFactory::ModuloNAdderHalfClassicDebug(lli cnum, vector<int> qnu
     std::function<void (int, int)> lambdaInitState = ExtractedStateInitializer(line, nt, state);
     //lambdas used for converting digit (of input numbber) index to qubit index
     //a0 line does not exist. replaced by classic register.
-    auto c0indice = [nt](int i){ return nt - 1 - 2 * i;};
+    auto c0indice = [nt](int i){ return nt - 2 - 2 * i;};
     auto a0cnumindice = [a0clb2](int i){return a0clb2.empty() ? 0 : a0clb2[i]; };//return cnum in base 2.
     auto a0Nindice = [Nrep = this->base2N](int i){return Nrep.empty() ? 0 : Nrep[i]; };//return cnum in base 2.
-    auto b0indice = [nt](int i){ return nt - 1 - (2 * i + 1);};
-    auto c1indice = [nt](int i){ return nt - 1 - 2 * (i + 1);};
+    auto b0indice = [nt](int i){ return nt - 2 - (2 * i + 1);};
+    auto c1indice = [nt](int i){ return nt - 2 - 2 * (i + 1);};
     auto tindice = [nt](){return nt - 1;};//second overflow qubit(t in fig 2 of paper)
     for(int i = 0; i < n; ++i){
         lambdaInitState(qnum[i], b0indice(i));//put quantum number in register
     }
     ExtractedRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0cnumindice, line, n, nt, state);
-    
+    dd->export2Dot(state,"0.dot");
     ExtractedRippleSubtractorHalfClassic(b0indice, c0indice, c1indice, a0Nindice, line, nt, state);
+    dd->export2Dot(state,"1.dot");
     gg.NotGenOrApply(line, c1indice(n - 1)/*nt - 2*/, nt, &state);
-    gg.CNotGenOrApply(line, tindice(), c1indice(n - 1)/*nt - 2*/, nt);
+    dd->export2Dot(state,"2.dot");
+    gg.CNotGenOrApply(line, tindice(), c1indice(n - 1)/*nt - 2*/, nt, &state);
+    dd->export2Dot(state,"3.dot");
     gg.NotGenOrApply(line, c1indice(n - 1)/*nt - 2*/, nt, &state);
+    dd->export2Dot(state,"4.dot");
     ExtractedControlledRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0Nindice, tindice(), line, n, nt, state);
+    dd->export2Dot(state,"5.dot");
     ExtractedRippleSubtractorHalfClassic(b0indice, c0indice, c1indice, a0cnumindice, line, nt, state);
-    gg.CNotGenOrApply(line, tindice(), c1indice(n - 1), nt);
+    dd->export2Dot(state,"6.dot");
+    gg.CNotGenOrApply(line, tindice(), c1indice(n - 1), nt, &state);
+    dd->export2Dot(state,"7.dot");
     ExtractedRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0cnumindice, line, n, nt, state);
     
     delete[] line;
