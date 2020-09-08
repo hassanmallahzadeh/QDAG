@@ -588,21 +588,13 @@ dd::Edge RegisterFactory::ModuloNAdderHalfClassicDebug(lli cnum, vector<int> qnu
         lambdaInitState(qnum[i], b0indice(i));//put quantum number in register
     }
     ExtractedRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0cnumindice, line, n, nt, state);
-    dd->export2Dot(state,"0.dot");
     ExtractedRippleSubtractorHalfClassic(b0indice, c0indice, c1indice, a0Nindice, line, nt, state);
-    dd->export2Dot(state,"1.dot");
     gg.NotGenOrApply(line, c1indice(n - 1)/*nt - 2*/, nt, &state);
-    dd->export2Dot(state,"2.dot");
     gg.CNotGenOrApply(line, tindice(), c1indice(n - 1)/*nt - 2*/, nt, &state);
-    dd->export2Dot(state,"3.dot");
     gg.NotGenOrApply(line, c1indice(n - 1)/*nt - 2*/, nt, &state);
-    dd->export2Dot(state,"4.dot");
     ExtractedControlledRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0Nindice, tindice(), line, n, nt, state);
-    dd->export2Dot(state,"5.dot");
     ExtractedRippleSubtractorHalfClassic(b0indice, c0indice, c1indice, a0cnumindice, line, nt, state);
-    dd->export2Dot(state,"6.dot");
     gg.CNotGenOrApply(line, tindice(), c1indice(n - 1), nt, &state);
-    dd->export2Dot(state,"7.dot");
     ExtractedRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0cnumindice, line, n, nt, state);
     
     delete[] line;
