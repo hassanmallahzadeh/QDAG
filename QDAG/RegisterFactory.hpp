@@ -58,13 +58,16 @@ public:
     
     dd::Edge RippleAdderHalfClassicDebug(lli cl, vector<int> num);
     void ExtractedRippleAdderHalfClassic(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, const std::function<int (int)> &a0indice, short *line, int n, int nt, dd::Edge &state);
-    void ExtractedControlledRippleAdderHalfClassic(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, const std::function<int (int)> &a0indice, int t, short *line, int n, int nt, dd::Edge &state);
+    void CExtractedRippleAdderHalfClassic(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, const std::function<int (int)> &a0indice, int t, short *line, int n, int nt, dd::Edge &state);
     dd::Edge RippleAdderHalfClassicGeneral(lli cnum, dd::Edge state);
     void ExtractedRippleSubtractorHalfClassic(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, const std::function<int (int)> &a0indice, short *line, int nt, dd::Edge &state);
     
     dd::Edge RippleSubtractorHalfClassicGeneral(lli cnum, dd::Edge state, bool awhc = true);
-    dd::Edge ModuloNAdderDebug(vector<int>, vector<int>);
+    void ExtractedModuloNAdderHalfClassic(const std::function<int (int)> &a0Nindice, const std::function<int (int)> &a0cnumindice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state, const std::function<int ()> &tindex);
+    // dd::Edge ModuloNAdderDebug(vector<int>, vector<int>);
     dd::Edge ModuloNAdderHalfClassicDebug(lli cnum, vector<int> qnum);
+    dd::Edge CMultiplierModuloNClassicDebug(lli cnum, vector<int> qnum);
+        void CModuloNAdderHalfClassic(const std::function<int ()> &gcindex, const std::function<int (int)> &xindice, const std::function<int ()> &tindex, const std::function<int (int)> &a0cnumindice, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state);
     ~RegisterFactory();
     dd::Edge CExponentiation();
 };

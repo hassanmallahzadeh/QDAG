@@ -27,6 +27,7 @@ RegisterFactory::RegisterFactory(lli N, lli a, dd::Package *dd) : gg(dd) {
         //  MakeInitialState();
     }
 }
+
 /// CExponentiation the input register, put in output register.
 dd::Edge RegisterFactory::CExponentiation(){
     dd::Edge e;
@@ -493,7 +494,7 @@ void RegisterFactory::ExtractedRippleAdderHalfClassic(const std::function<int (i
     }
 }
 ///// Like ExtractedRippleAdderHalfClassicV1, int t parameter added. qubit t negative controls effect of adding classical number to quantum number.
-void RegisterFactory::ExtractedControlledRippleAdderHalfClassic(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, const std::function<int (int)> &a0indice, int t, short *line, int n, int nt, dd::Edge &state){
+void RegisterFactory::CExtractedRippleAdderHalfClassic(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, const std::function<int (int)> &a0indice, int t, short *line, int n, int nt, dd::Edge &state){
     auto lambdaCarry = [&state, this, line, nt, t](int c0, int a0, int b0, int c1){
         if(a0){
             gg.ToffoliGenOrApply(line, c1, b0, t, nt, &state, true, false);
@@ -547,33 +548,45 @@ dd::Edge RegisterFactory::RippleAdderHalfClassicGeneral(lli cnum, dd::Edge state
     delete[] line;
     return state;
 }
-dd::Edge RegisterFactory::ModuloNAdderDebug(vector<int> num1, vector<int> num2){
-    assert(num1.size() == num2.size());
-    int n = static_cast<int> (num1.size());
-    short* line = new short[n];
-    gg.lineClear(line, n);
-    int nt = n * 3 + 1;//first number, second number, carry and overflow carry.
-    dd::Edge state = StateGenerator(dd).dd_BaseState(nt, 0);//start by setting all qubits to zero.
-    std::function<void (int, int)> lambdaInitState = ExtractedStateInitializer(line, nt, state);
-    auto c0indice = [](int i){ return 3 * i;};
-    auto a0indice = [](int i){ return 3 * i + 1;};
-    auto b0indice = [](int i){ return 3 * i + 2;};
-    auto c1indice = [](int i){ return 3 * (i + 1);};
-    for(int i = 0; i < n; ++i){
-        lambdaInitState(num1[i], a0indice(i));//put first number in register
-        lambdaInitState(num2[i], b0indice(i));//put second number in register
-    }
-    state = RippleAdderGeneral(state, n);
-    delete[] line;
-    return state;
+void RegisterFactory::ExtractedModuloNAdderHalfClassic(const std::function<int (int)> &a0Nindice, const std::function<int (int)> &a0cnumindice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state, const std::function<int ()> &tindice) {
+    ExtractedRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0cnumindice, line, n, nt, state);
+    ExtractedRippleSubtractorHalfClassic(b0indice, c0indice, c1indice, a0Nindice, line, nt, state);
+    gg.NotGenOrApply(line, c1indice(n - 1)/*nt - 2*/, nt, &state);
+    gg.CNotGenOrApply(line, tindice(), c1indice(n - 1)/*nt - 2*/, nt, &state);
+    gg.NotGenOrApply(line, c1indice(n - 1)/*nt - 2*/, nt, &state);
+    CExtractedRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0Nindice, tindice(), line, n, nt, state);
+    ExtractedRippleSubtractorHalfClassic(b0indice, c0indice, c1indice, a0cnumindice, line, nt, state);
+    gg.CNotGenOrApply(line, tindice(), c1indice(n - 1), nt, &state);
+    ExtractedRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0cnumindice, line, n, nt, state);
 }
+
+//dd::Edge RegisterFactory::ModuloNAdderDebug(vector<int> num1, vector<int> num2){
+//    assert(num1.size() == num2.size());
+//    int n = static_cast<int> (num1.size());
+//    short* line = new short[n];
+//    gg.lineClear(line, n);
+//    int nt = n * 3 + 1;//first number, second number, carry and overflow carry.
+//    dd::Edge state = StateGenerator(dd).dd_BaseState(nt, 0);//start by setting all qubits to zero.
+//    std::function<void (int, int)> lambdaInitState = ExtractedStateInitializer(line, nt, state);
+//    auto c0indice = [](int i){ return 3 * i;};
+//    auto a0indice = [](int i){ return 3 * i + 1;};
+//    auto b0indice = [](int i){ return 3 * i + 2;};
+//    auto c1indice = [](int i){ return 3 * (i + 1);};
+//    for(int i = 0; i < n; ++i){
+//        lambdaInitState(num1[i], a0indice(i));//put first number in register
+//        lambdaInitState(num2[i], b0indice(i));//put second number in register
+//    }
+//    state = RippleAdderGeneral(state, n);
+//    delete[] line;
+//    return state;
+//}
 dd::Edge RegisterFactory::ModuloNAdderHalfClassicDebug(lli cnum, vector<int> qnum){
     n = static_cast<int>(base2N.size());
     assert(n == qnum.size());//assumed quantum number represented in n base2 digits.
     short* line = new short[n];
     gg.lineClear(line, n);
     vector<bool> a0clb2 = shor::base2rep(cnum, n);//classical value in base 2
-    int nt = 2 * n + 2;//quantum number (n), carries(n), overflow carries(2).
+    int nt = 2 * n + 2;//quantum number (n), carries(n), overflow carrie(1), temp memory qubit(1).
     dd::Edge state = StateGenerator(dd).dd_BaseState(nt, 0);//start by setting all qubits to zero.
     std::function<void (int, int)> lambdaInitState = ExtractedStateInitializer(line, nt, state);
     //lambdas used for converting digit (of input numbber) index to qubit index
@@ -583,19 +596,11 @@ dd::Edge RegisterFactory::ModuloNAdderHalfClassicDebug(lli cnum, vector<int> qnu
     auto a0Nindice = [Nrep = this->base2N](int i){return Nrep.empty() ? 0 : Nrep[i]; };//return cnum in base 2.
     auto b0indice = [nt](int i){ return nt - 2 - (2 * i + 1);};
     auto c1indice = [nt](int i){ return nt - 2 - 2 * (i + 1);};
-    auto tindice = [nt](){return nt - 1;};//second overflow qubit(t in fig 2 of paper)
+    auto tindice = [nt](){return nt - 1;};//temp memory of modulon qubit(t in fig 4 of paper)
     for(int i = 0; i < n; ++i){
         lambdaInitState(qnum[i], b0indice(i));//put quantum number in register
     }
-    ExtractedRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0cnumindice, line, n, nt, state);
-    ExtractedRippleSubtractorHalfClassic(b0indice, c0indice, c1indice, a0Nindice, line, nt, state);
-    gg.NotGenOrApply(line, c1indice(n - 1)/*nt - 2*/, nt, &state);
-    gg.CNotGenOrApply(line, tindice(), c1indice(n - 1)/*nt - 2*/, nt, &state);
-    gg.NotGenOrApply(line, c1indice(n - 1)/*nt - 2*/, nt, &state);
-    ExtractedControlledRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0Nindice, tindice(), line, n, nt, state);
-    ExtractedRippleSubtractorHalfClassic(b0indice, c0indice, c1indice, a0cnumindice, line, nt, state);
-    gg.CNotGenOrApply(line, tindice(), c1indice(n - 1), nt, &state);
-    ExtractedRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0cnumindice, line, n, nt, state);
+    ExtractedModuloNAdderHalfClassic(a0Nindice, a0cnumindice, b0indice, c0indice, c1indice, line, nt, state, tindice);
     
     delete[] line;
     return state;
@@ -606,7 +611,6 @@ void RegisterFactory::ExtractedRippleSubtractorHalfClassic(const std::function<i
             gg.CNotGenOrApply(line, c1, b0, nt, &state);
             gg.NotGenOrApply(line, b0, nt, &state);
         }
-        
         gg.ToffoliGenOrApply(line, c1, c0, b0, nt, &state);
     };
     auto lambdaCarryInv = [&state, this, line, nt](int c0, int a0, int b0, int c1){
@@ -651,6 +655,39 @@ dd::Edge RegisterFactory::RippleSubtractorHalfClassicGeneral(lli cnum, dd::Edge 
     ExtractedRippleSubtractorHalfClassic(a0indice, b0indice, c0indice, c1indice, line, nt, state);
     delete[] line;
     return state;
+}
+dd::Edge RegisterFactory::CMultiplierModuloNClassicDebug(lli cnum, vector<int> qnum){
+    n = static_cast<int>(base2N.size());
+       assert(n == qnum.size());//assumed quantum number represented in n base2 digits.
+       short* line = new short[n];
+       gg.lineClear(line, n);
+       vector<bool> a0clb2 = shor::base2rep(cnum, n);//classical value in base 2
+    int nt = 2 * n + 3;//quantum number (n), carries(n), overflow carrie(1), temp memory qubit(1), multiplier control qubit(1).
+    
+    dd::Edge state = StateGenerator(dd).dd_BaseState(nt, 0);//start by setting all qubits to zero.
+    auto lambdaInitState = ExtractedStateInitializer(line, nt, state);
+    //lambdas used for converting digit (of input numbber) index to qubit index
+    //a0 line does not exist. replaced by classic register, used in moduloN circuit.
+   auto mcindex = [nt](){return nt - 1;};//multiplier control qubit(c in fig 5 of paper)
+    auto xindice = [nt](int i){ return nt - 2 - i;};
+    auto tindex = [nt, n = this->n](){return nt - n - 1;};
+    auto c0indice = [nt, n = this->n](int i){ return nt - n - 2 - 2 * i;};
+    auto a0cnumindice = [a0clb2](int i){return a0clb2.empty() ? 0 : a0clb2[i]; };//return cnum in base 2.
+    auto b0indice = [nt, n = this->n](int i){ return nt - n - 2 - (2 * i + 1);};
+    auto c1indice = [nt, n = this->n](int i){ return nt - n - 2 - 2 * (i + 1);};
+    
+    for(int i = 0; i < n; ++i){
+        lambdaInitState(qnum[i], xindice(i));//put quantum number in register
+    }
+    for(int i = 0; i < n; ++i){//fig5 of paper, repeated shift and apply
+        CModuloNAdderHalfClassic(mcindex, xindice,tindex,a0cnumindice,c0indice,b0indice,c1indice,line,nt,state);
+        cnum <<= 1;
+        a0clb2 = shor::base2rep(cnum, n);//TODO: look how to do this more efficiently. We don't have to calculate the bit pattern again after a shift.
+    }
+    return state;
+};
+void CModuloNAdderHalfClassic(const std::function<int ()> &mcindex, const std::function<int (int)> &xindice, const std::function<int ()> &tindex, const std::function<int (int)> &a0cnumindice, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state){
+    
 }
 RegisterFactory::~RegisterFactory(){
     delete[] line;

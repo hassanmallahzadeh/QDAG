@@ -22,13 +22,13 @@ void TempTest();
 void UniformityTest();
 void QFTexecutionTimes();
 int main(){
-    if( true ){
+    if( false ){
         TempTest();
     }
     if(/* DISABLES CODE */ false){//make 'true' to investigate a single QFT (fixed number of bits)
         UniformityTest();
     }
-    if(/* DISABLES CODE */ false){
+    if(/* DISABLES CODE */ true){
         QFTexecutionTimes();
     }
     return 0;
