@@ -11,11 +11,11 @@
 #include "commonheaders.h"
 #include <stdio.h>
 class Bob{
-    lli p = -1;
-    lli q = -1;
-    array<lli, 2> randPrimes();
+    ulli p = -1;
+    ulli q = -1;
+    array<ulli, 2> randPrimes();
 public:
-    void ForcePandQ(lli p, lli q);
-    lli ReturnN();
+    void ForcePandQ(ulli p, ulli q);
+    ulli ReturnN();
 };
 #endif /* Bob_hpp */

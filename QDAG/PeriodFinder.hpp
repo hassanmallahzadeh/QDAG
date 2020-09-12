@@ -14,8 +14,8 @@
 #include "IIC-JKU/DDpackage.h"
 #include <bit>
 class PeriodFinder{
-    lli N;
-    lli a;
+    ulli N;
+    ulli a;
     int ni = -1;//input register size
     int no = -1;//output register size
     dd::Package *dd = nullptr;
@@ -23,8 +23,8 @@ class PeriodFinder{
     dd::Edge outputRegister = {nullptr, {nullptr, nullptr}};
     void InitializeRegisters();
 public:
-    PeriodFinder(lli N, lli b);
-    lli FoundPeriod();
+    PeriodFinder(ulli N, ulli b);
+    ulli FoundPeriod();
     bool IsNumberPow2();
 };
 #endif /* PeriodFinder_hpp */

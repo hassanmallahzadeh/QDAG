@@ -25,7 +25,7 @@ public:
     dd::Edge dd_UniformState(int n);
     dd::Edge dd_Sqrt3State(int n);//if i th digit (before or after fraction point, is divisble by 2 i th bit 0 else 1.
     dd::Edge dd_RandomState(int n, int seed);
-    dd::Edge dd_BaseState(int n, lli i);
+    dd::Edge dd_BaseState(int n, ulli i);
     dd::Edge dd_CustomState(vector<dd::ComplexValue> v, int n);
 };
 class GateGenerator{
@@ -33,7 +33,9 @@ private:
     dd::Package* dd;
 public:
     void lineSet(short* line, int t, int c0 = -1, int c1 = -1, bool c0p = true, bool c1p = true);
+    void lineSet(short* line, int t, const map<int,bool> &m);
     void lineReset(short* line, int t, int c0 = -1, int c1 = -1);
+    void lineReset(short* line, int t, const map<int,bool> &m);
     static void lineClear(short* line, int n);
     GateGenerator(dd::Package* dd);
     dd::Edge Smatv1(int n, int b1, int b2);
@@ -45,6 +47,7 @@ public:
     dd::Edge ToffoliGenOrApply(short* line, int, int, int, int, dd::Edge* state = nullptr ,bool = true, bool = true);
     dd::Edge CNotGenOrApply(short* line, int, int, int, dd::Edge* state = nullptr, bool = true);
     dd::Edge NotGenOrApply(short* line, int, int, dd::Edge* state = nullptr);
+    dd::Edge CKNotGenOrApply(short* line, int t, const map<int,bool> &m, int nt, dd::Edge* state = nullptr);
     dd::Edge HadGenOrApply(short* line, int, int, dd::Edge* state = nullptr);
 };
 #endif /* QFT_DDgenerator_hpp */

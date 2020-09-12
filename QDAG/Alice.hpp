@@ -11,12 +11,12 @@
 #include "commonheaders.h"
 #include <stdio.h>
 class Alice{
-    lli N;
-    lli ChooseNumInG_N();
+    ulli N;
+    ulli ChooseNumInG_N();
     engine unrg;
     const int attemptlimit = 100;
 public:
-    Alice(lli N, engine& unrg);
-    array<lli, 2> Factors();
+    Alice(ulli N, engine& unrg);
+    array<ulli, 2> Factors();
 };
 #endif /* Alice_hpp */

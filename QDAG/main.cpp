@@ -40,7 +40,7 @@ void TempTest(){
    
     vector<int> num2{2,0,0};/*((|0>+|1>)/√2)|0>*///most significant on right
    // vector<int> num1{1,1};/*|1>|1>*///most significant on right
-    lli num1 = 5;/*|1>|1>*/
+    ulli num1 = 5;/*|1>|1>*/
     dd::Edge state = rf.ModuloNAdderHalfClassicDebug(num1, num2);
     dd->export2Dot(state, "before.dot");
 }

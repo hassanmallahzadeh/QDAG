@@ -21,15 +21,15 @@ dd::Edge StateGenerator::dd_UniformState(int n) {
     dd::Edge f = dd::Package::DDone;
     dd::Edge edges[4];
     edges[1] = edges[3] = dd::Package::DDzero;
-
+    
     for (short p = 0; p < n; ++p) {
-            edges[0] = f;
-            edges[2] = f;
+        edges[0] = f;
+        edges[2] = f;
         f = dd->makeNonterminal(p, edges);
     }
-     dd::ComplexValue c{1/std::sqrt(pow(2,n)), 0.0 };
-     dd::Complex cx = dd->cn.getCachedComplex(c.r,c.i);
-     f.w =dd->cn.mulCached(f.w, cx);
+    dd::ComplexValue c{1/std::sqrt(pow(2,n)), 0.0 };
+    dd::Complex cx = dd->cn.getCachedComplex(c.r,c.i);
+    f.w =dd->cn.mulCached(f.w, cx);
     return f;
 }
 /// Generate 'random' state from square root of 3. digit even:0, digit odd: 1.
@@ -57,14 +57,14 @@ dd::Edge StateGenerator::dd_Sqrt3State(int n){
 /// Generate Random State.
 /// @param n num qubits
 dd::Edge StateGenerator::dd_RandomState(int n, int seed){
-          std::mt19937 gen(seed); //Standard mersenne_twister_engine seeded with rd()
-         std::uniform_int_distribution<long> dis0(0.0, pow(2,n) - 1);
-         std::uniform_int_distribution<int> dis(0.0, 1.0);
+    std::mt19937 gen(seed); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_int_distribution<long> dis0(0.0, pow(2,n) - 1);
+    std::uniform_int_distribution<int> dis(0.0, 1.0);
     long r0 = dis0(gen);//at least one of the basis has to have non-zero coefficient.
-        int nonzerocount = 0;
+    int nonzerocount = 0;
     dd::Edge f = dd::Package::DDone;
-     dd::Edge edges[4];
-     edges[1] = edges[3] = dd::Package::DDzero;
+    dd::Edge edges[4];
+    edges[1] = edges[3] = dd::Package::DDzero;
     for (short p = 0; p < n; ++p) {
         bool r = dis(gen);
         bool r0masked = ((r0 >> p) & 1);
@@ -92,8 +92,8 @@ dd::Edge StateGenerator::dd_RandomState(int n, int seed){
 /// return base state. put here to have a central state generator. it just returns the DDpackage base vector.
 /// @param n num qubits
 /// @param i base index. 0 to 2^n - 1;
-dd::Edge StateGenerator::dd_BaseState(int n, lli i) {
-   // assert( i >= 0 & i < pow(2,n));
+dd::Edge StateGenerator::dd_BaseState(int n, ulli i) {
+    // assert( i >= 0 & i < pow(2,n));
     return dd->makeBasisState(n, i);
 }
 
@@ -103,14 +103,14 @@ dd::Edge StateGenerator::dd_BaseState(int n, lli i) {
 dd::Edge StateGenerator::dd_CustomState(vector<dd::ComplexValue> v, int n) {
     assert (n == log2(static_cast<int>(v.size())));
     //FIXME: this needs to be made 'manually'
-   dd::Edge state {nullptr, {nullptr, nullptr}};//skeleton to start with.
+    dd::Edge state {nullptr, {nullptr, nullptr}};//skeleton to start with.
     dd::Edge temp;
     for (int i = 0; i < v.size(); ++i){
         if(dd::operator != (v[i], {0, 0})){
             dd::Complex vx = dd->cn.getTempCachedComplex(v[i].r,v[i].i);
             temp = dd->makeBasisState(n, i);
             temp.w = dd->cn.mulCached(temp.w, vx);
-          //  dd->cn.mul(temp.w, temp.w, vx);TODO: this corrupts data (if used instead of temp.w = dd->cn.mulCached(temp.w, vx)). Understand why.
+            //  dd->cn.mul(temp.w, temp.w, vx);TODO: this corrupts data (if used instead of temp.w = dd->cn.mulCached(temp.w, vx)). Understand why.
             if(!state.p){
                 state = temp;
             }
@@ -144,18 +144,24 @@ void GateGenerator::lineSet(short *line, int t, int c0, int c1, bool c0p, bool c
         line[t] = 2;
     if(c0 >= 0){
         if(c0p)
-        line[c0] = 1;
+            line[c0] = 1;
         else
-        line[c0] = 0;
+            line[c0] = 0;
     }
     if(c1 >= 0){
         if(c1p)
-        line[c1] = 1;
+            line[c1] = 1;
         else
-        line[c1] = 0;
+            line[c1] = 0;
     }
 }
-
+void GateGenerator::lineSet(short* line, int t, const map<int,bool> &m){
+    if(t >= 0)
+        line[t] = 2;
+    for(auto it = m.cbegin(); it != m.cend(); ++it){
+        it->second ? line[it->first] = 1: line[it->first] = 0;
+    }
+}
 /// reset 'line' for controlled gates.//NOTE: Just for base 2
 /// @param line linearray
 /// @param t target index
@@ -169,7 +175,16 @@ void GateGenerator::lineReset(short *line, int t, int c0, int c1) {
     if(c1 >= 0)
         line[c1] = -1;
 }
-
+/// reset 'line' for controlled gates, arbitrary number of controls.//NOTE: Just for base 2
+/// @param line linearray
+/// @param t target index
+/// @param m map containing control line indices (first) and whether it is positive or negative (second)
+void GateGenerator::lineReset(short* line, int t, const map<int,bool> &m){
+    line[t] = -1;
+    for(auto it = m.cbegin(); it != m.cend(); ++it){
+        line[it->first] = -1;
+    }
+};
 void GateGenerator::lineClear(short *line, int n){
     for(int i = 0; i < n; ++i){
         line[i] = -1;
@@ -242,12 +257,12 @@ void GateGenerator::RmatGenerator(dd::Matrix2x2 &m, int k) {
 /// permute operator. can be placed at beginning or end of circuit
 /// @param n number of variables
 dd::Edge GateGenerator::permuteOperator(int n) {
-        dd::Edge e_swap = dd->makeIdent(0, n-1);
-        for(int i = 0; i < n/2; ++i){//apply n/2 swap gates.
-            dd::Edge smat = Smatv1(n, i, n - i - 1);
-            e_swap = dd->multiply(smat, e_swap);
-        }
-        return e_swap;
+    dd::Edge e_swap = dd->makeIdent(0, n-1);
+    for(int i = 0; i < n/2; ++i){//apply n/2 swap gates.
+        dd::Edge smat = Smatv1(n, i, n - i - 1);
+        e_swap = dd->multiply(smat, e_swap);
+    }
+    return e_swap;
 }
 
 /// apply swap gates, one by one to the input state, used in     RegisterFactory::ExponentiateOutReg(). Refer to figure 6 of PRA S1050-2947(96)05707-1.
@@ -267,13 +282,30 @@ dd::Edge GateGenerator::swapRegistersOnState(int nt, vector<int> v1, vector<int>
 /// @param n number of qubits
 /// @param state input state root.
 dd::Edge GateGenerator::permuteOperatorOnState(int n, dd::Edge state){
-          for(int i = 0; i < n/2; ++i){//apply n/2 swap gates.
-              state = dd->multiply(Smatv1(n, i, n - i - 1), state);
-          }
-          return state;
+    for(int i = 0; i < n/2; ++i){//apply n/2 swap gates.
+        state = dd->multiply(Smatv1(n, i, n - i - 1), state);
+    }
+    return state;
 };
+
+/// Controlled-k Not gate. Not gate has arbitrary number of control qubits.
+/// @param line gate generator line
+/// @param t target index
+/// @param nt max index(exclusive)
+/// @param m map containing control line indices (first) and whether it is positive or negative (second)
+/// @param state if provided, gate will be applied to this state
+/// @return Controlled-k Not gate.
+dd::Edge GateGenerator::CKNotGenOrApply(short* line, int t, const map<int,bool> &m, int nt,  dd::Edge* state){
+    lineSet(line, t, m);
+    dd::Edge e = dd->makeGateDD(Xmat, nt, line);
+    lineReset(line, t, m);
+    if(state){
+        *state = dd->multiply(e, *state);
+    }
+    return e;
+}
 /// Create Toffoli gate if not computed already.
-/// @param line gategenerator line
+/// @param line gate generator line
 /// @param c0 first control index
 /// @param c1 second control index
 /// @param t target index
@@ -303,8 +335,8 @@ dd::Edge GateGenerator::CNotGenOrApply(short* line, int t, int c, int nt, dd::Ed
     dd::Edge e = dd->makeGateDD(Xmat, nt, line);
     lineReset(line, t, c);
     if(state){
-           *state = dd->multiply(e, *state);
-       }
+        *state = dd->multiply(e, *state);
+    }
     return e;
 }
 
@@ -318,8 +350,8 @@ dd::Edge GateGenerator::NotGenOrApply(short* line, int t, int nt, dd::Edge* stat
     dd::Edge e = dd->makeGateDD(Xmat, nt, line);
     lineReset(line, t);
     if(state){
-             *state = dd->multiply(e, *state);
-         }
+        *state = dd->multiply(e, *state);
+    }
     return e;
 }
 /// Create Hadamard. be combined with CNotGenerator() or ToffoliGenerator(), left for code readability.
@@ -329,11 +361,11 @@ dd::Edge GateGenerator::NotGenOrApply(short* line, int t, int nt, dd::Edge* stat
 /// @param state optional state value for gate to be applied to before return.
 dd::Edge GateGenerator::HadGenOrApply(short *line, int t, int nt, dd::Edge* state){
     lineSet(line, t);
-      dd::Edge e = dd->makeGateDD(Hmat, nt, line);
-      lineReset(line, t);
+    dd::Edge e = dd->makeGateDD(Hmat, nt, line);
+    lineReset(line, t);
     if(state){
-             *state = dd->multiply(e, *state);
-         }
-      return e;
+        *state = dd->multiply(e, *state);
+    }
+    return e;
 }
 /*---END GATE GENERATOR DEFINITIONS---*/

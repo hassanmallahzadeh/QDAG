@@ -11,7 +11,7 @@ namespace shor{
 /// greatest common divisor, Euclidean algorithm.
 /// @param f first number
 /// @param c second number
-lli gcd(lli f, lli c){
+ulli gcd(ulli f, ulli c){
     assert( f > 0 & c > 0);
     if(f == c){
         return f;
@@ -19,7 +19,7 @@ lli gcd(lli f, lli c){
     if(f < c){
         std::swap(f,c);
     }
-    lli ftemp = 0;
+    ulli ftemp = 0;
     while(c > 0){
         ftemp = f;
         f = c;
@@ -32,21 +32,21 @@ lli gcd(lli f, lli c){
 /// Based on appendix J of Mermin book. We look for j and k s.t. jf + kc == 1;
 /// @param f N =pq in our problem
 /// @param c number for which reverese is to be found.
-lli modInverse(lli f, lli c){
+ulli modInverse(ulli f, ulli c){
     assert( f > 0 & c > 0);
     if(f < c){
         std::swap(f,c);
     }
-    lli ftemp = -1;
-    lli m = -1;
+    ulli ftemp = -1;
+    ulli m = -1;
     struct st{
-        lli f = 0;
-        lli c = 0;
-        lli m = 0;
+        ulli f = 0;
+        ulli c = 0;
+        ulli m = 0;
     };
     vector<st> v;
-    lli j = 0;
-    lli k = 0;
+    ulli j = 0;
+    ulli k = 0;
     while(c > 0){
         m = floor(f/c);
         v.push_back(st{f,c,m});
@@ -65,9 +65,9 @@ lli modInverse(lli f, lli c){
 /// @param x base
 /// @param a exponent
 /// @param n mod
-lli modexp( lli x,  lli a,  lli n) {
-    lli value = 1;
-    lli tmp = x % n;
+ulli modexp( ulli x,  ulli a,  ulli n) {
+    ulli value = 1;
+    ulli tmp = x % n;
     while (a > 0) {
         if (a & 1) {
             value = (value * tmp) % n;
@@ -106,7 +106,7 @@ int bddNumVar(dd::Edge edge, bool isVector){
 /// Constructs base2 representation of N, n digits. If n > log_2(N) + 1, pad with zeros
 /// @param N Number for which base2 rep is to be found
 /// @param n number of digits (bits) available. most be n > log_2(N).
-vector<bool> base2rep(lli N,int n){
+vector<bool> base2rep(ulli N,int n){
     vector<bool> v;
     int dc = 0;//digit counter
     while(N > 0){
