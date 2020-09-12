@@ -22,27 +22,25 @@ private:
     vector<bool> base2N;//base2 representation of N.
     short* line = nullptr;//holds 'line'for setting basic gates.
     GateGenerator gg;
-    void extractedMapToTemp(vector<int>, int c1, int c2, ulli cl);
 public:
     RegisterFactory(ulli N, ulli a, dd::Package *dd);
     dd::Edge RippleAdderDebug(vector<int> num1, vector<int> num2);
-    dd::Edge RippleAdderGeneral(dd::Edge state, int n);
     std::function<void (int, int)> ExtractedStateInitializer(short *line, int nt, dd::Edge &state);
     
     dd::Edge RippleAdderHalfClassicDebug(ulli cl, vector<int> num);
-    void HelperRippleAdderHalfClassic(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, const std::function<int (int)> &a0indice, short *line, int n, int nt, dd::Edge &state);
+    void HelperRippleAdderHalfClassic(const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, short *, int, int, dd::Edge &);
     void HelperRippleSubtractorHalfClassic(const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, short *, int, dd::Edge &);
     void CRippleAdderHalfClassic(const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, int t, short *, int, int, dd::Edge &);
     
-    void HelperModuloNAdderHalfClassic(const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, short *, int , dd::Edge &, const std::function<int ()> &);
+    void HelperModuloNAdderHalfClassic(const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, short *, int, dd::Edge &, const std::function<int ()> &);
     void CCModuloNAdderHalfClassic(int, int , int, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, short *, int , dd::Edge &);
     dd::Edge ModuloNAdderHalfClassicDebug(ulli cnum, vector<int> qnum);
     dd::Edge CMultiplierModuloNClassicDebug(ulli cnum, vector<int> qnum);
  
-    void HelperCCRippleHalfClassic(std::function<void (int, int, int, int)> &lambdaCarry, std::function<void (int, int, int, int)> &lambdaCarryInv, std::function<void (int, int, int)> &lambdaSum, short *line, int mc, int nt, dd::Edge &state, int x);
+    void HelperCCRippleHalfClassic(std::function<void (int, int, int, int)> &, std::function<void (int, int, int, int)> &, std::function<void (int, int, int)> &, short *, int, int, dd::Edge &, int);
     
-    void CCRippleAdderHalfClassic(int gc, int x, int t, const std::function<int (int)> &a0cnumindice, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state);
-      void CCRippleSubtractorHalfClassic(int gc, int x, int t, const std::function<int (int)> &a0cnumindice, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state);
+    void CCRippleAdderHalfClassic(int, int, int, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, short *, int, dd::Edge &);
+      void CCRippleSubtractorHalfClassic(int, int, int, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, short *, int, dd::Edge &);
     ~RegisterFactory();
     dd::Edge CExponentiation();
 };

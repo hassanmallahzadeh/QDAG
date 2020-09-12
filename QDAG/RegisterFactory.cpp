@@ -79,48 +79,6 @@ dd::Edge RegisterFactory::RippleAdderDebug(vector<int> num1, vector<int> num2){
     delete[] line;
     return state;
 }
-
-/// full quantum ripple adder.
-/// @param state state for RippleAdder circuit to be executed on.
-/// @param n number of digits of numbers to be added (base 2)
-dd::Edge RegisterFactory::RippleAdderGeneral(dd::Edge state, int n){
-    short* line = new short[n];
-    gg.lineClear(line, n);
-    int nt = n * 3 + 1;//first number, second number, carry and overflow carry.
-    assert(log2(shor::bddNumVar(state, true)) + 1 == nt);
-    //lambdas used for converting digit (of input numbber) index to qubit index
-    auto c0indice = [](int i){ return 3 * i;};
-    auto a0indice = [](int i){ return 3 * i + 1;};
-    auto b0indice = [](int i){ return 3 * i + 2;};
-    auto c1indice = [](int i){ return 3 * (i + 1);};
-    
-    auto lambdaCarry = [&state, this, line, nt](int c0, int a0, int b0, int c1){
-        gg.ToffoliGenOrApply(line, c1, a0, b0, nt, &state);
-        gg.CNotGenOrApply(line, b0, a0, nt, &state);
-        gg.ToffoliGenOrApply(line, c1, c0, b0, nt, &state);
-    };
-    auto lambdaCarryInv = [&state, this, line, nt](int c0, int a0, int b0, int c1){
-        gg.ToffoliGenOrApply(line, c1, c0, b0, nt, &state);
-        gg.CNotGenOrApply(line, b0, a0, nt, &state);
-        gg.ToffoliGenOrApply(line, c1, a0, b0, nt, &state);
-    };
-    auto lambdaSum = [&state, this, line, nt](int c, int a, int b){
-        gg.CNotGenOrApply(line, b, a, nt, &state);
-        gg.CNotGenOrApply(line, b, c, nt, &state);
-    };
-    //execute ripple adder:
-    for (int i = 0; i < n; ++i){
-        lambdaCarry(c0indice(i), a0indice(i), b0indice(i), c1indice(i));
-    }
-    gg.CNotGenOrApply(line, b0indice(n-1), a0indice(n-1), nt, &state);
-    lambdaSum(c0indice(n-1), a0indice(n-1), b0indice(n-1));
-    for (int i = n - 2; i >= 0; --i){
-        lambdaCarryInv(c0indice(i), a0indice(i), b0indice(i), c1indice(i));
-        lambdaSum(c0indice(i), a0indice(i), b0indice(i));
-    }
-    delete[] line;
-    return gg.permuteOperatorOnState(nt, state);
-}
 std::function<void (int, int)> RegisterFactory::ExtractedStateInitializer(short *line, int nt, dd::Edge &state) {
     auto lambdaInitState = [&state, this, line, nt](int val, int index){
         switch (val) {
