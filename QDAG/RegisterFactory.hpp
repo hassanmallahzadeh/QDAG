@@ -25,8 +25,7 @@ private:
 public:
     RegisterFactory(ulli N, ulli a, dd::Package *dd);
     dd::Edge RippleAdderDebug(vector<int> num1, vector<int> num2);
-    std::function<void (int, int)> ExtractedStateInitializer(short *line, int nt, dd::Edge &state);
-    
+    std::function<void (int, int)> StateInitializer(short *line, int nt, dd::Edge &state);
     dd::Edge RippleAdderHalfClassicDebug(ulli cl, vector<int> num);
     void HelperRippleAdderHalfClassic(const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, short *, int, int, dd::Edge &);
     void HelperRippleSubtractorHalfClassic(const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, short *, int, dd::Edge &);

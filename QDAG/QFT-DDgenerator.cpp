@@ -292,7 +292,7 @@ dd::Edge GateGenerator::permuteOperatorOnState(int n, dd::Edge state){
 /// @param line gate generator line
 /// @param t target index
 /// @param nt max index(exclusive)
-/// @param m map containing control line indices (first) and whether it is positive or negative (second)
+/// @param m map containing control line indices (first) and whether it is positive or negative (second). map chosen over hash map since num qubits is small.
 /// @param state if provided, gate will be applied to this state
 /// @return Controlled-k Not gate.
 dd::Edge GateGenerator::CKNotGenOrApply(short* line, int t, const map<int,bool> &m, int nt,  dd::Edge* state){
