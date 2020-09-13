@@ -34,7 +34,7 @@ public:
     void HelperModuloNAdderHalfClassic(const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, short *, int, dd::Edge &, const std::function<int ()> &);
     void CCModuloNAdderHalfClassic(int, int , int, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, short *, int , dd::Edge &);
     dd::Edge ModuloNAdderHalfClassicDebug(ulli cnum, vector<int> qnum);
-    dd::Edge CMultiplierModuloNClassicDebug(ulli cnum, vector<int> qnum);
+    dd::Edge CMultiplierModuloNClassicDebug(ulli cnum, vector<int> qnum, int mcv);
  
     void HelperCCRippleHalfClassic(std::function<void (int, int, int, int)> &, std::function<void (int, int, int, int)> &, std::function<void (int, int, int)> &, short *, int, int, dd::Edge &, int);
     

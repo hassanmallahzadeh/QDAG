@@ -118,11 +118,10 @@ dd::Edge RegisterFactory::RippleAdderHalfClassicDebug(ulli cnum, vector<int> num
     auto a0indice = [a0clb2](int i){return a0clb2.empty() ? 0 : a0clb2[i]; };
     auto b0indice = [nt](int i){ return nt - 1 - (2 * i + 1);};
     auto c1indice = [nt](int i){ return nt - 1 - 2 * (i + 1);};
-    
     for(int i = 0; i < n; ++i){
         lambdaInitState(num[i], b0indice(i));//put quantum number in register
     }
-    HelperRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0indice, line, n, nt, state);
+    HelperRippleAdderHalfClassic(a0indice, c0indice, b0indice, c1indice, line, n, nt, state);
     delete[] line;
     return state;
 }
@@ -135,7 +134,7 @@ dd::Edge RegisterFactory::RippleAdderHalfClassicDebug(ulli cnum, vector<int> num
 /// @param n num variables to hold input numbers
 /// @param nt total number of needed variables
 /// @param state input state containing input numbers data.
-void RegisterFactory::HelperRippleAdderHalfClassic(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, const std::function<int (int)> & a0cnumindice, short *line, int n, int nt, dd::Edge &state) {
+void RegisterFactory::HelperRippleAdderHalfClassic(const std::function<int (int)> & a0cnumindice, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int n, int nt, dd::Edge &state) {
     
     auto lambdaCarry = [&state, this, line, nt](int c0, int a0, int b0, int c1){
         if(a0){
@@ -172,7 +171,7 @@ void RegisterFactory::HelperRippleAdderHalfClassic(const std::function<int (int)
     }
 }
 ///// Like ExtractedRippleAdderHalfClassicV1, int t parameter added. qubit t negative controls effect of adding classical number to quantum number.
-void RegisterFactory::CRippleAdderHalfClassic(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, const std::function<int (int)> &a0indice, int t, short *line, int n, int nt, dd::Edge &state){
+void RegisterFactory::CRippleAdderHalfClassic(const std::function<int (int)> &a0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice,  int t, short *line, int n, int nt, dd::Edge &state){
     auto lambdaCarry = [&state, this, line, nt, t](int c0, int a0, int b0, int c1){
         if(a0){
             gg.ToffoliGenOrApply(line, c1, b0, t, nt, &state, true, false);
@@ -206,15 +205,15 @@ void RegisterFactory::CRippleAdderHalfClassic(const std::function<int (int)> &b0
     }
 }
 void RegisterFactory::HelperModuloNAdderHalfClassic(const std::function<int (int)> &a0Nindice, const std::function<int (int)> &a0cnumindice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state, const std::function<int ()> &tindice) {
-    HelperRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0cnumindice, line, n, nt, state);
-    HelperRippleSubtractorHalfClassic(b0indice, c0indice, c1indice, a0Nindice, line, nt, state);
+    HelperRippleAdderHalfClassic(a0cnumindice, c0indice, b0indice, c1indice, line, n, nt, state);
+    HelperRippleSubtractorHalfClassic(a0Nindice, c0indice, b0indice, c1indice, line, nt, state);
     gg.NotGenOrApply(line, c1indice(n - 1)/*nt - 2*/, nt, &state);
     gg.CNotGenOrApply(line, tindice(), c1indice(n - 1)/*nt - 2*/, nt, &state);
     gg.NotGenOrApply(line, c1indice(n - 1)/*nt - 2*/, nt, &state);
-    CRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0Nindice, tindice(), line, n, nt, state);
-    HelperRippleSubtractorHalfClassic(b0indice, c0indice, c1indice, a0cnumindice, line, nt, state);
+    CRippleAdderHalfClassic(a0Nindice, c0indice, b0indice, c1indice, tindice(), line, n, nt, state);
+    HelperRippleSubtractorHalfClassic(a0cnumindice, c0indice, b0indice, c1indice, line, nt, state);
     gg.CNotGenOrApply(line, tindice(), c1indice(n - 1), nt, &state);
-    HelperRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0cnumindice, line, n, nt, state);
+    HelperRippleAdderHalfClassic(a0cnumindice, c0indice, b0indice, c1indice, line, n, nt, state);
 }
 /// Controlled-Controlled ModuloNAdder classic number to quantum number.
 /// @param mcindex multiplier controller
@@ -234,7 +233,7 @@ void RegisterFactory::CCModuloNAdderHalfClassic(int mcindex, int xindex, int tin
     gg.NotGenOrApply(line, c1indice(n - 1), nt, &state);
     gg.CNotGenOrApply(line, tindex, c1indice(n - 1), nt, &state);
     gg.NotGenOrApply(line, c1indice(n - 1), nt, &state);
-    CRippleAdderHalfClassic(b0indice, c0indice, c1indice, a0Nbase2, tindex, line, n, nt, state);
+    CRippleAdderHalfClassic(a0Nbase2, c0indice, b0indice, c1indice, tindex, line, n, nt, state);
     CCRippleSubtractorHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
     gg.CNotGenOrApply(line, tindex, c1indice(n - 1), nt, &state);
     CCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
@@ -265,7 +264,7 @@ dd::Edge RegisterFactory::ModuloNAdderHalfClassicDebug(ulli cnum, vector<int> qn
     delete[] line;
     return state;
 }
-void RegisterFactory::HelperRippleSubtractorHalfClassic(const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, const std::function<int (int)> &a0indice, short *line, int nt, dd::Edge &state) {
+void RegisterFactory::HelperRippleSubtractorHalfClassic(const std::function<int (int)> &a0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state) {
     auto lambdaCarry = [&state, this, line, nt](int c0, int a0, int b0, int c1){
         if(a0){
             gg.CNotGenOrApply(line, c1, b0, nt, &state);
@@ -300,38 +299,45 @@ void RegisterFactory::HelperRippleSubtractorHalfClassic(const std::function<int 
 /// Tester of controlled multiplier modulo N. Fig 5 of paper.
 /// @param cnum classical number to be multiplied by quantum number.
 /// @param qnum quantum number
-dd::Edge RegisterFactory::CMultiplierModuloNClassicDebug(ulli cnum, vector<int> qnum){
+/// @param mcv multiplier controller qubit value. Switch like in state initializer switch.
+dd::Edge RegisterFactory::CMultiplierModuloNClassicDebug(ulli cnum, vector<int> qnum, int mcv){
     assert(n == qnum.size());//assert quantum number represented in base2 is n digits.
-    short* line = new short[n];
-    gg.lineClear(line, n);
     vector<bool> a0clb2 = shor::base2rep(cnum, n);//classical value in base 2, n digits.
     int nt = 3 * n + 3;//quantum number x Fig5 (n), quantum register y Fig5 (n), carries(n) Fig2, overflow carry(1) Fig2, temp memory qubit Fig4 t (1), multiplier control qubit c Fig5(1).
-    
+    short* line = new short[nt];
+    gg.lineClear(line, nt);
     dd::Edge state = StateGenerator(dd).dd_BaseState(nt, 0);//start by setting all qubits to zero.
     auto lambdaInitState = StateInitializer(line, nt, state);
     //lambdas used for converting digit (of input number) to qubit index
     //a0 line does not exist. replaced by classic register.
     auto a0Nbase2 = [Nrep = this->base2N](int i){return Nrep.empty() ? 0 : Nrep[i]; };//return N's digits in base 2.
-    auto a0cnumbase2 = [a0clb2](int i){return a0clb2.empty() ? 0 : a0clb2[i]; };//return cnum's digits in base 2.
+    auto a0cnumbase2 = [&a0clb2](int i){return a0clb2.empty() ? 0 : a0clb2[i]; };//return cnum's digits in base 2.
     auto mcindex = [nt](){return nt - 1;};//multiplier control qubit(c in fig 5 of paper)
     auto xindice = [nt](int i){return nt - 2 - i;};
     auto tindex = [nt, n = this->n](){return nt - n - 2;};
     auto c0indice = [nt, n = this->n](int i){return nt - n - 3 - 2 * i;};
     auto b0indice = [nt, n = this->n](int i){return nt - n - 3 - (2 * i + 1);};
     auto c1indice = [nt, n = this->n](int i){return nt - n - 3 - 2 * (i + 1);};
+
+    lambdaInitState(mcv, mcindex());
     for(int i = 0; i < n; ++i){
         lambdaInitState(qnum[i], xindice(i));//put quantum number in register
     }
+      
     for(int i = 0; i < n; ++i){//fig5 of paper, repeated shift and apply
-        CCModuloNAdderHalfClassic(mcindex(), xindice(i), tindex(), a0cnumbase2, a0Nbase2, c0indice, b0indice ,c1indice, line, nt, state);
-        cnum <<= 1;
-        a0clb2 = shor::base2rep(cnum, n);//TODO: look how to do this more efficiently. We don't have to calculate the bit pattern again after a shift.
+        cnum = cnum << i;
+        cnum = cnum % N;
+        a0clb2 = shor::base2rep(cnum, n);
+             CCModuloNAdderHalfClassic(mcindex(), xindice(i), tindex(), a0cnumbase2, a0Nbase2, c0indice, b0indice ,c1indice, line, nt, state);
     }
-    gg.NotGenOrApply(line, mcindex(), nt);
+    dd->export2Dot(state, "0.dot");
+    gg.NotGenOrApply(line, mcindex(), nt, &state);
+    dd->export2Dot(state, "1.dot");
     for(int i = 0; i < n; ++i){
-        gg.ToffoliGenOrApply(line, b0indice(i), mcindex(), xindice(i), nt);
+        gg.ToffoliGenOrApply(line, b0indice(i), mcindex(), xindice(i), nt, &state);
     }
-    gg.NotGenOrApply(line, mcindex(), nt);
+    dd->export2Dot(state, "2.dot");
+    gg.NotGenOrApply(line, mcindex(), nt, &state);
     delete[] line;
     return state;
 };
@@ -408,18 +414,18 @@ void RegisterFactory::CCRippleAdderHalfClassic(int mc, int x, int t, const std::
 /// @param line 'line' for gate generation
 /// @param nt total number of needed variables
 /// @param state input state containing input numbers data.
-void RegisterFactory::CCRippleSubtractorHalfClassic(int mc, int x, int t, const std::function<int (int)> &a0cnumindice, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state){
+void RegisterFactory::CCRippleSubtractorHalfClassic(int mc, int xindex, int t, const std::function<int (int)> &a0cnumindice, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state){
     std::function<void (int, int, int, int)> lambdaCarry;
        std::function<void (int, int, int, int)> lambdaCarryInv;
        std::function<void (int, int, int)> lambdaSum;
-       HelperCCRippleHalfClassic(lambdaCarry, lambdaCarryInv, lambdaSum, line, mc, nt, state, x);
+       HelperCCRippleHalfClassic(lambdaCarry, lambdaCarryInv, lambdaSum, line, mc, nt, state, xindex);
     for (int i = 0; i < n - 1; ++i){
                   lambdaSum(c0indice(i), a0cnumindice(i), b0indice(i));
              lambdaCarry(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
          }
     lambdaSum(c0indice(n-1), a0cnumindice(n-1), b0indice(n-1));
       if(a0cnumindice(n-1))
-            gg.ToffoliGenOrApply(line, b0indice(n-1), mc, x, nt, &state);
+            gg.ToffoliGenOrApply(line, b0indice(n-1), mc, xindex, nt, &state);
     for (int i = n - 1; i >= 0; --i){
            lambdaCarryInv(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
        }
