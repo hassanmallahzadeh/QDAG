@@ -28,39 +28,41 @@ ulli gcd(ulli f, ulli c){
     }
     return f;
 }
-/// modular multtiplication inverse of 'c' mod 'f'. assumed gcd(f,c) == 1;
-/// Based on appendix J of Mermin book. We look for j and k s.t. jf + kc == 1;
-/// @param f N =pq in our problem
-/// @param c number for which reverese is to be found.
-ulli modInverse(ulli f, ulli c){
-    assert( f > 0 & c > 0);
-    if(f < c){
-        std::swap(f,c);
+// Returns modulo inverse of a with respect
+// to m using extended Euclid Algorithm
+// Assumption: a and m are coprimes, i.e.,
+// gcd(a, m) = 1//https://www.geeksforgeeks.org/multiplicative-inverse-under-modulo-m/
+ulli modInverse(ulli a, ulli m)
+{
+    ulli m0 = m;
+    ulli y = 0, x = 1;
+  
+    if (m == 1)
+      return 0;
+  
+    while (a > 1)
+    {
+        // q is quotient
+        ulli q = a / m;
+        ulli t = m;
+  
+        // m is remainder now, process same as
+        // Euclid's algo
+        static_cast<void>(m = a % m), a = t;
+        t = y;
+  
+        // Update y and x
+        y = x - q * y;
+        x = t;
     }
-    ulli ftemp = -1;
-    ulli m = -1;
-    struct st{
-        ulli f = 0;
-        ulli c = 0;
-        ulli m = 0;
-    };
-    vector<st> v;
-    ulli j = 0;
-    ulli k = 0;
-    while(c > 0){
-        m = floor(f/c);
-        v.push_back(st{f,c,m});
-        ftemp = f;
-        f = c;
-        c = ftemp - m * c;
-    }
-    assert(v[v.size()-1].c == 1);//ensure f and m are mutually prime.
-    for (auto it = v.crbegin(); it != v.crend() ; ++it){
-        st elem = *it;
-    }
-    return f;
+  
+    // Make x positive
+    if (x < 0)
+       x += m0;
+  
+    return x;
 }
-
+  
 /// This function takes three integers, x, a, and n, and returns x^a mod n.  This algorithm is known as the "Russian peasant method," I believe, and avoids overflow by never calculating x^a directly.
 /// @param x base
 /// @param a exponent
