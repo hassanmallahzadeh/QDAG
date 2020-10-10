@@ -14,26 +14,10 @@
             filePath = "QDAG/RegisterFactory.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "386"
-            endingLineNumber = "386"
+            startingLineNumber = "395"
+            endingLineNumber = "395"
             landmarkName = "RegisterFactory::CMultiplierModuloNDebug(a0cnumbase10, qnum, mcv)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "48E10A2D-E788-43CB-9935-2625BA78F0EB"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "QDAG/RegisterFactory.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "335"
-            endingLineNumber = "335"
-            landmarkName = "make next four opertations not do redundant calculations."
-            landmarkType = "19">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
