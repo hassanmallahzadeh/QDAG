@@ -260,15 +260,15 @@ void RegisterFactory::CCModuloNAdderHalfClassic(int mcindex, int xindex, int tin
 /// @param nt total number of qubits
 /// @param state state to operate on
 void RegisterFactory::InvCCModuloNAdderHalfClassic(int mcindex, int xindex, int tindex, const std::function<int (int)> &a0cnumbase2, const std::function<int (int)> &a0Nbase2, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state){
- InvCCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
-      gg.CNotGenOrApply(line, tindex, c1indice(n - 1), nt, &state);
-      CCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
+    InvCCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
+    gg.CNotGenOrApply(line, tindex, c1indice(n - 1), nt, &state);
+    CCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
     InvCRippleAdderHalfClassic(a0Nbase2, c0indice, b0indice, c1indice, tindex, line, n, nt, state);
-      gg.NotGenOrApply(line, c1indice(n - 1), nt, &state);
-      gg.CNotGenOrApply(line, tindex, c1indice(n - 1), nt, &state);
-        gg.NotGenOrApply(line, c1indice(n - 1), nt, &state);
-      HelperRippleAdderHalfClassic(a0Nbase2, c0indice, b0indice, c1indice, line, nt, state);
-        InvCCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
+    gg.NotGenOrApply(line, c1indice(n - 1), nt, &state);
+    gg.CNotGenOrApply(line, tindex, c1indice(n - 1), nt, &state);
+    gg.NotGenOrApply(line, c1indice(n - 1), nt, &state);
+    HelperRippleAdderHalfClassic(a0Nbase2, c0indice, b0indice, c1indice, line, nt, state);
+    InvCCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
 }
 dd::Edge RegisterFactory::ModuloNAdderHalfClassicDebug(ulli cnum, vector<int> qnum){
     n = static_cast<int>(base2N.size());
@@ -370,13 +370,13 @@ void RegisterFactory::CMultiplierModuloNHalfClassic(const std::function<int (int
 /// @param tindex temp memory index for moduloNAdder (FIG2)
 /// @param xindice quantum register. x indice (for input quantum number)
 void RegisterFactory::InvCMultiplierModuloNHalfClassic(const std::function<int (int)> &a0Nbase2, const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, ulli a0cnum, short *line, int mcindex, int nt, dd::Edge &state, const std::function<int ()> &tindex, const std::function<int (int)> &xindice){
-        gg.NotGenOrApply(line, mcindex, nt, &state);
+    gg.NotGenOrApply(line, mcindex, nt, &state);
     for(int i = n - 1 ; i >= n; --i){
-         gg.ToffoliGenOrApply(line, b0indice(i), mcindex, xindice(i), nt, &state);
-     }
+        gg.ToffoliGenOrApply(line, b0indice(i), mcindex, xindice(i), nt, &state);
+    }
     gg.NotGenOrApply(line, mcindex, nt, &state);
     for(int i = n - 1; i >= 0; --i){//fig5 of paper, repeated shift and apply
-         //TODO: make next four opertations not do redundant calculations.
+        //TODO: make next four opertations not do redundant calculations.
         ulli tempa0cnum = a0cnum;
         tempa0cnum = tempa0cnum << i;
         tempa0cnum = tempa0cnum % N;
@@ -526,15 +526,21 @@ dd::Edge RegisterFactory::ExponentiatorModuloNDebug(ulli cnum, vector<int> qnum)
     auto c1indice = [nt, m, n = this->n](int i){return nt - m - n - 1 - 2 * (i + 1);};
     auto tindex = [nt, m, n = this->n](){return nt - m - 3 * n - 2;};
     for(int i = 0; i < n; ++i){
-           lambdaInitState(qnum[i], xindice(i));//put quantum number in register
-       }
-    gg.NotGenOrApply(line, xpindice(n-1), nt);//put 1 in result register.
-    ulli clop = 1;//classical operand of multipliers
+        lambdaInitState(qnum[i], xindice(i));//put quantum number in register
+    }
+    lambdaInitState(1, xpindice(0));//put 1 in x register in fig 5(multiplier)
+    ulli clop = cnum;//classical operand of multipliers
     for(int i = 0; i < m; ++i){//repeatedly multiply a^2^i and a^2^-i, based on control qubit (x_i) as in fig 6 of paper.
-        CMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, clop, line, xindice(i), nt, state, tindex, xpindice);
         ulli invclop = shor::modInverse(clop, N);
-        InvCMultiplierModuloNHalfClassic(a0Nbase2, xpindice, c0indice, c1indice, invclop, line, xindice(i), nt, state, tindex, b0indice);
-        clop = clop * clop;
+        if(i % 2 == 0){
+            CMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, clop, line, xindice(i), nt, state, tindex, xpindice);
+            InvCMultiplierModuloNHalfClassic(a0Nbase2, xpindice, c0indice, c1indice, invclop, line, xindice(i), nt, state, tindex, b0indice);
+        }
+        else{//swap.
+            CMultiplierModuloNHalfClassic(a0Nbase2, xpindice, c0indice, c1indice, clop, line, xindice(i), nt, state, tindex, b0indice);
+            InvCMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, invclop, line, xindice(i), nt, state, tindex, xpindice);
+        }
+            clop = clop * clop;
     }
     delete[] line;
     return state;
@@ -568,20 +574,20 @@ void RegisterFactory::InvCRippleAdderHalfClassic(const std::function<int (int)> 
         }
     };
     auto lambdaSum = [&state, this, line, cindex, nt](int c0, int a0, int b0){
-         gg.CNotGenOrApply(line, b0, c0, nt, &state);
-         if(a0){
-             gg.CNotGenOrApply(line, b0, cindex, nt, &state, false);
-         }
-     };
-        for (int i = n - 2; i >= 0; --i){
-                    lambdaSum(c0indice(i), a0cnumindice(i), b0indice(i));
+        gg.CNotGenOrApply(line, b0, c0, nt, &state);
+        if(a0){
+            gg.CNotGenOrApply(line, b0, cindex, nt, &state, false);
+        }
+    };
+    for (int i = n - 2; i >= 0; --i){
+        lambdaSum(c0indice(i), a0cnumindice(i), b0indice(i));
         lambdaCarry(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
     };
     lambdaSum(c0indice(n-1), a0cnumindice(n-1), b0indice(n-1));
     if(a0cnumindice(n-1))
-    gg.CNotGenOrApply(line, b0indice(n-1), cindex, nt, &state, false);
-      for (int i = 0; i < n; ++i){
-          lambdaCarryInv(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
-      }
+        gg.CNotGenOrApply(line, b0indice(n-1), cindex, nt, &state, false);
+    for (int i = 0; i < n; ++i){
+        lambdaCarryInv(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
+    }
 }
 
