@@ -36,11 +36,11 @@ int main(){
 
 void TempTest(){
     auto* dd = new dd::Package();
-    RegisterFactory rf = RegisterFactory(3, 1, dd);
-    vector<int> num2{1,0};/*((|0>+|1>)/√2)|0>*///most significant on right
-   // vector<int> num1{1,0};/*|1>|1>*///most significant on right
-    ulli num1 = 1;/*|1>|1>*/
-    dd::Edge state = rf.ExponentiatorModuloNDebug(num1, num2);
+    lli N = 3;
+    lli a = 2;
+    RegisterFactory rf = RegisterFactory(N, a, dd);
+    vector<int> numq{0,2};/*((|0>+|1>)/√2)|0>*///most significant on right
+    dd::Edge state = rf.ExponentiatorModuloNDebug(numq);
     dd->export2Dot(state, "test.dot");
 }
 void UniformityTest(){
@@ -49,6 +49,7 @@ void UniformityTest(){
     int n = 4;
     map<string,int> m;
     for(int i = 0; i < ntrials; ++i){
+        
         auto* dd = new dd::Package;
         QFT qft = QFT(dd);
         StateGenerator sg = StateGenerator(dd);

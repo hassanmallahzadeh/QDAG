@@ -19,7 +19,7 @@
 #include <ctime>
 #include<random>
 #include <iostream>
-typedef unsigned long long int ulli;
+typedef long long int lli;
 typedef std::mt19937 engine;
 using std::vector;
 using std::array;

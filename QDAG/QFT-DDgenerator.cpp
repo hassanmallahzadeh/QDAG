@@ -92,7 +92,7 @@ dd::Edge StateGenerator::dd_RandomState(int n, int seed){
 /// return base state. put here to have a central state generator. it just returns the DDpackage base vector.
 /// @param n num qubits
 /// @param i base index. 0 to 2^n - 1;
-dd::Edge StateGenerator::dd_BaseState(int n, ulli i) {
+dd::Edge StateGenerator::dd_BaseState(int n, lli i) {
     // assert( i >= 0 & i < pow(2,n));
     return dd->makeBasisState(n, i);
 }

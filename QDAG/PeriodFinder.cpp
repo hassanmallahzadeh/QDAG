@@ -15,7 +15,7 @@ using std::bitset;
 /// <#Description#>
 /// @param N Number to be factorized, modulo number
 /// @param a number to be used as base for finding the period.
-PeriodFinder::PeriodFinder(ulli N, ulli a){
+PeriodFinder::PeriodFinder(lli N, lli a){
     this->N = N;
     this->a = a;
     dd = new dd::Package;
@@ -29,13 +29,13 @@ void PeriodFinder::InitializeRegisters(){
     StateGenerator sg = StateGenerator(dd);
     outputRegister = sg.dd_BaseState(no, 0);
     inputRegister = sg.dd_UniformState(ni);
-    ulli wreg = a;//work register
-    ulli oreg = 1;//num to be put in output register
+    lli wreg = a;//work register
+    lli oreg = 1;//num to be put in output register
     vector<dd::ComplexValue> v;
         dd::Edge f = dd::Package::DDone;
            dd::Edge edges[4];
            edges[1] = edges[3] = dd::Package::DDzero;
-    ulli workreg = workreg * workreg;//work 'register'
+    lli workreg = workreg * workreg;//work 'register'
         for (short p = 0; p < no; ++p) {
                    edges[0] = f;
                    edges[2] = f;

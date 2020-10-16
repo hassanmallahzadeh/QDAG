@@ -25,7 +25,7 @@ public:
     dd::Edge dd_UniformState(int n);
     dd::Edge dd_Sqrt3State(int n);//if i th digit (before or after fraction point, is divisble by 2 i th bit 0 else 1.
     dd::Edge dd_RandomState(int n, int seed);
-    dd::Edge dd_BaseState(int n, ulli i);
+    dd::Edge dd_BaseState(int n, lli i);
     dd::Edge dd_CustomState(vector<dd::ComplexValue> v, int n);
 };
 class GateGenerator{

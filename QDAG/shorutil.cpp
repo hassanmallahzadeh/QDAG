@@ -11,7 +11,7 @@ namespace shor{
 /// greatest common divisor, Euclidean algorithm.
 /// @param f first number
 /// @param c second number
-ulli gcd(ulli f, ulli c){
+lli gcd(lli f, lli c){
     assert( f > 0 & c > 0);
     if(f == c){
         return f;
@@ -19,7 +19,7 @@ ulli gcd(ulli f, ulli c){
     if(f < c){
         std::swap(f,c);
     }
-    ulli ftemp = 0;
+    lli ftemp = 0;
     while(c > 0){
         ftemp = f;
         f = c;
@@ -32,10 +32,10 @@ ulli gcd(ulli f, ulli c){
 // to m using extended Euclid Algorithm
 // Assumption: a and m are coprimes, i.e.,
 // gcd(a, m) = 1//https://www.geeksforgeeks.org/multiplicative-inverse-under-modulo-m/
-ulli modInverse(ulli a, ulli m)
+lli modInverse(lli a, lli m)
 {
-    ulli m0 = m;
-    ulli y = 0, x = 1;
+    lli m0 = m;
+    lli y = 0, x = 1;
   
     if (m == 1)
       return 0;
@@ -43,8 +43,8 @@ ulli modInverse(ulli a, ulli m)
     while (a > 1)
     {
         // q is quotient
-        ulli q = a / m;
-        ulli t = m;
+        lli q = a / m;
+        lli t = m;
   
         // m is remainder now, process same as
         // Euclid's algo
@@ -67,9 +67,9 @@ ulli modInverse(ulli a, ulli m)
 /// @param x base
 /// @param a exponent
 /// @param n mod
-ulli modexp( ulli x,  ulli a,  ulli n) {
-    ulli value = 1;
-    ulli tmp = x % n;
+lli modexp( lli x,  lli a,  lli n) {
+    lli value = 1;
+    lli tmp = x % n;
     while (a > 0) {
         if (a & 1) {
             value = (value * tmp) % n;
@@ -108,7 +108,7 @@ int bddNumVar(dd::Edge edge, bool isVector){
 /// Constructs base2 representation of N, n digits. If n > log_2(N) + 1, pad with zeros
 /// @param N Number for which base2 rep is to be found
 /// @param n number of digits (bits) available. most be n > log_2(N).
-vector<bool> base2rep(ulli N,int n){
+vector<bool> base2rep(lli N,int n){
     vector<bool> v;
     int dc = 0;//digit counter
     while(N > 0){

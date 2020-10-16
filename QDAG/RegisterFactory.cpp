@@ -15,7 +15,8 @@
 /// @param N number to be factored
 /// @param a random number smaller than N
 /// @param dd pointer to Package class
-RegisterFactory::RegisterFactory(ulli N, ulli a, dd::Package *dd) : gg(dd) {
+RegisterFactory::RegisterFactory(lli N, lli a, dd::Package *dd) : gg(dd) {
+    assert(N > a);
     this->dd = dd;
     if(N > 0){//0 blocks for debugging of ripple carry
         this->N = N;//num to be factorized
@@ -104,7 +105,7 @@ std::function<void (int, int)> RegisterFactory::StateInitializer(short *line, in
 
 /// RippleAdderHalfClassic, used when one input (a0) is classic. related to figure 2 of paper. state is prepared inside.
 /// @param cnum classic number to be added to quantum register.
-dd::Edge RegisterFactory::RippleAdderHalfClassicDebug(ulli cnum, vector<int> num){
+dd::Edge RegisterFactory::RippleAdderHalfClassicDebug(lli cnum, vector<int> num){
     assert(n == static_cast<int>(num.size()));
     
     vector<bool> a0clb2 = shor::base2rep(cnum);//classical value in base 2
@@ -260,17 +261,23 @@ void RegisterFactory::CCModuloNAdderHalfClassic(int mcindex, int xindex, int tin
 /// @param nt total number of qubits
 /// @param state state to operate on
 void RegisterFactory::InvCCModuloNAdderHalfClassic(int mcindex, int xindex, int tindex, const std::function<int (int)> &a0cnumbase2, const std::function<int (int)> &a0Nbase2, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state){
+    static int tempcounter = 0;
     InvCCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
+   
     gg.CNotGenOrApply(line, tindex, c1indice(n - 1), nt, &state);
+    dd->export2Dot(state, "temp" + std::to_string(tempcounter) + ".dot");
+       tempcounter++;
     CCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
     InvCRippleAdderHalfClassic(a0Nbase2, c0indice, b0indice, c1indice, tindex, line, n, nt, state);
     gg.NotGenOrApply(line, c1indice(n - 1), nt, &state);
     gg.CNotGenOrApply(line, tindex, c1indice(n - 1), nt, &state);
+    dd->export2Dot(state, "temp" + std::to_string(tempcounter) + ".dot");
+       tempcounter++;
     gg.NotGenOrApply(line, c1indice(n - 1), nt, &state);
     HelperRippleAdderHalfClassic(a0Nbase2, c0indice, b0indice, c1indice, line, nt, state);
     InvCCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
 }
-dd::Edge RegisterFactory::ModuloNAdderHalfClassicDebug(ulli cnum, vector<int> qnum){
+dd::Edge RegisterFactory::ModuloNAdderHalfClassicDebug(lli cnum, vector<int> qnum){
     n = static_cast<int>(base2N.size());
     assert(n == qnum.size());//assumed quantum number represented in n base2 digits.
     short* line = new short[n];
@@ -339,11 +346,11 @@ void RegisterFactory::InvHelperRippleAdderHalfClassic(const std::function<int (i
 /// @param state state to operate on
 /// @param tindex temp memory index for moduloNAdder (FIG2)
 /// @param xindice  quantum register. x indice (for input quantum number)
-void RegisterFactory::CMultiplierModuloNHalfClassic(const std::function<int (int)> &a0Nbase2, const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, ulli a0cnum, short *line, int mcindex, int nt, dd::Edge &state, const std::function<int ()> &tindex, const std::function<int (int)> &xindice) {
+void RegisterFactory::CMultiplierModuloNHalfClassic(const std::function<int (int)> &a0Nbase2, const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, lli a0cnum, short *line, int mcindex, int nt, dd::Edge &state, const std::function<int ()> &tindex, const std::function<int (int)> &xindice) {
     
     for(int i = 0; i < n; ++i){//fig5 of paper, repeated shift and apply
         //TODO: make next four opertations not do redundant calculations.
-        ulli tempa0cnum = a0cnum;
+        lli tempa0cnum = a0cnum;
         tempa0cnum = tempa0cnum << i;
         tempa0cnum = tempa0cnum % N;
         vector<bool> a0clb2 = shor::base2rep(tempa0cnum, n);//classical value in base 2, n digits.
@@ -369,15 +376,15 @@ void RegisterFactory::CMultiplierModuloNHalfClassic(const std::function<int (int
 /// @param state state to operate on
 /// @param tindex temp memory index for moduloNAdder (FIG2)
 /// @param xindice quantum register. x indice (for input quantum number)
-void RegisterFactory::InvCMultiplierModuloNHalfClassic(const std::function<int (int)> &a0Nbase2, const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, ulli a0cnum, short *line, int mcindex, int nt, dd::Edge &state, const std::function<int ()> &tindex, const std::function<int (int)> &xindice){
+void RegisterFactory::InvCMultiplierModuloNHalfClassic(const std::function<int (int)> &a0Nbase2, const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, lli a0cnum, short *line, int mcindex, int nt, dd::Edge &state, const std::function<int ()> &tindex, const std::function<int (int)> &xindice){
     gg.NotGenOrApply(line, mcindex, nt, &state);
-    for(int i = n - 1 ; i >= n; --i){
+    for(int i = n - 1 ; i >= 0; --i){
         gg.ToffoliGenOrApply(line, b0indice(i), mcindex, xindice(i), nt, &state);
     }
     gg.NotGenOrApply(line, mcindex, nt, &state);
     for(int i = n - 1; i >= 0; --i){//fig5 of paper, repeated shift and apply
         //TODO: make next four opertations not do redundant calculations.
-        ulli tempa0cnum = a0cnum;
+        lli tempa0cnum = a0cnum;
         tempa0cnum = tempa0cnum << i;
         tempa0cnum = tempa0cnum % N;
         vector<bool> a0clb2 = shor::base2rep(tempa0cnum, n);//classical value in base 2, n digits.
@@ -389,7 +396,7 @@ void RegisterFactory::InvCMultiplierModuloNHalfClassic(const std::function<int (
 /// @param a0cnumbase10 classical number to be multiplied by quantum number.
 /// @param qnum quantum number
 /// @param mcv multiplier controller qubit value. Switch like in state initializer switch.
-dd::Edge RegisterFactory::CMultiplierModuloNDebug(ulli a0cnumbase10, vector<int> qnum, int mcv){
+dd::Edge RegisterFactory::CMultiplierModuloNDebug(lli cnum, vector<int> qnum, int mcv){
     assert(n == qnum.size());//assert quantum number represented in base2 is n digits.
     int nt = 3 * n + 3;//quantum number x Fig5 (n), quantum register y Fig5 (n), carries(n) Fig2, overflow carry(1) Fig2, temp memory qubit Fig4 t (1), multiplier control qubit c Fig5(1).
     short* line = new short[nt];
@@ -411,7 +418,7 @@ dd::Edge RegisterFactory::CMultiplierModuloNDebug(ulli a0cnumbase10, vector<int>
         lambdaInitState(qnum[i], xindice(i));//put quantum number in register
     }
     
-    CMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, a0cnumbase10, line, mcindex, nt, state, tindex, xindice);
+    CMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, cnum, line, mcindex, nt, state, tindex, xindice);
     delete[] line;
     return state;
 };
@@ -505,11 +512,10 @@ void RegisterFactory::InvCCRippleAdderHalfClassic(int mc, int xindex, int t, con
     }
 }
 /// ExponentiatorModuloNDebugger(tester), Fig6 of the paper.
-/// @param cnum classic number to be base for exponentiator. 'a' in fig6 of paper.
 /// @param qnum quantum number x in fig6, which will be the exponent. coded with arbitrary qubit size in this function.
-dd::Edge RegisterFactory::ExponentiatorModuloNDebug(ulli cnum, vector<int> qnum){
+dd::Edge RegisterFactory::ExponentiatorModuloNDebug( vector<int> qnum){
+    lli cnum = a;
     int m = static_cast<int>(qnum.size());
-    //TODO: Map of {i \in 0 \to 2m} to a^2^i and a^2^-i
     int nt = 3 * n + 2 + m;//quantum number x Fig5 (n), quantum register y Fig5 (n), carries(n) Fig2, overflow carry(1) Fig2, temp memory qubit Fig4 t (1), quantum exponent(m) which are controls for multipliers.
     short* line = new short[nt];
     gg.lineClear(line, nt);
@@ -519,29 +525,35 @@ dd::Edge RegisterFactory::ExponentiatorModuloNDebug(ulli cnum, vector<int> qnum)
     //a0 line does not exist. replaced by classic register.
     auto a0Nbase2 = [Nrep = this->base2N](int i){return Nrep.empty() ? 0 : Nrep[i]; };//return N's digits in base 2.
     //lambdas used for converting digit (of input number) to qubit index.
-    auto xindice = [nt](int i){return nt - i - 1;};//x qubits in fig 6. quantum register
-    auto xpindice = [nt, m](int i){return nt - m - 1 - i;};//= x qubits in fig 5
-    auto c0indice = [nt, m, n = this->n](int i){return nt - m - n - 1 - 2 * i;};
-    auto b0indice = [nt, m, n = this->n](int i){return nt - m - n - 1 - (2 * i + 1);}; //quantum register
-    auto c1indice = [nt, m, n = this->n](int i){return nt - m - n - 1 - 2 * (i + 1);};
-    auto tindex = [nt, m, n = this->n](){return nt - m - 3 * n - 2;};
-    for(int i = 0; i < n; ++i){
+    auto tindex = [nt, m, n = this->n](){return nt - 1;};
+    auto xindice = [nt](int i){return nt - i - 2;};//x qubits in fig 6. quantum register
+    auto xpindice = [nt, m](int i){return nt - m - 2 - i;};//= x qubits in fig 5
+    auto c0indice = [nt, m, n = this->n](int i){return nt - m - n - 2 - 2 * i;};
+    auto b0indice = [nt, m, n = this->n](int i){return nt - m - n - 2 - (2 * i + 1);}; //quantum register
+    auto c1indice = [nt, m, n = this->n](int i){return nt - m - n - 2 - 2 * (i + 1);};
+    for(int i = 0; i < m; ++i){
         lambdaInitState(qnum[i], xindice(i));//put quantum number in register
     }
     lambdaInitState(1, xpindice(0));//put 1 in x register in fig 5(multiplier)
-    ulli clop = cnum;//classical operand of multipliers
+    dd->export2Dot(state, "0.dot");
+    lli clop = cnum;//classical operand of multipliers
     for(int i = 0; i < m; ++i){//repeatedly multiply a^2^i and a^2^-i, based on control qubit (x_i) as in fig 6 of paper.
-        ulli invclop = shor::modInverse(clop, N);
+        lli invclop = shor::modInverse(clop, N);
         if(i % 2 == 0){
             CMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, clop, line, xindice(i), nt, state, tindex, xpindice);
+                 dd->export2Dot(state, std::to_string(i) + "-0.dot");
             InvCMultiplierModuloNHalfClassic(a0Nbase2, xpindice, c0indice, c1indice, invclop, line, xindice(i), nt, state, tindex, b0indice);
+                dd->export2Dot(state, std::to_string(i) + "-1.dot");
         }
         else{//swap.
             CMultiplierModuloNHalfClassic(a0Nbase2, xpindice, c0indice, c1indice, clop, line, xindice(i), nt, state, tindex, b0indice);
+            dd->export2Dot(state, std::to_string(i) + "-0.dot");
             InvCMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, invclop, line, xindice(i), nt, state, tindex, xpindice);
+            dd->export2Dot(state, std::to_string(i) + "-1.dot");
         }
             clop = clop * clop;
     }
+    dd->export2Dot(state, "1.dot");
     delete[] line;
     return state;
 }
@@ -579,14 +591,14 @@ void RegisterFactory::InvCRippleAdderHalfClassic(const std::function<int (int)> 
             gg.CNotGenOrApply(line, b0, cindex, nt, &state, false);
         }
     };
-    for (int i = n - 2; i >= 0; --i){
+    for (int i = 0; i < n-1; ++i){
         lambdaSum(c0indice(i), a0cnumindice(i), b0indice(i));
         lambdaCarry(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
     };
     lambdaSum(c0indice(n-1), a0cnumindice(n-1), b0indice(n-1));
     if(a0cnumindice(n-1))
         gg.CNotGenOrApply(line, b0indice(n-1), cindex, nt, &state, false);
-    for (int i = 0; i < n; ++i){
+    for (int i = n-1; i >= 0; --i){
         lambdaCarryInv(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
     }
 }

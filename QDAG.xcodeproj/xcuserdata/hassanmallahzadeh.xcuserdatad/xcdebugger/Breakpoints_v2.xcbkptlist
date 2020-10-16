@@ -7,16 +7,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "84F52210-41F7-49F8-A9B4-1B61764286C1"
+            uuid = "1F4D804C-31CC-4FC3-A22D-D976749A5FD0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "QDAG/shorutil.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "modInverse(a, m)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CCB7D778-10DA-458A-9288-DF55DB9D463A"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QDAG/RegisterFactory.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "395"
-            endingLineNumber = "395"
-            landmarkName = "RegisterFactory::CMultiplierModuloNDebug(a0cnumbase10, qnum, mcv)"
+            startingLineNumber = "542"
+            endingLineNumber = "542"
+            landmarkName = "RegisterFactory::ExponentiatorModuloNDebug(qnum)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
