@@ -14,6 +14,7 @@
 #include <random>
 #include "shorutil.hpp"
 #include "RegisterFactory.hpp"
+#include "PeriodFinder.hpp"
 #include <chrono>
 using namespace std::chrono;
 using std::cout;
@@ -35,12 +36,14 @@ int main(){
 }
 
 void TempTest(){
+   
     auto* dd = new dd::Package();
-    lli N = 3;
-    lli a = 2;
+    lli N = 4;
+    lli a = 3;
+    PeriodFinder pf= PeriodFinder(N,a);
     RegisterFactory rf = RegisterFactory(N, a, dd);
-    vector<int> numq{0,2};/*((|0>+|1>)/√2)|0>*///most significant on right
-    dd::Edge state = rf.ExponentiatorModuloNDebug(numq);
+    vector<int> numq{3,1,1};/*((|0>+|1>)/√2)|0>*///most significant on right
+    dd::Edge state = rf.ExponentiatorModuloN(numq);
     dd->export2Dot(state, "test.dot");
 }
 void UniformityTest(){

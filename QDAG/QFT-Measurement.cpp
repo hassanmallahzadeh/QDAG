@@ -17,6 +17,7 @@ Measurement::Measurement(dd::Package *dd) {
 /// @param e_root root of bdd for measurement
 /// @param n number of qubits
 /// @param n_target targeted qubit index
+/// @param unrg random generator engine
 int Measurement::Measure(dd::Edge &e_root, int n/*for StateCollapseMatMul*/, int n_target, engine& unrg){
     this->e_root = e_root;
     PopulateUpProbDiagram(e_root);

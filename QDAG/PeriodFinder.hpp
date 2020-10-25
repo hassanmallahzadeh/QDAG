@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include "commonheaders.h"
 #include "IIC-JKU/DDpackage.h"
+#include "QFT-Measurement.hpp"
+#include "RegisterFactory.hpp"
 #include <bit>
 class PeriodFinder{
     lli N;
@@ -19,12 +21,13 @@ class PeriodFinder{
     int ni = -1;//input register size
     int no = -1;//output register size
     dd::Package *dd = nullptr;
-    dd::Edge inputRegister = {nullptr, {nullptr, nullptr}};
-    dd::Edge outputRegister = {nullptr, {nullptr, nullptr}};
+    dd::Edge state;
+    RegisterFactory rf;
     void InitializeRegisters();
+    void MeasureOutputReg();
 public:
+    dd::Edge DebugPeriodFinder();
     PeriodFinder(lli N, lli b);
-    lli FoundPeriod();
-    bool IsNumberPow2();
+    ~PeriodFinder();
 };
 #endif /* PeriodFinder_hpp */

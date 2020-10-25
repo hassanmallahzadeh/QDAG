@@ -265,13 +265,11 @@ void RegisterFactory::InvCCModuloNAdderHalfClassic(int mcindex, int xindex, int 
     InvCCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
    
     gg.CNotGenOrApply(line, tindex, c1indice(n - 1), nt, &state);
-    dd->export2Dot(state, "temp" + std::to_string(tempcounter) + ".dot");
-       tempcounter++;
+          tempcounter++;
     CCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
     InvCRippleAdderHalfClassic(a0Nbase2, c0indice, b0indice, c1indice, tindex, line, n, nt, state);
     gg.NotGenOrApply(line, c1indice(n - 1), nt, &state);
     gg.CNotGenOrApply(line, tindex, c1indice(n - 1), nt, &state);
-    dd->export2Dot(state, "temp" + std::to_string(tempcounter) + ".dot");
        tempcounter++;
     gg.NotGenOrApply(line, c1indice(n - 1), nt, &state);
     HelperRippleAdderHalfClassic(a0Nbase2, c0indice, b0indice, c1indice, line, nt, state);
@@ -513,15 +511,14 @@ void RegisterFactory::InvCCRippleAdderHalfClassic(int mc, int xindex, int t, con
 }
 /// ExponentiatorModuloNDebugger(tester), Fig6 of the paper.
 /// @param qnum quantum number x in fig6, which will be the exponent. coded with arbitrary qubit size in this function.
-dd::Edge RegisterFactory::ExponentiatorModuloNDebug( vector<int> qnum){
+dd::Edge RegisterFactory::ExponentiatorModuloN( vector<int> qnum){
     lli cnum = a;
     int m = static_cast<int>(qnum.size());
     int nt = 3 * n + 2 + m;//quantum number x Fig5 (n), quantum register y Fig5 (n), carries(n) Fig2, overflow carry(1) Fig2, temp memory qubit Fig4 t (1), quantum exponent(m) which are controls for multipliers.
+    this->nt = nt;
     short* line = new short[nt];
     gg.lineClear(line, nt);
     dd::Edge state = StateGenerator(dd).dd_BaseState(nt, 0);//start by setting all qubits to zero.
-    vector<bool> a0clb2 = shor::base2rep(1, n);//classical value in base 2, n digits.
-    auto lambdaInitState = StateInitializer(line, nt, state);
     //a0 line does not exist. replaced by classic register.
     auto a0Nbase2 = [Nrep = this->base2N](int i){return Nrep.empty() ? 0 : Nrep[i]; };//return N's digits in base 2.
     //lambdas used for converting digit (of input number) to qubit index.
@@ -531,29 +528,26 @@ dd::Edge RegisterFactory::ExponentiatorModuloNDebug( vector<int> qnum){
     auto c0indice = [nt, m, n = this->n](int i){return nt - m - n - 2 - 2 * i;};
     auto b0indice = [nt, m, n = this->n](int i){return nt - m - n - 2 - (2 * i + 1);}; //quantum register
     auto c1indice = [nt, m, n = this->n](int i){return nt - m - n - 2 - 2 * (i + 1);};
+    auto lambdaInitState = StateInitializer(line, nt, state);//load lambda to initilize state in 'x'(from quantum exponent) and 'xp' set to 1
     for(int i = 0; i < m; ++i){
         lambdaInitState(qnum[i], xindice(i));//put quantum number in register
     }
     lambdaInitState(1, xpindice(0));//put 1 in x register in fig 5(multiplier)
-    dd->export2Dot(state, "0.dot");
-    lli clop = cnum;//classical operand of multipliers
+     lli clop = cnum;//classical operand of multipliers
     for(int i = 0; i < m; ++i){//repeatedly multiply a^2^i and a^2^-i, based on control qubit (x_i) as in fig 6 of paper.
         lli invclop = shor::modInverse(clop, N);
         if(i % 2 == 0){
             CMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, clop, line, xindice(i), nt, state, tindex, xpindice);
-                 dd->export2Dot(state, std::to_string(i) + "-0.dot");
-            InvCMultiplierModuloNHalfClassic(a0Nbase2, xpindice, c0indice, c1indice, invclop, line, xindice(i), nt, state, tindex, b0indice);
-                dd->export2Dot(state, std::to_string(i) + "-1.dot");
-        }
+                    InvCMultiplierModuloNHalfClassic(a0Nbase2, xpindice, c0indice, c1indice, invclop, line, xindice(i), nt, state, tindex, b0indice);
+                      }
         else{//swap.
             CMultiplierModuloNHalfClassic(a0Nbase2, xpindice, c0indice, c1indice, clop, line, xindice(i), nt, state, tindex, b0indice);
-            dd->export2Dot(state, std::to_string(i) + "-0.dot");
-            InvCMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, invclop, line, xindice(i), nt, state, tindex, xpindice);
-            dd->export2Dot(state, std::to_string(i) + "-1.dot");
+                 InvCMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, invclop, line, xindice(i), nt, state, tindex, xpindice);
+     
         }
             clop = clop * clop;
     }
-    dd->export2Dot(state, "1.dot");
+    m % 2 ? outputregindice = b0indice : outputregindice = xindice;//swap. refer to fig 5 of paper
     delete[] line;
     return state;
 }
@@ -602,4 +596,6 @@ void RegisterFactory::InvCRippleAdderHalfClassic(const std::function<int (int)> 
         lambdaCarryInv(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
     }
 }
+
+
 

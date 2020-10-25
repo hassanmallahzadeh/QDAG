@@ -34,6 +34,7 @@ lli gcd(lli f, lli c){
 // gcd(a, m) = 1//https://www.geeksforgeeks.org/multiplicative-inverse-under-modulo-m/
 lli modInverse(lli a, lli m)
 {
+    assert(gcd(a,m) == 1);//they must be co-prime.
     lli m0 = m;
     lli y = 0, x = 1;
   
