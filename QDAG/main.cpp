@@ -40,10 +40,8 @@ void TempTest(){
     auto* dd = new dd::Package();
     lli N = 4;
     lli a = 3;
-    PeriodFinder pf= PeriodFinder(N,a);
-    RegisterFactory rf = RegisterFactory(N, a, dd);
-    vector<int> numq{3,1,1};/*((|0>+|1>)/√2)|0>*///most significant on right
-    dd::Edge state = rf.ExponentiatorModuloN(numq);
+    PeriodFinder pf= PeriodFinder(N,a,dd);
+    dd::Edge state = pf.DebugPeriodFinder();
     dd->export2Dot(state, "test.dot");
 }
 void UniformityTest(){

@@ -22,12 +22,12 @@ class PeriodFinder{
     int no = -1;//output register size
     dd::Package *dd = nullptr;
     dd::Edge state;
-    RegisterFactory rf;
+    RegisterFactory* p_rf;
     void InitializeRegisters();
     void MeasureOutputReg();
 public:
     dd::Edge DebugPeriodFinder();
-    PeriodFinder(lli N, lli b);
+    PeriodFinder(lli, lli, dd::Package *);
     ~PeriodFinder();
 };
 #endif /* PeriodFinder_hpp */

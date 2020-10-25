@@ -16,11 +16,11 @@ using std::bitset;
 /// Period Finder Constructor.
 /// @param N Number to be factorized, modulo number
 /// @param a number to be used as base for finding the period.
-PeriodFinder::PeriodFinder(lli N, lli a){
+PeriodFinder::PeriodFinder(lli N, lli a, dd::Package *dd){
     this->N = N;
     this->a = a;
-    dd = new dd::Package;
-    RegisterFactory rf(N, a, dd);
+    this->dd = dd;
+    p_rf = new RegisterFactory(N, a, dd);
 }
 
 //END: PeriodFinder start of public methods
@@ -35,22 +35,24 @@ void PeriodFinder::InitializeRegisters(){
     for(int i = 0; i < ni; ++i){
         numq.push_back(2);//2 means all qubits in numq will be (|0> + |1>)/2
     }
-    state = rf.ExponentiatorModuloN(numq);
+    state = p_rf->ExponentiatorModuloN(numq);
 }
 
 void PeriodFinder::MeasureOutputReg(){
-    std::function<int (int)> outputindice = rf.OutPutRegIndice();
+    std::function<int (int)> outputindice = p_rf->OutPutRegIndice();
     Measurement mm(dd);
     std::random_device device;
-    std::mt19937 mt_rand(device);
+    std::mt19937 mt_rand(device());
     for(int i = 0; i < no; ++i){
-        mm.Measure(state, rf.nt, outputindice(i), mt_rand);
+        mm.Measure(state, p_rf->nt, outputindice(i), mt_rand);
     };
 }
 dd::Edge PeriodFinder::DebugPeriodFinder(){
+    InitializeRegisters();
+    MeasureOutputReg();
     return state;
 }
 PeriodFinder::~PeriodFinder(){
-    delete dd;
+    delete p_rf;
 }
 //END: PeriodFinder start of private methods
