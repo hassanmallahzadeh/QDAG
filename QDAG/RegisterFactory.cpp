@@ -547,7 +547,7 @@ dd::Edge RegisterFactory::ExponentiatorModuloN( vector<int> qnum){
         }
             clop = clop * clop;
     }
-    m % 2 ? outputregindice = b0indice : outputregindice = xindice;//swap. refer to fig 5 of paper
+    m % 2 ? outputregindice = b0indice : outputregindice = xpindice;//swap. refer to fig 5 of paper
     delete[] line;
     return state;
 }

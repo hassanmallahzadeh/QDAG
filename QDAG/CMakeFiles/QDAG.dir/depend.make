@@ -18,6 +18,8 @@ CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: IIC-JKU/DDpackage.h
 CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: PeriodFinder.cpp
 CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: PeriodFinder.hpp
 CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: QFT-DDgenerator.hpp
+CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: QFT-Measurement.hpp
+CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: RegisterFactory.hpp
 CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: commonheaders.h
 CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: shorutil.hpp
 
@@ -55,6 +57,7 @@ CMakeFiles/QDAG.dir/RegisterFactory.cpp.o: util.h
 
 CMakeFiles/QDAG.dir/main.cpp.o: IIC-JKU/DDcomplex.h
 CMakeFiles/QDAG.dir/main.cpp.o: IIC-JKU/DDpackage.h
+CMakeFiles/QDAG.dir/main.cpp.o: PeriodFinder.hpp
 CMakeFiles/QDAG.dir/main.cpp.o: QFT-DDgenerator.hpp
 CMakeFiles/QDAG.dir/main.cpp.o: QFT-Measurement.hpp
 CMakeFiles/QDAG.dir/main.cpp.o: QFT.hpp

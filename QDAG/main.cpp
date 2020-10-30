@@ -38,7 +38,7 @@ int main(){
 void TempTest(){
    
     auto* dd = new dd::Package();
-    lli N = 4;
+    lli N = 5;
     lli a = 3;
     PeriodFinder pf= PeriodFinder(N,a,dd);
     dd::Edge state = pf.DebugPeriodFinder();

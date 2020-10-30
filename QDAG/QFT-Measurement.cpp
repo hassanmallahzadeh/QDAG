@@ -25,13 +25,15 @@ int Measurement::Measure(dd::Edge &e_root, int n/*for StateCollapseMatMul*/, int
     array<fp,dd::RADIX> probs = QubitMeasurementProbs(n_target);
     int res = QubitMeasurementOutcome(probs, unrg);
     Mqinfo mqinfo = {n_target, res, probs[res]};
-    StateCollapseRestrict(mqinfo);
+ 
+    //StateCollapseRestrict(mqinfo);
+    StateCollapseMatMul(mqinfo, n);
+    e_root = this->e_root;
     return res;
 }
 /// Upstream probabilities for all dd nodes. recureively each node usp is its childs usp weighted by their edge weights (val squared) each.
 /// @param edge root edge
 fp Measurement::PopulateUpProbDiagram(const dd::Edge& edge){
-    
     if(upmap.find(edge.p) != upmap.end()){// already calculated so just return from umap
         return upmap[edge.p];
     }
@@ -159,7 +161,7 @@ int Measurement::QubitMeasurementOutcome(array<fp, dd::RADIX> a, engine& unrg) {
 /// @param mqinfo measured qubits info
 /// @param n total number of quibits
 void Measurement::StateCollapseMatMul(Mqinfo mqinfo, int n) {
-    assert(0);//function does not work. Likely since the matrix is not unitary.(returns identity)
+//    assert(0);//function does not work. Likely since the matrix is not unitary.(returns identity)
     assert(dd::RADIX == 2);
     short* line = new short[n]{};
     for(int i = 0; i < n; ++i){
@@ -171,12 +173,10 @@ void Measurement::StateCollapseMatMul(Mqinfo mqinfo, int n) {
         e_gate = dd->makeGateDD(N0mat, n, line);
     else
         e_gate = dd->makeGateDD(N1mat, n, line);
-    
     dd::ComplexValue c{sqrt(1/mqinfo.pr), 0.0 };//used to normalize the state.
-    dd::Complex cx = dd->cn.getCachedComplex(c.r,c.i);
+    dd::Complex cx = dd->cn.getTempCachedComplex(c.r,c.i);
     e_gate.w = dd->cn.mulCached(e_gate.w, cx);
     e_root = dd->multiply(e_gate, e_root);
-    line[mqinfo.ix] = -1;//reset
     delete[] line;
 }
 
@@ -226,6 +226,7 @@ void Measurement::ExtractedAboveLayerOnCollapse(dd::NodePtr curnode, int j, list
 /// Collapsed state after bits, use direct RESTRICT algorithm. "Bryant's Restrict algortithm".
 /// @param mqinfo measured qubits info
 void Measurement::StateCollapseRestrict(Mqinfo mqinfo) {
+    assert(0);//not to be used. final bdd is with unwanted nodes that should be removed.
     traverseset.clear();//clear act of QubitMeasurementProbs;
         
         dd::ComplexValue c{sqrt(1/mqinfo.pr), 0.0 };//used to normalize the state.

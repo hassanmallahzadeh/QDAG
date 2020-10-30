@@ -40,11 +40,18 @@ void PeriodFinder::InitializeRegisters(){
 
 void PeriodFinder::MeasureOutputReg(){
     std::function<int (int)> outputindice = p_rf->OutPutRegIndice();
-    Measurement mm(dd);
+    
     std::random_device device;
     std::mt19937 mt_rand(device());
+
+    dd->export2Dot(state, "before.dot");
     for(int i = 0; i < no; ++i){
-        mm.Measure(state, p_rf->nt, outputindice(i), mt_rand);
+        //TODO: measurement mechanism is 'reset' for every qubit. Look into reusing former calculations.
+        Measurement mm(dd);
+        int res = mm.Measure(state, p_rf->nt, outputindice(i), mt_rand);
+        dd->garbageCollect();
+        std::cout<<"qubit "<<outputindice(i)<<" result: "<<res<<std::endl;
+        dd->export2Dot(state, "iter" + std::to_string(i) + ".dot");
     };
 }
 dd::Edge PeriodFinder::DebugPeriodFinder(){

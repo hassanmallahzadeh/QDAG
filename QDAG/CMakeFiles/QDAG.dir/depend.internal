@@ -19,6 +19,8 @@ CMakeFiles/QDAG.dir/PeriodFinder.cpp.o
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/PeriodFinder.cpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/PeriodFinder.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp
 CMakeFiles/QDAG.dir/QFT-DDgenerator.cpp.o
@@ -56,6 +58,7 @@ CMakeFiles/QDAG.dir/RegisterFactory.cpp.o
 CMakeFiles/QDAG.dir/main.cpp.o
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.h
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/PeriodFinder.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT.hpp
