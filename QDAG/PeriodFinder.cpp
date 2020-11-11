@@ -10,8 +10,8 @@
 #include "QFT-DDgenerator.hpp"
 #include "shorutil.hpp"
 #include "QFT-Measurement.hpp"
-#include <bitset>
-using std::bitset;
+#include "QFT.hpp"
+#define DEMONSTRATE
 //BEG: PeriodFinder start of public methods
 /// Period Finder Constructor.
 /// @param N Number to be factorized, modulo number
@@ -43,21 +43,61 @@ void PeriodFinder::MeasureOutputReg(){
     
     std::random_device device;
     std::mt19937 mt_rand(device());
-
-    dd->export2Dot(state, "before.dot");
+#ifdef DEMONSTRATE
+    std::cout<<"measurement on output register after exponentiator:\n";
+#endif
     for(int i = 0; i < no; ++i){
         //TODO: measurement mechanism is 'reset' for every qubit. Look into reusing former calculations.
         Measurement mm(dd);
         int res = mm.Measure(state, p_rf->nt, outputindice(i), mt_rand);
-        dd->garbageCollect();
+#ifdef DEMONSTRATE
         std::cout<<"qubit "<<outputindice(i)<<" result: "<<res<<std::endl;
-        dd->export2Dot(state, "iter" + std::to_string(i) + ".dot");
+#endif
     };
 }
-dd::Edge PeriodFinder::DebugPeriodFinder(){
+/// Apply QFT to inpput register, perform emasurement with GN scheme, return resulted number in base 10
+///@return number outcome of measurement on input register.
+lli PeriodFinder::ApplyQFT(){
+    std::function<int (int)> inputindice;
+    inputindice = p_rf->InputRegIndice();
+    QFT *p_qft;//I do on heap since this is a bdd...
+    std::mt19937 mt_rand((std::random_device())());
+    p_qft = new QFT(dd);
+    vector<int> indices;
+    for(int i = 0; i < ni; ++i){
+        indices.push_back(inputindice(i));
+    }
+    vector<int> qftgnmo;//qft griffiths niu measurement outcomes.
+    qftgnmo = p_qft->dd_QFTGNV1(p_rf->nt, state, PERM_POS::BEG_PERM, mt_rand, indices);
+    assert(qftgnmo.size() == ni);
+#ifdef DEMONSTRATE
+    std::cout<<"measurement on input register during qft:\n";
+    for(int i = 0; i < indices.size(); ++i){
+    std::cout<<"qubit "<<indices[i]<<" result: "<<qftgnmo[i]<<std::endl;
+    }
+#endif
+    lli temp = 1;
+    lli y = 0;
+    for(int i = 0; i < qftgnmo.size(); ++i){
+        qftgnmo[i] == 1 ? (y += temp) : 1;//coding fun
+        temp *= 2;
+    }
+#ifdef DEMONSTRATE
+    std::cout<<"in base 10:\n";
+    std::cout << y << std::endl;
+#endif
+    delete p_qft;
+    return y;
+}
+lli PeriodFinder::AttemptFindingPeriod(){
+    return 0;
+}
+std::pair<lli,lli> PeriodFinder::DebugPeriodFinder(){
     InitializeRegisters();
     MeasureOutputReg();
-    return state;
+    lli inregout = ApplyQFT();
+    std::pair<lli,lli> p = shor::contfrac(inregout, ni, no);
+    return p;
 }
 PeriodFinder::~PeriodFinder(){
     delete p_rf;

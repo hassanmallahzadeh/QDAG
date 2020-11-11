@@ -14,7 +14,7 @@ using namespace std::chrono;
 using std::cout;
 using std::endl;
 
-const int QFT::posControl = 1;//can be 0, 1 or 2 for base 3, etc.
+const int QFT::posControl = 1;//apply rotation gates on stage i if qubit measrement on stage i had result posControl. refer to Mermin, fig 3.3. Would be 0, 1 or 2 for base 3, etc.
 
 QFT::QFT(dd::Package* dd){
     assert(dd::RADIX == 2);//parts of this code are not properly made for base != 2.
@@ -238,7 +238,7 @@ dd->garbageCollect();//without garbage collect crash happens on more than 17 qub
                 e_ans = dd->multiply(dd->makeGateDD(Rmat, n, line), e_ans);
                 gg.lineReset(line, i + j + 1, -1);
             }
-            gg.lineReset(line, i, n - i - 1);// reset line array
+            gg.lineReset(line, i, n - i - 1);// likely redundant. reset line array
         }
     }
     if(perm == END_PERM){
@@ -291,4 +291,45 @@ dd::Edge QFT::dd_QFTGNV2(int n, dd::Edge state, PERM_POS perm ,engine& unrg) {
        }
     delete[] line;
     return e_ans;
+}
+/// Applies QFT with GN Scheme to qubit indices specified in vector i.
+/// @return outcomes measurement outcomes during QFT.
+/// @param n number of qubits
+/// @param state input state root edge
+/// @param perm where and if apply the permutation operator.
+/// @param indice indice of qubits for applying QFT
+vector<int> QFT::dd_QFTGNV1(int n, dd::Edge &state, PERM_POS perm, engine& unrg, vector<int> indice){
+    GateGenerator  gg = GateGenerator(dd);
+    Measurement mm = Measurement(dd);
+    if(perm == BEG_PERM){
+        state = gg.permuteOperatorOnState(n, state);
+dd->garbageCollect();//without garbage collect crash happens on more than 17 qubits on my computer.//TODO: go after finding why crash happens.
+    }
+    short *line = new short[n]{};// set 'line' for dd->makeGateDD
+    for (int i = 0; i < n; ++i){
+        line[i] = -1;
+    }
+    vector<int> measurments;
+    for(int i = 0; i < indice.size(); ++i){
+        gg.lineSet(line, indice[i], -1);
+        state = dd->multiply(dd->makeGateDD(Hmat, n, line) ,state); //start by hadamard as in circuit
+        gg.lineReset(line, indice[i], -1);
+        int res = mm.Measure(state, n, indice[i], unrg);
+        measurments.push_back(res);
+        if(res == posControl){
+            dd::Matrix2x2 Rmat;// put rotation gates in place
+            for (int j = 0; j < indice.size() - i - 1; ++j){
+                gg.lineSet(line, indice[i + j + 1], -1);
+                gg.RmatGenerator(Rmat, j+2);
+                state = dd->multiply(dd->makeGateDD(Rmat, n, line), state);
+                gg.lineReset(line, indice[i + j + 1], -1);
+            }
+        }
+    }
+    if(perm == END_PERM){
+        dd->garbageCollect();
+      state = gg.permuteOperatorOnState(n, state);
+    cout<<"Warning: permutation gate has to be applied at the beginning for correct result.\n";
+    }
+    return measurments;//temporary, to compile
 }

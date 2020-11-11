@@ -30,6 +30,6 @@ public:
     dd::Edge dd_QFTV4(int n, dd::Edge state, PERM_POS perm);
     dd::Edge dd_QFTGNV1(int n, dd::Edge state, PERM_POS perm, engine& unrg);//Griffiths–Niu
     dd::Edge dd_QFTGNV2(int n, dd::Edge state, PERM_POS perm, engine& urng);//Griffiths–Niu,
-
+    vector<int> dd_QFTGNV1(int n, dd::Edge &state, PERM_POS perm, engine& unrg, vector<int> v);//Griffiths–Niu
 };
 #endif /* QFT_hpp */

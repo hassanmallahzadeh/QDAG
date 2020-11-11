@@ -22,27 +22,27 @@ using std::endl;
 void TempTest();
 void UniformityTest();
 void QFTexecutionTimes();
-int main(){
-    if(true){
-        TempTest();
-    }
-    if(/* DISABLES CODE */ false){//make 'true' to investigate a single QFT (fixed number of bits)
-        UniformityTest();
-    }
-    if(/* DISABLES CODE */ false){
-        QFTexecutionTimes();
-    }
-    return 0;
-}
+//int main(){
+//    if(true){
+//        TempTest();
+//    }
+//    if(/* DISABLES CODE */ false){//make 'true' to investigate a single QFT (fixed number of bits)
+//        UniformityTest();
+//    }
+//    if(/* DISABLES CODE */ false){
+//        QFTexecutionTimes();
+//    }
+//    return 0;
+//}
 
 void TempTest(){
    
     auto* dd = new dd::Package();
-    lli N = 5;
-    lli a = 3;
+    lli N = 3;
+    lli a = 2;
     PeriodFinder pf= PeriodFinder(N,a,dd);
-    dd::Edge state = pf.DebugPeriodFinder();
-    dd->export2Dot(state, "test.dot");
+    std::pair<lli,lli> p = pf.DebugPeriodFinder();
+    printf("numerator: %lld, denominator %lld\n", p.first, p.second);
 }
 void UniformityTest(){
     //examine uniformity of probabilities.
@@ -50,7 +50,6 @@ void UniformityTest(){
     int n = 4;
     map<string,int> m;
     for(int i = 0; i < ntrials; ++i){
-        
         auto* dd = new dd::Package;
         QFT qft = QFT(dd);
         StateGenerator sg = StateGenerator(dd);

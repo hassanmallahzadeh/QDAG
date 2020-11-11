@@ -102,8 +102,7 @@ dd::Edge StateGenerator::dd_BaseState(int n, lli i) {
 /// @param n number of qubits(added as safety feature).
 dd::Edge StateGenerator::dd_CustomState(vector<dd::ComplexValue> v, int n) {
     assert (n == log2(static_cast<int>(v.size())));
-    //FIXME: this needs to be made 'manually'
-    dd::Edge state {nullptr, {nullptr, nullptr}};//skeleton to start with.
+     dd::Edge state {nullptr, {nullptr, nullptr}};//skeleton to start with.
     dd::Edge temp;
     for (int i = 0; i < v.size(); ++i){
         if(dd::operator != (v[i], {0, 0})){
@@ -281,7 +280,7 @@ dd::Edge GateGenerator::swapRegistersOnState(int nt, vector<int> v1, vector<int>
 /// permute operator, apply swap gates, one by one to the input state
 /// @param n number of qubits
 /// @param state input state root.
-dd::Edge GateGenerator::permuteOperatorOnState(int n, dd::Edge state){
+dd::Edge GateGenerator::permuteOperatorOnState(int n, dd::Edge state){//TODO: pass state by value may cause wasted memory. investigate.
     for(int i = 0; i < n/2; ++i){//apply n/2 swap gates.
         state = dd->multiply(Smatv1(n, i, n - i - 1), state);
     }

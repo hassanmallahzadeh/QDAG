@@ -23,6 +23,7 @@ private:
     short* line = nullptr;//holds 'line'for setting basic gates.
     GateGenerator gg;
     std::function<int (int)> outputregindice;
+    std::function<int (int)> inputregindice;
     std::function<void (int, int)> StateInitializer(short *line, int nt, dd::Edge &state);
     void HelperRippleAdderHalfClassic(const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, short *, int, dd::Edge &);
     void InvHelperRippleAdderHalfClassic(const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, const std::function<int (int)> &, short *, int, dd::Edge &);
@@ -48,6 +49,7 @@ public:
     dd::Edge CMultiplierModuloNDebug(lli , vector<int>, int);
     dd::Edge ExponentiatorModuloN(vector<int>);
    std::function<int (int)> OutPutRegIndice(){return outputregindice;};
+    std::function<int (int)> InputRegIndice(){return inputregindice;};
     ~RegisterFactory();
     
 };

@@ -25,8 +25,10 @@ class PeriodFinder{
     RegisterFactory* p_rf;
     void InitializeRegisters();
     void MeasureOutputReg();
+    lli ApplyQFT();
+    lli AttemptFindingPeriod();
 public:
-    dd::Edge DebugPeriodFinder();
+    std::pair<lli,lli> DebugPeriodFinder();
     PeriodFinder(lli, lli, dd::Package *);
     ~PeriodFinder();
 };

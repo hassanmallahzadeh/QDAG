@@ -21,7 +21,7 @@ RegisterFactory::RegisterFactory(lli N, lli a, dd::Package *dd) : gg(dd) {
     if(N > 0){//0 blocks for debugging of ripple carry
         this->N = N;//num to be factorized
         this->a = a;//randomly chosen number smaller than N
-        base2N = shor::base2rep(N);//base 2 representation of N
+        base2N = shor::base2rep(N);//base 2//TODO: take out redundant base2conversions. representation of N
         n = static_cast<int>(base2N.size());//num qubits needed to represent N.
     }
 }
@@ -547,7 +547,8 @@ dd::Edge RegisterFactory::ExponentiatorModuloN( vector<int> qnum){
         }
             clop = clop * clop;
     }
-    m % 2 ? outputregindice = b0indice : outputregindice = xpindice;//swap. refer to fig 5 of paper
+    m % 2 ? outputregindice = b0indice : outputregindice = xpindice;//alternate. refer to fig 5 of paper
+    inputregindice = xindice;
     delete[] line;
     return state;
 }

@@ -20,6 +20,7 @@
 #include<random>
 #include <iostream>
 typedef long long int lli;
+typedef long double ld;
 typedef std::mt19937 engine;
 using std::vector;
 using std::array;

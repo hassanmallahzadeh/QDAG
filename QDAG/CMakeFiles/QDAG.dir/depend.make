@@ -19,6 +19,7 @@ CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: PeriodFinder.cpp
 CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: PeriodFinder.hpp
 CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: QFT-DDgenerator.hpp
 CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: QFT-Measurement.hpp
+CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: QFT.hpp
 CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: RegisterFactory.hpp
 CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: commonheaders.h
 CMakeFiles/QDAG.dir/PeriodFinder.cpp.o: shorutil.hpp

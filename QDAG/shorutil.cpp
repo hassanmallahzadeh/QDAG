@@ -125,5 +125,57 @@ vector<bool> base2rep(lli N,int n){
     }
     return v;
 }
-
+/// Finds j0/r0 where j0 is a natural number and r0 is a factor of period. Refer to Mermin, appendix K.
+/// @param yn input register measurement outcome
+/// @param no num qubits in output register
+/// @param ni num qunits in input register
+std::pair<lli,lli> contfrac(lli yn, int ni, int no){
+    std::pair<lli,lli> outfrac;
+    lli ru = 1;//upper limit for period(r)
+    lli Q = 1;//Q, notation in Karimipur lecture notes.
+    for(int i = 0; i < no; ++i)
+    ru *= 2;
+    for(int i = 0; i < ni; ++i)
+    Q *= 2;
+    lli a = 0;//quotient
+    lli rem = 1;//reminder
+    lli b0 = Q;//dividened
+    lli b1 = yn;//divisor.
+    vector<lli> va;
+    while(rem > 0 & a < ru){
+        a = b0 /b1;
+        rem = b0 - a * b1;
+        b0 = b1;
+        b1 = rem;
+        va.push_back(a);
+    }
+    vector<lli> vp;//memory inefficiency but does not matter for us.
+    vector<lli> vq;
+    vp.push_back(1);//base case
+    vq.push_back(va.at(0));//assume there was some number in input!
+    if(va.size() > 1){//base case
+    vp.push_back(va.at(1));
+    vq.push_back(1 + va[0] * va[1]);
+    }
+    for(int i = 2; i < va.size(); ++i){
+        vq.push_back(va[i] * vq[i - 1] + vq[i - 2]);
+        vp.push_back(va[i] * vp[i - 1] + vp[i - 2]);
+        if(!(vq.back() < ru))
+        {
+            vq.pop_back();
+            vp.pop_back();
+            break;
+        }
+    }
+    outfrac.first = vp.back();
+    outfrac.second = vq.back();
+    if(outfrac.first <=0 | outfrac.second <=0)
+        assert(0);
+    assert(abs(Q * double(outfrac.first)/outfrac.second - yn) <= 0.5);
+    return  outfrac;
+}
+}
+int main(){
+    std::pair<lli,lli> outfrac = shor::contfrac(11490, 14, 7);
+    std::cout<<outfrac.first<<" "<<outfrac.second<<std::endl;
 }
