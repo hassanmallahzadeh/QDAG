@@ -300,7 +300,6 @@ dd::Edge QFT::dd_QFTGNV2(int n, dd::Edge state, PERM_POS perm ,engine& unrg) {
 /// @param indice indice of qubits for applying QFT
 vector<int> QFT::dd_QFTGNV1(int n, dd::Edge &state, PERM_POS perm, engine& unrg, vector<int> indice){
     GateGenerator  gg = GateGenerator(dd);
-    Measurement mm = Measurement(dd);
     if(perm == BEG_PERM){
         state = gg.permuteOperatorOnState(n, state);
 dd->garbageCollect();//without garbage collect crash happens on more than 17 qubits on my computer.//TODO: go after finding why crash happens.
@@ -310,6 +309,7 @@ dd->garbageCollect();//without garbage collect crash happens on more than 17 qub
         line[i] = -1;
     }
     vector<int> measurments;
+    Measurement mm = Measurement(dd);
     for(int i = 0; i < indice.size(); ++i){
         gg.lineSet(line, indice[i], -1);
         state = dd->multiply(dd->makeGateDD(Hmat, n, line) ,state); //start by hadamard as in circuit
@@ -331,5 +331,5 @@ dd->garbageCollect();//without garbage collect crash happens on more than 17 qub
       state = gg.permuteOperatorOnState(n, state);
     cout<<"Warning: permutation gate has to be applied at the beginning for correct result.\n";
     }
-    return measurments;//temporary, to compile
+    return measurments;
 }

@@ -18,18 +18,19 @@
 class PeriodFinder{
     lli N;
     lli a;
-    int ni = -1;//input register size
-    int no = -1;//output register size
     dd::Package *dd = nullptr;
     dd::Edge state;
     RegisterFactory* p_rf;
+    lli AttemptFindingPeriod();
     void InitializeRegisters();
     void MeasureOutputReg();
     lli ApplyQFT();
-    lli AttemptFindingPeriod();
 public:
+    lli FinalMeasurementOnInReg();
+    int ni = -1;//input register size
+    int no = -1;//output register size
     std::pair<lli,lli> DebugPeriodFinder();
-    PeriodFinder(lli, lli, dd::Package *);
+    PeriodFinder(lli, lli, dd::Package * = nullptr);
     ~PeriodFinder();
 };
 #endif /* PeriodFinder_hpp */

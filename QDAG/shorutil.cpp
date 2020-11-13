@@ -174,8 +174,24 @@ std::pair<lli,lli> contfrac(lli yn, int ni, int no){
     assert(abs(Q * double(outfrac.first)/outfrac.second - yn) <= 0.5);
     return  outfrac;
 }
+
+/// converts a vector of base 2 number to base 10
+/// @param v vector of elements in base 2
+/// @param fms  == true : first element is the most significant
+int base2to10(vector<bool> v ,bool fms){
+    int x = 0;
+    int temp = 1;
+    if(fms)
+        std::reverse(v.begin(), v.end());
+    for(int i = 0; i < v.size(); ++i){
+        if(v[i])
+            x += temp;
+        temp *= 2;
+    }
+    return x;
 }
-int main(){
-    std::pair<lli,lli> outfrac = shor::contfrac(11490, 14, 7);
-    std::cout<<outfrac.first<<" "<<outfrac.second<<std::endl;
 }
+//int main(){
+//    std::pair<lli,lli> outfrac = shor::contfrac(11490, 14, 7);
+//    std::cout<<outfrac.first<<" "<<outfrac.second<<std::endl;
+//}

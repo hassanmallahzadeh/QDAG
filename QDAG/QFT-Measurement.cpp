@@ -29,6 +29,9 @@ int Measurement::Measure(dd::Edge &e_root, int n/*for StateCollapseMatMul*/, int
     //StateCollapseRestrict(mqinfo);
     StateCollapseMatMul(mqinfo, n);
     e_root = this->e_root;//TODO: without this would not work. I expected a shallow copy a deep copy happens. To be understood.
+    upmap.clear();
+    downmap.clear();
+    traverseset.clear();
     return res;
 }
 /// Upstream probabilities for all dd nodes. recureively each node usp is its childs usp weighted by their edge weights (val squared) each.

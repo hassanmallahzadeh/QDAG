@@ -545,7 +545,7 @@ dd::Edge RegisterFactory::ExponentiatorModuloN( vector<int> qnum){
                  InvCMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, invclop, line, xindice(i), nt, state, tindex, xpindice);
      
         }
-            clop = clop * clop;
+            clop = (clop * clop) % N;
     }
     m % 2 ? outputregindice = b0indice : outputregindice = xpindice;//alternate. refer to fig 5 of paper
     inputregindice = xindice;

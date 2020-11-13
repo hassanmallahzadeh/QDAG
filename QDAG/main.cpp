@@ -22,41 +22,99 @@ using std::endl;
 void TempTest();
 void UniformityTest();
 void QFTexecutionTimes();
-//int main(){
-//    if(true){
-//        TempTest();
-//    }
-//    if(/* DISABLES CODE */ false){//make 'true' to investigate a single QFT (fixed number of bits)
-//        UniformityTest();
-//    }
-//    if(/* DISABLES CODE */ false){
-//        QFTexecutionTimes();
-//    }
-//    return 0;
-//}
-
-void TempTest(){
-   
-    auto* dd = new dd::Package();
-    lli N = 3;
-    lli a = 2;
-    PeriodFinder pf= PeriodFinder(N,a,dd);
-    std::pair<lli,lli> p = pf.DebugPeriodFinder();
-    printf("numerator: %lld, denominator %lld\n", p.first, p.second);
+void FinalOutRegMeasure();
+int main(){
+    if(true){
+        FinalOutRegMeasure();
+    }
+    if(/* DISABLES CODE */ false){//make 'true' to investigate a single QFT (fixed number of bits)
+        UniformityTest();
+    }
+    if(/* DISABLES CODE */ false){
+        QFTexecutionTimes();
+    }
+    return 0;
 }
+
+void MeasurmentModuleTest(){
+    int n = 4;
+  
+   // dd->export2Dot(e, "state.dot");
+    int tr = 1000;
+    vector<int> trv(pow(2,n),0);
+    std::mt19937 mt_rand((std::random_device())());
+    for(int i = 0 ; i < tr; ++i){
+        auto* dd = new dd::Package;
+        StateGenerator sg = StateGenerator(dd);
+        vector<dd::ComplexValue> vc({{0,0},{0,0},{0.5,0},{0,0},{0,0},{0.5,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0.5,0},{0.5,0}});
+        dd::Edge e = sg.dd_CustomState(vc, 4);
+        Measurement mg = Measurement(dd);
+        vector<bool> rv;
+        for(int j = 0 ; j < n; ++j)
+        rv.push_back(mg.Measure(e, n, j, mt_rand));
+        ++trv[shor::base2to10(rv, false)];
+        delete dd;
+    }
+    std::ofstream datafile;
+    datafile.open ("/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/freqs.txt");
+    if(datafile.is_open()){
+        for (int i = 0; i < trv.size(); ++i){
+            datafile << i << " "<< trv[i] <<endl;
+        }
+        datafile.close();
+    }
+}
+void FinalOutRegMeasure(){
+    
+    lli N = 8;
+    lli a = 5;
+    int tr = 100;
+    vector<int> v;
+    for(int i = 0; i < tr; ++i){
+        auto* dd = new dd::Package;
+        PeriodFinder pf = PeriodFinder(N,a,dd);
+        lli regout = pf.FinalMeasurementOnInReg();
+        if(i == 0)
+        v =  vector<int>(pow(2, pf.ni), 0);
+        ++v.at(regout);
+        delete dd;
+    }
+    std::ofstream datafile;
+    datafile.open ("/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/freqs.txt");
+    if(datafile.is_open()){
+        for (int i = 0; i < v.size(); ++i){
+            datafile << i << " "<< v[i] <<endl;
+        }
+        datafile.close();
+    }
+}
+//void FinalInputRegProbDistr(lli N, lli a){
+//    auto* dd = new dd::Package();
+//    PeriodFinder pf= PeriodFinder(N,a,dd);
+//    pf.InitializeRegisters();
+//    pf.MeasureOutputReg();
+//    lli res = pf.ApplyQFT();
+//    vector<lli> results;
+//    vector<int> freq(
+//    printf("numerator: %lld, denominator %lld\n", p.first, p.second);
+//    delete dd;
+//}
 void UniformityTest(){
     //examine uniformity of probabilities.
     int ntrials = 1024;//
     int n = 4;
+    vector<int> vt;//for test of dd_QFTGNV1 when we determine on which qubits QFT is to be performed.
+    for(int i = 0; i < n; ++i)
+    vt.push_back(i);
     map<string,int> m;
     for(int i = 0; i < ntrials; ++i){
         auto* dd = new dd::Package;
         QFT qft = QFT(dd);
         StateGenerator sg = StateGenerator(dd);
-        dd::Edge state = sg.dd_BaseState(n, 0);
+        dd::Edge state = sg.dd_UniformState(n);
         std::random_device rd;
         engine eng(rd());
-        state =  qft.dd_QFTGNV1(n, state, BEG_PERM, eng);
+        qft.dd_QFTGNV1(n, state, NO_PERM, eng,vt);
         dd::NodePtr p = state.p;
         string s = "";
         while(p != dd->terminalNode){

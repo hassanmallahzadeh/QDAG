@@ -51,6 +51,5 @@ public:
    std::function<int (int)> OutPutRegIndice(){return outputregindice;};
     std::function<int (int)> InputRegIndice(){return inputregindice;};
     ~RegisterFactory();
-    
 };
 #endif /* RegisterFactoryInterface_hpp */

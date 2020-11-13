@@ -297,7 +297,6 @@ namespace dd {
         Edge f = DDone;
         Edge edges[4];
         edges[1] = edges[3] = DDzero;
-
         for (short p = 0; p < n; ++p) {
             if (state[p] == 0) {
                 edges[0] = f;

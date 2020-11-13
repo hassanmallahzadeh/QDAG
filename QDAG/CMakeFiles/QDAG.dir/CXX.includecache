@@ -90,6 +90,12 @@ commonheaders.h
 random
 -
 
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.cpp
+QFT-Measurement.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
+util.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/util.h
+
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
 IIC-JKU/DDpackage.h
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
@@ -191,6 +197,10 @@ PeriodFinder.hpp
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/PeriodFinder.hpp
 chrono
 -
+
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.cpp
+shorutil.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp
 
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp
 commonheaders.h
