@@ -22,10 +22,11 @@ using std::endl;
 void TempTest();
 void UniformityTest();
 void QFTexecutionTimes();
-void FinalOutRegMeasure();
+void FinalOutRegMeasureTest();
 int main(){
-    if(true){
-        FinalOutRegMeasure();
+    TempTest();
+    if(false){{//make 'true' to investigate number returned after measurement on input register. (last quantum step).
+        FinalOutRegMeasureTest();
     }
     if(/* DISABLES CODE */ false){//make 'true' to investigate a single QFT (fixed number of bits)
         UniformityTest();
@@ -35,7 +36,25 @@ int main(){
     }
     return 0;
 }
-
+}
+void TempTest(){
+    lli N = 10;
+    lli a = 7;
+    std::pair<lli,lli> p = {-1,-1};
+    lli gcd = -1;
+    int counter = 0;
+    do{
+        auto* dd = new dd::Package;
+        PeriodFinder pf = PeriodFinder(N,a,dd);
+        p = pf.DebugPeriodFinder();
+        if(p.second > 0 && p.first > 0)//0 is not measured.
+        gcd = shor::gcd(p.first, p.second);
+        ++counter;
+    delete dd;
+    }while(!(p.second>0) || gcd != 1 || shor::modexp(a,p.second,N) != 1/*not good for lli variable to be changed*/);
+    
+    printf("period of %lld mod %lld found: %lld in %d run\n",a,N,p.second, counter);
+}
 void MeasurmentModuleTest(){
     int n = 4;
   
@@ -64,7 +83,7 @@ void MeasurmentModuleTest(){
         datafile.close();
     }
 }
-void FinalOutRegMeasure(){
+void FinalOutRegMeasureTest(){
     
     lli N = 8;
     lli a = 5;

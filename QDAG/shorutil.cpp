@@ -65,22 +65,28 @@ lli modInverse(lli a, lli m)
 }
   
 /// This function takes three integers, x, a, and n, and returns x^a mod n.  This algorithm is known as the "Russian peasant method," I believe, and avoids overflow by never calculating x^a directly.
-/// @param x base
-/// @param a exponent
+/// @param b base
+/// @param x exponent
 /// @param n mod
-lli modexp( lli x,  lli a,  lli n) {
+lli modexp( lli b,  lli x,  lli n) {
     lli value = 1;
-    lli tmp = x % n;
-    while (a > 0) {
-        if (a & 1) {
+    lli tmp = b % n;
+    while (x > 0) {
+        if (x & 1) {
             value = (value * tmp) % n;
         }
         tmp = tmp * tmp % n;
-        a>>=1;
+        x>>=1;
     }
     return value;
 }
-
+lli pow(lli a, lli x){
+    lli ans = 1;
+    for(int i = 0; i < x; ++i)
+    ans *= a;
+    
+    return ans;
+}
 int bddNumVar(dd::Edge edge, bool isVector){
     list<dd::NodePtr> l;
     assert(edge.p);// make sure not null
@@ -131,6 +137,8 @@ vector<bool> base2rep(lli N,int n){
 /// @param ni num qunits in input register
 std::pair<lli,lli> contfrac(lli yn, int ni, int no){
     std::pair<lli,lli> outfrac;
+    if(yn <=0 )
+        return std::pair<lli,lli>({-1,-1});//bad
     lli ru = 1;//upper limit for period(r)
     lli Q = 1;//Q, notation in Karimipur lecture notes.
     for(int i = 0; i < no; ++i)
@@ -151,15 +159,24 @@ std::pair<lli,lli> contfrac(lli yn, int ni, int no){
     }
     vector<lli> vp;//memory inefficiency but does not matter for us.
     vector<lli> vq;
-    vp.push_back(1);//base case
-    vq.push_back(va.at(0));//assume there was some number in input!
-    if(va.size() > 1){//base case
-    vp.push_back(va.at(1));
-    vq.push_back(1 + va[0] * va[1]);
-    }
-    for(int i = 2; i < va.size(); ++i){
-        vq.push_back(va[i] * vq[i - 1] + vq[i - 2]);
-        vp.push_back(va[i] * vp[i - 1] + vp[i - 2]);
+    
+    for(int i = 0; i < va.size(); ++i){
+        switch (i){
+            case 0:
+                vp.push_back(1);//base case
+                vq.push_back(va.at(0));//assume there was some number in input!
+                break;
+            case 1:
+                if(va.size() > 1){//base case
+                  vp.push_back(va.at(1));
+                  vq.push_back(1 + va[0] * va[1]);
+                  }
+                break;
+            default:
+                vq.push_back(va[i] * vq[i - 1] + vq[i - 2]);
+                vp.push_back(va[i] * vp[i - 1] + vp[i - 2]);
+                break;
+        }
         if(!(vq.back() < ru))
         {
             vq.pop_back();
@@ -171,8 +188,11 @@ std::pair<lli,lli> contfrac(lli yn, int ni, int no){
     outfrac.second = vq.back();
     if(outfrac.first <=0 | outfrac.second <=0)
         assert(0);
-    assert(abs(Q * double(outfrac.first)/outfrac.second - yn) <= 0.5);
+    fp err = abs(Q * double(outfrac.first)/outfrac.second - yn);
+    if(err > 0.5)
+        return std::pair<lli,lli>({-1,-1});
     return  outfrac;
+    
 }
 
 /// converts a vector of base 2 number to base 10

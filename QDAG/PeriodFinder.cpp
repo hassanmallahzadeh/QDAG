@@ -30,7 +30,7 @@ PeriodFinder::PeriodFinder(lli N, lli a, dd::Package *dd){
 void PeriodFinder::InitializeRegisters(){
    vector<bool> base2N = shor::base2rep(N);//base 2 representation of N
     no = static_cast<int>(base2N.size());//num qubits needed to represent N.
-    ni = 3 * no;//input register size.
+    ni = 2 * no;//input register size.
     vector<int> numq;
     for(int i = 0; i < ni; ++i){
         numq.push_back(2);//2 means all qubits in numq will be (|0> + |1>)/2
