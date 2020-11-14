@@ -22,12 +22,12 @@ using std::endl;
 void TempTest();
 void UniformityTest();
 void QFTexecutionTimes();
-void FinalOutRegMeasureTest();
+void FinalOutRegMeasureNoQFTTest();
 int main(){
     if(false)
     TempTest();
     if(true){{//make 'true' to investigate number returned after measurement on input register. (last quantum step).
-        FinalOutRegMeasureTest();
+        FinalOutRegMeasureNoQFTTest();
     }
     if(/* DISABLES CODE */ false){//make 'true' to investigate a single QFT (fixed number of bits)
         UniformityTest();
@@ -84,7 +84,7 @@ void MeasurmentModuleTest(){
         datafile.close();
     }
 }
-void FinalOutRegMeasureTest(){
+void FinalOutRegMeasureNoQFTTest(){
     
     lli N = 7;
     lli a = 2;
