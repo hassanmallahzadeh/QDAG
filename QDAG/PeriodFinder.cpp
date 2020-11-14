@@ -38,23 +38,25 @@ void PeriodFinder::InitializeRegisters(){
     state = p_rf->ExponentiatorModuloN(numq);
 }
 
-void PeriodFinder::MeasureOutputReg(){
+lli PeriodFinder::MeasureOutputReg(){
+    bool report = false;
     std::function<int (int)> outputindice = p_rf->OutPutRegIndice();
     
     std::random_device device;
     std::mt19937 mt_rand(device());
-#ifdef DEMONSTRATE
+    
+    if(report)
     std::cout<<"measurement on output register after exponentiator:\n";
-#endif
+    vector<int> vres;
     for(int i = 0; i < no; ++i){
         //TODO: measurement mechanism is 'reset' for every qubit. Look into reusing former calculations.
         Measurement mm(dd);
         int res = mm.Measure(state, p_rf->nt, outputindice(i), mt_rand);
-#ifdef DEMONSTRATE
+        vres.push_back(res);
+if(report)
         std::cout<<"qubit "<<outputindice(i)<<" result: "<<res<<std::endl;
-#endif
     };
-    
+    return shor::base2to10(vres, false);
 }
 /// Apply QFT to inpput register, perform emasurement with GN scheme, return resulted number in base 10
 ///@return number outcome of measurement on input register.
@@ -80,17 +82,9 @@ lli PeriodFinder::ApplyQFT(){
     std::cout<<"in base 10:\n";
     std::cout << y << std::endl;
 #endif
-    lli temp = 1;
-    lli y = 0;
-    for(int i = 0; i < qftgnmo.size(); ++i){
-        qftgnmo[i] == 1 ? (y += temp) : 1;//coding fun
-        temp *= 2;
-    }
+    lli y = shor::base2to10(qftgnmo, false);
     delete p_qft;
     return y;
-}
-lli PeriodFinder::AttemptFindingPeriod(){
-    return 0;
 }
 std::pair<lli,lli> PeriodFinder::DebugPeriodFinder(){
     InitializeRegisters();
@@ -99,11 +93,26 @@ std::pair<lli,lli> PeriodFinder::DebugPeriodFinder(){
     std::pair<lli,lli> p = shor::contfrac(inregout, ni, no);
     return p;
 }
-lli PeriodFinder::FinalMeasurementOnInReg(){
+lli PeriodFinder::DebugFinalMeasurementOnInReg(){
     InitializeRegisters();
     MeasureOutputReg();
     lli inregout = ApplyQFT();
     return inregout;
+}
+std::pair<lli,lli> PeriodFinder::DebugMeasureInputRegNoQFT(){
+    InitializeRegisters();
+    lli ores = MeasureOutputReg();
+    auto inputindice = p_rf->InputRegIndice();
+    std::mt19937 mt_rand((std::random_device())());
+    vector<int> vres;
+    for(int i = 0; i < ni; ++i){
+        //TODO: measurement mechanism is 'reset' for every qubit. Look into reusing former calculations.
+        Measurement mm(dd);
+        int res = mm.Measure(state, p_rf->nt, inputindice(i), mt_rand);
+        vres.push_back(res);
+    };
+    lli ires = shor::base2to10(vres, false);
+    return std::pair<lli,lli>(ires,ores);
 }
 PeriodFinder::~PeriodFinder(){
     delete p_rf;

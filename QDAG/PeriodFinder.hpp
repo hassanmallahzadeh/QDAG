@@ -21,15 +21,15 @@ class PeriodFinder{
     dd::Package *dd = nullptr;
     dd::Edge state;
     RegisterFactory* p_rf;
-    lli AttemptFindingPeriod();
     void InitializeRegisters();
-    void MeasureOutputReg();
+    lli MeasureOutputReg();
     lli ApplyQFT();
 public:
-    lli FinalMeasurementOnInReg();
+    lli DebugFinalMeasurementOnInReg();
     int ni = -1;//input register size
     int no = -1;//output register size
     std::pair<lli,lli> DebugPeriodFinder();
+    std::pair<lli,lli> DebugMeasureInputRegNoQFT();
     PeriodFinder(lli, lli, dd::Package * = nullptr);
     ~PeriodFinder();
 };

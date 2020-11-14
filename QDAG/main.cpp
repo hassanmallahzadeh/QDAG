@@ -24,8 +24,9 @@ void UniformityTest();
 void QFTexecutionTimes();
 void FinalOutRegMeasureTest();
 int main(){
+    if(false)
     TempTest();
-    if(false){{//make 'true' to investigate number returned after measurement on input register. (last quantum step).
+    if(true){{//make 'true' to investigate number returned after measurement on input register. (last quantum step).
         FinalOutRegMeasureTest();
     }
     if(/* DISABLES CODE */ false){//make 'true' to investigate a single QFT (fixed number of bits)
@@ -38,7 +39,7 @@ int main(){
 }
 }
 void TempTest(){
-    lli N = 10;
+    lli N = 30;
     lli a = 7;
     std::pair<lli,lli> p = {-1,-1};
     lli gcd = -1;
@@ -68,7 +69,7 @@ void MeasurmentModuleTest(){
         vector<dd::ComplexValue> vc({{0,0},{0,0},{0.5,0},{0,0},{0,0},{0.5,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0.5,0},{0.5,0}});
         dd::Edge e = sg.dd_CustomState(vc, 4);
         Measurement mg = Measurement(dd);
-        vector<bool> rv;
+        vector<int> rv;
         for(int j = 0 ; j < n; ++j)
         rv.push_back(mg.Measure(e, n, j, mt_rand));
         ++trv[shor::base2to10(rv, false)];
@@ -85,19 +86,24 @@ void MeasurmentModuleTest(){
 }
 void FinalOutRegMeasureTest(){
     
-    lli N = 8;
-    lli a = 5;
+    lli N = 7;
+    lli a = 2;
     int tr = 100;
     vector<int> v;
-    for(int i = 0; i < tr; ++i){
+    int i = 0;
+    do{
         auto* dd = new dd::Package;
         PeriodFinder pf = PeriodFinder(N,a,dd);
-        lli regout = pf.FinalMeasurementOnInReg();
-        if(i == 0)
-        v =  vector<int>(pow(2, pf.ni), 0);
-        ++v.at(regout);
+        std::pair<lli,lli> iores = pf.DebugMeasureInputRegNoQFT();
+        static lli flag = iores.second;//pick results with same output reg num.
+        if(iores.second == flag){
+            if(v.empty())
+                v =  vector<int>(pow(2, pf.ni), 0);//make the info holder vector.
+        ++v.at(iores.first);
+            ++i;
+        }
         delete dd;
-    }
+    } while(i < tr);
     std::ofstream datafile;
     datafile.open ("/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/freqs.txt");
     if(datafile.is_open()){

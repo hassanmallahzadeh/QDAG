@@ -198,12 +198,13 @@ std::pair<lli,lli> contfrac(lli yn, int ni, int no){
 /// converts a vector of base 2 number to base 10
 /// @param v vector of elements in base 2
 /// @param fms  == true : first element is the most significant
-int base2to10(vector<bool> v ,bool fms){
-    int x = 0;
-    int temp = 1;
+lli base2to10(vector<int> v ,bool fms){
+    lli x = 0;
+    lli temp = 1;
     if(fms)
         std::reverse(v.begin(), v.end());
     for(int i = 0; i < v.size(); ++i){
+        assert(v[i] == 0 || v[i] == 1);//since base 2.
         if(v[i])
             x += temp;
         temp *= 2;
