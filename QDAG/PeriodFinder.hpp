@@ -25,7 +25,7 @@ class PeriodFinder{
     lli MeasureOutputReg();
     lli ApplyQFT();
 public:
-    lli DebugFinalMeasurementOnInReg();
+    std::pair<lli,lli> DebugMeasureInputRegAfterQFT();
     int ni = -1;//input register size
     int no = -1;//output register size
     std::pair<lli,lli> DebugPeriodFinder();

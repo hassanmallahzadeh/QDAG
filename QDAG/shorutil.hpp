@@ -20,5 +20,6 @@ vector<bool> base2rep(lli N, int n = -1);
 std::pair<lli,lli> contfrac(lli, int, int);
 lli base2to10(vector<int>,bool);
 lli pow(lli,lli);
+lli bfpf(lli,lli);
 }
 #endif /* shorutil_hpp */

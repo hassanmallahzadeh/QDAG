@@ -211,6 +211,20 @@ lli base2to10(vector<int> v ,bool fms){
     }
     return x;
 }
+/// classical brute force period finder
+/// @param N mod
+/// @param a base
+lli bfpf(lli N,lli a){
+    lli exp = a;
+    for(int i = 1; i < N; ++i){
+        if(exp % N == 1){
+            return i;
+            break;
+        }
+        exp *= a;
+    }
+    return -1;
+}
 }
 //int main(){
 //    std::pair<lli,lli> outfrac = shor::contfrac(11490, 14, 7);

@@ -23,20 +23,10 @@ void TempTest();
 void UniformityTest();
 void QFTexecutionTimes();
 void FinalOutRegMeasureNoQFTTest();
+void FinalOutRegMeasureWithQFTTest();
 int main(){
-    if(false)
-    TempTest();
-    if(true){{//make 'true' to investigate number returned after measurement on input register. (last quantum step).
-        FinalOutRegMeasureNoQFTTest();
-    }
-    if(/* DISABLES CODE */ false){//make 'true' to investigate a single QFT (fixed number of bits)
-        UniformityTest();
-    }
-    if(/* DISABLES CODE */ false){
-        QFTexecutionTimes();
-    }
+    FinalOutRegMeasureWithQFTTest();
     return 0;
-}
 }
 void TempTest(){
     lli N = 30;
@@ -84,10 +74,11 @@ void MeasurmentModuleTest(){
         datafile.close();
     }
 }
+///investigate number returned after measurement on input register. (last quantum step).
 void FinalOutRegMeasureNoQFTTest(){
     
     lli N = 7;
-    lli a = 2;
+    lli a = 3;
     int tr = 100;
     vector<int> v;
     int i = 0;
@@ -97,6 +88,35 @@ void FinalOutRegMeasureNoQFTTest(){
         std::pair<lli,lli> iores = pf.DebugMeasureInputRegNoQFT();
         static lli flag = iores.second;//pick results with same output reg num.
         if(iores.second == flag){
+            if(v.empty())
+                v =  vector<int>(pow(2, pf.ni), 0);//make the info holder vector.
+        ++v.at(iores.first);
+            ++i;
+        }
+        delete dd;
+    } while(i < tr);
+    std::ofstream datafile;
+    datafile.open ("/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/freqs1.txt");
+    if(datafile.is_open()){
+        for (int i = 0; i < v.size(); ++i){
+            datafile << i << " "<< v[i] <<endl;
+        }
+        datafile.close();
+    }
+}
+void FinalOutRegMeasureWithQFTTest(){
+    
+    lli N = 7;
+    lli a = 3;
+    int tr = 200;
+    vector<int> v;
+    int i = 0;
+    do{
+        auto* dd = new dd::Package;
+        PeriodFinder pf = PeriodFinder(N,a,dd);
+        std::pair<lli,lli> iores = pf.DebugMeasureInputRegAfterQFT();
+       // static lli flag = iores.second;//pick results with same output reg num.
+        if(true/*iores.second == flag*/){
             if(v.empty())
                 v =  vector<int>(pow(2, pf.ni), 0);//make the info holder vector.
         ++v.at(iores.first);
@@ -124,6 +144,7 @@ void FinalOutRegMeasureNoQFTTest(){
 //    printf("numerator: %lld, denominator %lld\n", p.first, p.second);
 //    delete dd;
 //}
+/// investigate a single QFT (fixed number of bits)
 void UniformityTest(){
     //examine uniformity of probabilities.
     int ntrials = 1024;//

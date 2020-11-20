@@ -93,11 +93,11 @@ std::pair<lli,lli> PeriodFinder::DebugPeriodFinder(){
     std::pair<lli,lli> p = shor::contfrac(inregout, ni, no);
     return p;
 }
-lli PeriodFinder::DebugFinalMeasurementOnInReg(){
+std::pair<lli,lli> PeriodFinder::DebugMeasureInputRegAfterQFT(){
     InitializeRegisters();
-    MeasureOutputReg();
-    lli inregout = ApplyQFT();
-    return inregout;
+    lli ores = MeasureOutputReg();
+    lli ires = ApplyQFT();
+    return std::pair<lli,lli>(ires,ores);;
 }
 std::pair<lli,lli> PeriodFinder::DebugMeasureInputRegNoQFT(){
     InitializeRegisters();
