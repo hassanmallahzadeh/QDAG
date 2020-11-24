@@ -20,7 +20,11 @@ PeriodFinder::PeriodFinder(lli N, lli a, dd::Package *dd){
     this->N = N;
     this->a = a;
     dd ? this->dd = dd : dd = new dd::Package;
-    p_rf = new RegisterFactory(N, a, dd);
+    vector<bool> base2N = shor::base2rep(N);//base 2 representation of N
+     no = static_cast<int>(base2N.size());//num qubits needed to represent N.
+     base2N = shor::base2rep(N*N);//base 2 representation of N^2
+     ni = static_cast<int>(base2N.size());//num qubits needed to represent N^2.
+    p_rf = new RegisterFactory(N, a, ni, no, dd);
 }
 
 //END: PeriodFinder start of public methods
@@ -28,9 +32,7 @@ PeriodFinder::PeriodFinder(lli N, lli a, dd::Package *dd){
 //BEG: PeriodFinder start of private methods
 
 void PeriodFinder::InitializeRegisters(){
-   vector<bool> base2N = shor::base2rep(N);//base 2 representation of N
-    no = static_cast<int>(base2N.size());//num qubits needed to represent N.
-    ni = 2 * no;//input register size.
+
     vector<int> numq;
     for(int i = 0; i < ni; ++i){
         numq.push_back(2);//2 means all qubits in numq will be (|0> + |1>)/2
@@ -70,10 +72,11 @@ lli PeriodFinder::ApplyQFT(){
     for(int i = 0; i < ni; ++i){
         indices.push_back(inputindice(i));
     }
+    std::reverse(indices.begin(), indices.end());//TAKE OUT DEBUG
     vector<int> qftgnmo;//qft griffiths niu measurement outcomes.
     qftgnmo = p_qft->dd_QFTGNV1(p_rf->nt, state, PERM_POS::NO_PERM, mt_rand, indices);
     assert(qftgnmo.size() == ni);
-    std::reverse(qftgnmo.begin(), qftgnmo.end());//QFT has reversed output.
+//    std::reverse(qftgnmo.begin(), qftgnmo.end());//QFT has reversed output.
 #ifdef DEMONSTRATE
     std::cout<<"measurement on input register during qft:\n";
     for(int i = 0; i < indices.size(); ++i){

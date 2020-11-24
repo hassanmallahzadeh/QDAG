@@ -302,7 +302,7 @@ vector<int> QFT::dd_QFTGNV1(int n, dd::Edge &state, PERM_POS perm, engine& unrg,
     GateGenerator  gg = GateGenerator(dd);
     if(perm == BEG_PERM){
         state = gg.permuteOperatorOnState(n, state);
-dd->garbageCollect();//without garbage collect crash happens on more than 17 qubits on my computer.//TODO: go after finding why crash happens.
+//dd->garbageCollect();//without garbage collect crash happens on more than 17 qubits on my computer.//TODO: go after finding why crash happens.
     }
     short *line = new short[n]{};// set 'line' for dd->makeGateDD
     for (int i = 0; i < n; ++i){
@@ -311,9 +311,9 @@ dd->garbageCollect();//without garbage collect crash happens on more than 17 qub
     vector<int> measurments;
     Measurement mm = Measurement(dd);
     for(int i = 0; i < indice.size(); ++i){
-        gg.lineSet(line, indice[i], -1);
+          gg.lineSet(line, indice[i]);
         state = dd->multiply(dd->makeGateDD(Hmat, n, line) ,state); //start by hadamard as in circuit
-        gg.lineReset(line, indice[i], -1);
+        gg.lineReset(line, indice[i]);
         int res = mm.Measure(state, n, indice[i], unrg);
         measurments.push_back(res);
         if(res == posControl){
@@ -327,9 +327,10 @@ dd->garbageCollect();//without garbage collect crash happens on more than 17 qub
         }
     }
     if(perm == END_PERM){
-        dd->garbageCollect();
+    //    dd->garbageCollect();
       state = gg.permuteOperatorOnState(n, state);
     cout<<"Warning: permutation gate has to be applied at the beginning for correct result.\n";
     }
+ //   dd->garbageCollect();
     return measurments;
 }

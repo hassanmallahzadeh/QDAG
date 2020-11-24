@@ -23,9 +23,12 @@ void TempTest();
 void UniformityTest();
 void QFTexecutionTimes();
 void FinalOutRegMeasureNoQFTTest();
-void FinalOutRegMeasureWithQFTTest();
+void FinalInRegMeasureNoQFTTest();
+void FinalInOutRegMeasureNoQFTTest();
+void FinalInRegMeasureWithQFTTest();
+void FinalInRegMeasureNoQFTX0DistroTest();
 int main(){
-    FinalOutRegMeasureWithQFTTest();
+    FinalInRegMeasureWithQFTTest();
     return 0;
 }
 void TempTest(){
@@ -74,10 +77,34 @@ void MeasurmentModuleTest(){
         datafile.close();
     }
 }
-///investigate number returned after measurement on input register. (last quantum step).
+void FinalInRegMeasureNoQFTX0DistroTest(){
+    lli N = 13;
+    lli a = 3;
+    int tr = 300;
+    lli r = shor::bfpf(N, a);
+    vector<int> v;
+    int i = 0;
+    do{
+        auto* dd = new dd::Package;
+        PeriodFinder pf = PeriodFinder(N,a,dd);
+        std::pair<lli,lli> iores = pf.DebugMeasureInputRegNoQFT();
+        if(v.empty())
+            v =  vector<int>(r, 0);//make the info holder vector.
+    ++v.at((iores.first)%r);
+        ++i;
+        delete dd;
+    } while(i < tr);
+    std::ofstream datafile;
+    datafile.open ("/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/freqs1.txt");
+    if(datafile.is_open()){
+        for (int i = 0; i < v.size(); ++i){
+            datafile << i << " "<< v[i] <<endl;
+        }
+        datafile.close();
+    }
+}
 void FinalOutRegMeasureNoQFTTest(){
-    
-    lli N = 7;
+    lli N = 13;
     lli a = 3;
     int tr = 100;
     vector<int> v;
@@ -86,8 +113,41 @@ void FinalOutRegMeasureNoQFTTest(){
         auto* dd = new dd::Package;
         PeriodFinder pf = PeriodFinder(N,a,dd);
         std::pair<lli,lli> iores = pf.DebugMeasureInputRegNoQFT();
+        if(v.empty())
+            v =  vector<int>(pow(2, pf.no), 0);//make the info holder vector.
+    ++v.at(iores.second);
+        ++i;
+        delete dd;
+    } while(i < tr);
+    std::ofstream datafile;
+    datafile.open ("/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/freqs1.txt");
+    if(datafile.is_open()){
+        for (int i = 0; i < v.size(); ++i){
+            datafile << i << " "<< v[i] <<endl;
+        }
+        datafile.close();
+    }
+}
+///investigate number returned after measurement on input register. (last quantum step).
+void FinalInRegMeasureNoQFTTest(){
+    
+    lli N = 3;
+    lli a = 2;
+    int tr = 100;
+    vector<int> v;
+    bool fixout = false;
+    int i = 0;
+    bool flag0 = false;
+    do{
+        auto* dd = new dd::Package;
+        PeriodFinder pf = PeriodFinder(N,a,dd);
+        std::pair<lli,lli> iores = pf.DebugMeasureInputRegNoQFT();
         static lli flag = iores.second;//pick results with same output reg num.
-        if(iores.second == flag){
+        if(!flag0 && fixout){
+        printf("output qubit, measured after exponentiation: %lld\n",flag);
+            flag0 = true;
+        }
+        if(!fixout || iores.second == flag){
             if(v.empty())
                 v =  vector<int>(pow(2, pf.ni), 0);//make the info holder vector.
         ++v.at(iores.first);
@@ -104,18 +164,18 @@ void FinalOutRegMeasureNoQFTTest(){
         datafile.close();
     }
 }
-void FinalOutRegMeasureWithQFTTest(){
+void FinalInRegMeasureWithQFTTest(){
     
-    lli N = 7;
-    lli a = 3;
-    int tr = 200;
+    lli N = 21;
+    lli a = 11;
+    int tr = 300;
     vector<int> v;
     int i = 0;
     do{
         auto* dd = new dd::Package;
         PeriodFinder pf = PeriodFinder(N,a,dd);
         std::pair<lli,lli> iores = pf.DebugMeasureInputRegAfterQFT();
-       // static lli flag = iores.second;//pick results with same output reg num.
+     //   static lli flag = 1;//pick results with same output reg num.
         if(true/*iores.second == flag*/){
             if(v.empty())
                 v =  vector<int>(pow(2, pf.ni), 0);//make the info holder vector.
