@@ -16,9 +16,9 @@
 		C09D2A2524AE575100188786 /* DDexport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A1F24AE575100188786 /* DDexport.cpp */; };
 		C09D2A2624AE575100188786 /* QFT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A2024AE575100188786 /* QFT.cpp */; };
 		C09D2A2A24AECA3300188786 /* QFT-DDgenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A2824AECA3300188786 /* QFT-DDgenerator.cpp */; };
-		C0B4E5BB24DF340A00D6A640 /* Alice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0B4E5B924DF340900D6A640 /* Alice.cpp */; };
+		C0B4E5BB24DF340A00D6A640 /* Factorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0B4E5B924DF340900D6A640 /* Factorizer.cpp */; };
 		C0B4E5BE24DF56A900D6A640 /* shorutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0B4E5BC24DF56A900D6A640 /* shorutil.cpp */; };
-		C0B4E5C124DF97FB00D6A640 /* PeriodFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0B4E5BF24DF97FB00D6A640 /* PeriodFinder.cpp */; };
+		C0B4E5C124DF97FB00D6A640 /* ProbabilisticPeriodFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0B4E5BF24DF97FB00D6A640 /* ProbabilisticPeriodFinder.cpp */; };
 		C0DBF41624F09BC2008B9216 /* RegisterFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0DBF41424F09BC2008B9216 /* RegisterFactory.cpp */; };
 /* End PBXBuildFile section */
 
@@ -54,12 +54,12 @@
 		C09D2A2824AECA3300188786 /* QFT-DDgenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "QFT-DDgenerator.cpp"; sourceTree = "<group>"; };
 		C09D2A2924AECA3300188786 /* QFT-DDgenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "QFT-DDgenerator.hpp"; sourceTree = "<group>"; };
 		C09D2A2B24AECC9800188786 /* commonheaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = commonheaders.h; sourceTree = "<group>"; };
-		C0B4E5B924DF340900D6A640 /* Alice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Alice.cpp; sourceTree = "<group>"; };
-		C0B4E5BA24DF340900D6A640 /* Alice.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Alice.hpp; sourceTree = "<group>"; };
+		C0B4E5B924DF340900D6A640 /* Factorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Factorizer.cpp; sourceTree = "<group>"; };
+		C0B4E5BA24DF340900D6A640 /* Factorizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Factorizer.hpp; sourceTree = "<group>"; };
 		C0B4E5BC24DF56A900D6A640 /* shorutil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = shorutil.cpp; sourceTree = "<group>"; };
 		C0B4E5BD24DF56A900D6A640 /* shorutil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = shorutil.hpp; sourceTree = "<group>"; };
-		C0B4E5BF24DF97FB00D6A640 /* PeriodFinder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PeriodFinder.cpp; sourceTree = "<group>"; };
-		C0B4E5C024DF97FB00D6A640 /* PeriodFinder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PeriodFinder.hpp; sourceTree = "<group>"; };
+		C0B4E5BF24DF97FB00D6A640 /* ProbabilisticPeriodFinder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProbabilisticPeriodFinder.cpp; sourceTree = "<group>"; };
+		C0B4E5C024DF97FB00D6A640 /* ProbabilisticPeriodFinder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ProbabilisticPeriodFinder.hpp; sourceTree = "<group>"; };
 		C0DBF41424F09BC2008B9216 /* RegisterFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RegisterFactory.cpp; sourceTree = "<group>"; };
 		C0DBF41524F09BC2008B9216 /* RegisterFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RegisterFactory.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -130,10 +130,10 @@
 				C073EBB724DF0A8400B88991 /* Bob.hpp */,
 				C0B4E5BC24DF56A900D6A640 /* shorutil.cpp */,
 				C0B4E5BD24DF56A900D6A640 /* shorutil.hpp */,
-				C0B4E5B924DF340900D6A640 /* Alice.cpp */,
-				C0B4E5BA24DF340900D6A640 /* Alice.hpp */,
-				C0B4E5BF24DF97FB00D6A640 /* PeriodFinder.cpp */,
-				C0B4E5C024DF97FB00D6A640 /* PeriodFinder.hpp */,
+				C0B4E5B924DF340900D6A640 /* Factorizer.cpp */,
+				C0B4E5BA24DF340900D6A640 /* Factorizer.hpp */,
+				C0B4E5BF24DF97FB00D6A640 /* ProbabilisticPeriodFinder.cpp */,
+				C0B4E5C024DF97FB00D6A640 /* ProbabilisticPeriodFinder.hpp */,
 				C0DBF41424F09BC2008B9216 /* RegisterFactory.cpp */,
 				C0DBF41524F09BC2008B9216 /* RegisterFactory.hpp */,
 			);
@@ -218,8 +218,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0B4E5C124DF97FB00D6A640 /* PeriodFinder.cpp in Sources */,
-				C0B4E5BB24DF340A00D6A640 /* Alice.cpp in Sources */,
+				C0B4E5C124DF97FB00D6A640 /* ProbabilisticPeriodFinder.cpp in Sources */,
+				C0B4E5BB24DF340A00D6A640 /* Factorizer.cpp in Sources */,
 				C09D2A2424AE575100188786 /* IIC-JKUmain.cpp in Sources */,
 				C09D2A2324AE575100188786 /* DDcomplex.cpp in Sources */,
 				C0475BCA24B57281003F5DC0 /* QFT-Measurement.cpp in Sources */,

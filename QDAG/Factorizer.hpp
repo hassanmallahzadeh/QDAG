@@ -10,13 +10,12 @@
 #define Alice_hpp
 #include "commonheaders.h"
 #include <stdio.h>
-class Alice{
+class Factorizer{
     lli N;
     lli ChooseNumInG_N();
-    engine unrg;
-    const int attemptlimit = 100;
 public:
-    Alice(lli N, engine& unrg);
+    Factorizer(lli N);
     array<lli, 2> Factors();
+    lli PeriodFinder(lli a);
 };
 #endif /* Alice_hpp */

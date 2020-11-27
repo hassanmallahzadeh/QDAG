@@ -9,10 +9,8 @@
 #include "Factorizer.hpp"
 #include "shorutil.hpp"
 #include "ProbabilisticPeriodFinder.hpp"
-//BEG: Alice Public Methods
-Factorizer::Factorizer(lli N, engine &unrg){
+Factorizer::Factorizer(lli N){
     this->N = N;
-    this->unrg = unrg;
 }
 array<lli, 2> Factorizer::Factors(){
     const int attemptlimit = 100;
@@ -32,7 +30,7 @@ array<lli, 2> Factorizer::Factors(){
             factors = {commonfactor, N/commonfactor};
             break;
         }
-        lli period = PeriodFinder();//TODO: call period finder
+        lli period = PeriodFinder(a);//TODO: call period finder
         if(period == -1){//period finding limit reached.
             factors = {-1,-1};
             break;
@@ -48,16 +46,14 @@ array<lli, 2> Factorizer::Factors(){
     }
     return factors;
 }
-//END: Alice Public Methods
-
-//BEG: Alice Private Methods
 lli Factorizer::ChooseNumInG_N(){
-    std::uniform_int_distribution<lli> dis(N - 1);
-    return dis(unrg);
+    std::random_device device;
+    std::mt19937 mt_rand(device());
+    std::uniform_int_distribution<lli> dis(2, N - 1);
+    return dis(mt_rand);
 }
-lli Factorizer::PeriodFinder(){
+lli Factorizer::PeriodFinder(lli a){
     int trylimit = 100;
-    lli a = ChooseNumInG_N();
     std::pair<lli,lli> p = {-1,-1};
     int counter = 0;
     do{
@@ -76,4 +72,3 @@ lli Factorizer::PeriodFinder(){
     
     return p.second;
 }
-//END: Alice Private Methods

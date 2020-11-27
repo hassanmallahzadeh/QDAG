@@ -15,7 +15,7 @@
 #include "QFT-Measurement.hpp"
 #include "RegisterFactory.hpp"
 #include <bit>
-class PeriodFinder{
+class ProbabilisticPeriodFinder{
     lli N;
     lli a;
     dd::Package *dd = nullptr;
@@ -29,7 +29,7 @@ public:
     int ni = -1;//input register size
     int no = -1;//output register size
     std::pair<lli,lli> AttemptReadingMultipleOfInverseOfPeriod();
-    PeriodFinder(lli, lli, dd::Package * = nullptr);
-    ~PeriodFinder();
+    ProbabilisticPeriodFinder(lli, lli, dd::Package * = nullptr);
+    ~ProbabilisticPeriodFinder();
 };
 #endif /* PeriodFinder_hpp */

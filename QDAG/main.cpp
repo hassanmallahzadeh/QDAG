@@ -14,7 +14,8 @@
 #include <random>
 #include "shorutil.hpp"
 #include "RegisterFactory.hpp"
-#include "PeriodFinder.hpp"
+#include "ProbabilisticPeriodFinder.hpp"
+#include "Factorizer.hpp"
 #include <chrono>
 using namespace std::chrono;
 using std::cout;
@@ -24,23 +25,28 @@ void UniformityTest();
 void QFTexecutionTimes();
 void FinalInRegMeasureWithQFTTest();
 int main(){
-    PeriodFinderTest();
+    lli N = 35;
+    Factorizer Alice = Factorizer(N);
+    array<lli, 2> f = Alice.Factors();
+    printf("Factors of %lli, are %lli and %lli\n", N, f[0], f[1]);
     return 0;
 }
 void PeriodFinderTest(){
-    lli N = 21;
+    lli N = 200;
     lli a = 11;
     std::pair<lli,lli> p = {-1,-1};
     int counter = 0;
     do{
         auto* dd = new dd::Package;
-        PeriodFinder pf = PeriodFinder(N,a,dd);
+        ProbabilisticPeriodFinder pf = ProbabilisticPeriodFinder(N,a,dd);
         p = pf.AttemptReadingMultipleOfInverseOfPeriod();
         if(p.second > 0 && p.first > 0)//0 is not measured.
+        {
         ++counter;
+        printf("numerator: %lld denominator: %lld run: %d\n",p.first, p.second, counter);
+    }
     delete dd;
     } while(!(p.second>0) || shor::modexp(a,p.second,N) != 1/*not good for lli variable to be changed*/);
-    
     printf("period of %lld mod %lld found: %lld in %d run\n",a,N,p.second, counter);
 }
 void FinalInRegMeasureWithQFTTest(){
@@ -52,7 +58,7 @@ void FinalInRegMeasureWithQFTTest(){
     int i = 0;
     do{
         auto* dd = new dd::Package;
-        PeriodFinder pf = PeriodFinder(N,a,dd);
+        ProbabilisticPeriodFinder pf = ProbabilisticPeriodFinder(N,a,dd);
         std::pair<lli,lli> iores = pf.AttemptReadingMultipleOfInverseOfPeriod();
      //   static lli flag = 1;//pick results with same output reg num.
         if(true/*iores.second == flag*/){

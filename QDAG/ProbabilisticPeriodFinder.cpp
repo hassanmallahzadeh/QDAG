@@ -6,7 +6,7 @@
 //  Copyright © 2020 Hassan Mallahzadeh. All rights reserved.
 //
 
-#include "PeriodFinder.hpp"
+#include "ProbabilisticPeriodFinder.hpp"
 #include "QFT-DDgenerator.hpp"
 #include "shorutil.hpp"
 #include "QFT-Measurement.hpp"
@@ -16,7 +16,7 @@
 /// Period Finder Constructor.
 /// @param N Number to be factorized, modulo number
 /// @param a number to be used as base for finding the period.
-PeriodFinder::PeriodFinder(lli N, lli a, dd::Package *dd){
+ProbabilisticPeriodFinder::ProbabilisticPeriodFinder(lli N, lli a, dd::Package *dd){
     this->N = N;
     this->a = a;
     dd ? this->dd = dd : dd = new dd::Package;
@@ -31,7 +31,7 @@ PeriodFinder::PeriodFinder(lli N, lli a, dd::Package *dd){
 
 //BEG: PeriodFinder start of private methods
 
-void PeriodFinder::InitializeRegisters(){
+void ProbabilisticPeriodFinder::InitializeRegisters(){
 
     vector<int> numq;
     for(int i = 0; i < ni; ++i){
@@ -40,7 +40,7 @@ void PeriodFinder::InitializeRegisters(){
     state = p_rf->ExponentiatorModuloN(numq);
 }
 
-lli PeriodFinder::MeasureOutputReg(){
+lli ProbabilisticPeriodFinder::MeasureOutputReg(){
     bool report = false;
     std::function<int (int)> outputindice = p_rf->OutPutRegIndice();
     
@@ -62,7 +62,7 @@ if(report)
 }
 /// Apply QFT to inpput register, perform emasurement with GN scheme, return resulted number in base 10
 ///@return number outcome of measurement on input register.
-lli PeriodFinder::ApplyQFTMeasureInputRegister(){
+lli ProbabilisticPeriodFinder::ApplyQFTMeasureInputRegister(){
     std::function<int (int)> inputindice;
     inputindice = p_rf->InputRegIndice();
     QFT *p_qft;//I do on heap since this is a bdd...
@@ -89,14 +89,14 @@ lli PeriodFinder::ApplyQFTMeasureInputRegister(){
     delete p_qft;
     return y;
 }
-std::pair<lli,lli> PeriodFinder::AttemptReadingMultipleOfInverseOfPeriod(){
+std::pair<lli,lli> ProbabilisticPeriodFinder::AttemptReadingMultipleOfInverseOfPeriod(){
     InitializeRegisters();
     MeasureOutputReg();
     lli inregout = ApplyQFTMeasureInputRegister();
     std::pair<lli,lli> p = shor::contfrac(inregout, ni, no);
     return p;
 }
-PeriodFinder::~PeriodFinder(){
+ProbabilisticPeriodFinder::~ProbabilisticPeriodFinder(){
     delete p_rf;
 }
 //END: PeriodFinder start of private methods

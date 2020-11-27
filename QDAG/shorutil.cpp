@@ -26,6 +26,7 @@ lli gcd(lli f, lli c){
         //   c = ftemp - floor(ftemp/c) * c;
         c = ftemp % c;
     }
+    assert( f > 0);
     return f;
 }
 // Returns modulo inverse of a with respect
