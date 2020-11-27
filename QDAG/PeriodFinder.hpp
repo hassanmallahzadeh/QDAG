@@ -23,13 +23,12 @@ class PeriodFinder{
     RegisterFactory* p_rf;
     void InitializeRegisters();
     lli MeasureOutputReg();
-    lli ApplyQFT();
+    lli ApplyQFTMeasureInputRegister();
+  
 public:
-    std::pair<lli,lli> DebugMeasureInputRegAfterQFT();
     int ni = -1;//input register size
     int no = -1;//output register size
-    std::pair<lli,lli> DebugPeriodFinder();
-    std::pair<lli,lli> DebugMeasureInputRegNoQFT();
+    std::pair<lli,lli> AttemptReadingMultipleOfInverseOfPeriod();
     PeriodFinder(lli, lli, dd::Package * = nullptr);
     ~PeriodFinder();
 };

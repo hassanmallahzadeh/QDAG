@@ -62,7 +62,7 @@ if(report)
 }
 /// Apply QFT to inpput register, perform emasurement with GN scheme, return resulted number in base 10
 ///@return number outcome of measurement on input register.
-lli PeriodFinder::ApplyQFT(){
+lli PeriodFinder::ApplyQFTMeasureInputRegister(){
     std::function<int (int)> inputindice;
     inputindice = p_rf->InputRegIndice();
     QFT *p_qft;//I do on heap since this is a bdd...
@@ -72,7 +72,7 @@ lli PeriodFinder::ApplyQFT(){
     for(int i = 0; i < ni; ++i){
         indices.push_back(inputindice(i));
     }
-    std::reverse(indices.begin(), indices.end());//TAKE OUT DEBUG
+    std::reverse(indices.begin(), indices.end());
     vector<int> qftgnmo;//qft griffiths niu measurement outcomes.
     qftgnmo = p_qft->dd_QFTGNV1(p_rf->nt, state, PERM_POS::NO_PERM, mt_rand, indices);
     assert(qftgnmo.size() == ni);
@@ -89,33 +89,12 @@ lli PeriodFinder::ApplyQFT(){
     delete p_qft;
     return y;
 }
-std::pair<lli,lli> PeriodFinder::DebugPeriodFinder(){
+std::pair<lli,lli> PeriodFinder::AttemptReadingMultipleOfInverseOfPeriod(){
     InitializeRegisters();
     MeasureOutputReg();
-    lli inregout = ApplyQFT();
+    lli inregout = ApplyQFTMeasureInputRegister();
     std::pair<lli,lli> p = shor::contfrac(inregout, ni, no);
     return p;
-}
-std::pair<lli,lli> PeriodFinder::DebugMeasureInputRegAfterQFT(){
-    InitializeRegisters();
-    lli ores = MeasureOutputReg();
-    lli ires = ApplyQFT();
-    return std::pair<lli,lli>(ires,ores);;
-}
-std::pair<lli,lli> PeriodFinder::DebugMeasureInputRegNoQFT(){
-    InitializeRegisters();
-    lli ores = MeasureOutputReg();
-    auto inputindice = p_rf->InputRegIndice();
-    std::mt19937 mt_rand((std::random_device())());
-    vector<int> vres;
-    for(int i = 0; i < ni; ++i){
-        //TODO: measurement mechanism is 'reset' for every qubit. Look into reusing former calculations.
-        Measurement mm(dd);
-        int res = mm.Measure(state, p_rf->nt, inputindice(i), mt_rand);
-        vres.push_back(res);
-    };
-    lli ires = shor::base2to10(vres, false);
-    return std::pair<lli,lli>(ires,ores);
 }
 PeriodFinder::~PeriodFinder(){
     delete p_rf;

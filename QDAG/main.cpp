@@ -19,150 +19,29 @@
 using namespace std::chrono;
 using std::cout;
 using std::endl;
-void TempTest();
+void PeriodFinderTest();
 void UniformityTest();
 void QFTexecutionTimes();
-void FinalOutRegMeasureNoQFTTest();
-void FinalInRegMeasureNoQFTTest();
-void FinalInOutRegMeasureNoQFTTest();
 void FinalInRegMeasureWithQFTTest();
-void FinalInRegMeasureNoQFTX0DistroTest();
 int main(){
-    FinalInRegMeasureWithQFTTest();
+    PeriodFinderTest();
     return 0;
 }
-void TempTest(){
-    lli N = 30;
-    lli a = 7;
+void PeriodFinderTest(){
+    lli N = 21;
+    lli a = 11;
     std::pair<lli,lli> p = {-1,-1};
-    lli gcd = -1;
     int counter = 0;
     do{
         auto* dd = new dd::Package;
         PeriodFinder pf = PeriodFinder(N,a,dd);
-        p = pf.DebugPeriodFinder();
+        p = pf.AttemptReadingMultipleOfInverseOfPeriod();
         if(p.second > 0 && p.first > 0)//0 is not measured.
-        gcd = shor::gcd(p.first, p.second);
         ++counter;
     delete dd;
-    }while(!(p.second>0) || gcd != 1 || shor::modexp(a,p.second,N) != 1/*not good for lli variable to be changed*/);
+    } while(!(p.second>0) || shor::modexp(a,p.second,N) != 1/*not good for lli variable to be changed*/);
     
     printf("period of %lld mod %lld found: %lld in %d run\n",a,N,p.second, counter);
-}
-void MeasurmentModuleTest(){
-    int n = 4;
-  
-   // dd->export2Dot(e, "state.dot");
-    int tr = 1000;
-    vector<int> trv(pow(2,n),0);
-    std::mt19937 mt_rand((std::random_device())());
-    for(int i = 0 ; i < tr; ++i){
-        auto* dd = new dd::Package;
-        StateGenerator sg = StateGenerator(dd);
-        vector<dd::ComplexValue> vc({{0,0},{0,0},{0.5,0},{0,0},{0,0},{0.5,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0.5,0},{0.5,0}});
-        dd::Edge e = sg.dd_CustomState(vc, 4);
-        Measurement mg = Measurement(dd);
-        vector<int> rv;
-        for(int j = 0 ; j < n; ++j)
-        rv.push_back(mg.Measure(e, n, j, mt_rand));
-        ++trv[shor::base2to10(rv, false)];
-        delete dd;
-    }
-    std::ofstream datafile;
-    datafile.open ("/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/freqs.txt");
-    if(datafile.is_open()){
-        for (int i = 0; i < trv.size(); ++i){
-            datafile << i << " "<< trv[i] <<endl;
-        }
-        datafile.close();
-    }
-}
-void FinalInRegMeasureNoQFTX0DistroTest(){
-    lli N = 13;
-    lli a = 3;
-    int tr = 300;
-    lli r = shor::bfpf(N, a);
-    vector<int> v;
-    int i = 0;
-    do{
-        auto* dd = new dd::Package;
-        PeriodFinder pf = PeriodFinder(N,a,dd);
-        std::pair<lli,lli> iores = pf.DebugMeasureInputRegNoQFT();
-        if(v.empty())
-            v =  vector<int>(r, 0);//make the info holder vector.
-    ++v.at((iores.first)%r);
-        ++i;
-        delete dd;
-    } while(i < tr);
-    std::ofstream datafile;
-    datafile.open ("/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/freqs1.txt");
-    if(datafile.is_open()){
-        for (int i = 0; i < v.size(); ++i){
-            datafile << i << " "<< v[i] <<endl;
-        }
-        datafile.close();
-    }
-}
-void FinalOutRegMeasureNoQFTTest(){
-    lli N = 13;
-    lli a = 3;
-    int tr = 100;
-    vector<int> v;
-    int i = 0;
-    do{
-        auto* dd = new dd::Package;
-        PeriodFinder pf = PeriodFinder(N,a,dd);
-        std::pair<lli,lli> iores = pf.DebugMeasureInputRegNoQFT();
-        if(v.empty())
-            v =  vector<int>(pow(2, pf.no), 0);//make the info holder vector.
-    ++v.at(iores.second);
-        ++i;
-        delete dd;
-    } while(i < tr);
-    std::ofstream datafile;
-    datafile.open ("/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/freqs1.txt");
-    if(datafile.is_open()){
-        for (int i = 0; i < v.size(); ++i){
-            datafile << i << " "<< v[i] <<endl;
-        }
-        datafile.close();
-    }
-}
-///investigate number returned after measurement on input register. (last quantum step).
-void FinalInRegMeasureNoQFTTest(){
-    
-    lli N = 3;
-    lli a = 2;
-    int tr = 100;
-    vector<int> v;
-    bool fixout = false;
-    int i = 0;
-    bool flag0 = false;
-    do{
-        auto* dd = new dd::Package;
-        PeriodFinder pf = PeriodFinder(N,a,dd);
-        std::pair<lli,lli> iores = pf.DebugMeasureInputRegNoQFT();
-        static lli flag = iores.second;//pick results with same output reg num.
-        if(!flag0 && fixout){
-        printf("output qubit, measured after exponentiation: %lld\n",flag);
-            flag0 = true;
-        }
-        if(!fixout || iores.second == flag){
-            if(v.empty())
-                v =  vector<int>(pow(2, pf.ni), 0);//make the info holder vector.
-        ++v.at(iores.first);
-            ++i;
-        }
-        delete dd;
-    } while(i < tr);
-    std::ofstream datafile;
-    datafile.open ("/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/freqs1.txt");
-    if(datafile.is_open()){
-        for (int i = 0; i < v.size(); ++i){
-            datafile << i << " "<< v[i] <<endl;
-        }
-        datafile.close();
-    }
 }
 void FinalInRegMeasureWithQFTTest(){
     
@@ -174,7 +53,7 @@ void FinalInRegMeasureWithQFTTest(){
     do{
         auto* dd = new dd::Package;
         PeriodFinder pf = PeriodFinder(N,a,dd);
-        std::pair<lli,lli> iores = pf.DebugMeasureInputRegAfterQFT();
+        std::pair<lli,lli> iores = pf.AttemptReadingMultipleOfInverseOfPeriod();
      //   static lli flag = 1;//pick results with same output reg num.
         if(true/*iores.second == flag*/){
             if(v.empty())
@@ -193,17 +72,6 @@ void FinalInRegMeasureWithQFTTest(){
         datafile.close();
     }
 }
-//void FinalInputRegProbDistr(lli N, lli a){
-//    auto* dd = new dd::Package();
-//    PeriodFinder pf= PeriodFinder(N,a,dd);
-//    pf.InitializeRegisters();
-//    pf.MeasureOutputReg();
-//    lli res = pf.ApplyQFT();
-//    vector<lli> results;
-//    vector<int> freq(
-//    printf("numerator: %lld, denominator %lld\n", p.first, p.second);
-//    delete dd;
-//}
 /// investigate a single QFT (fixed number of bits)
 void UniformityTest(){
     //examine uniformity of probabilities.
