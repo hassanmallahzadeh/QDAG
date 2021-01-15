@@ -211,15 +211,15 @@ dd::Edge QFT::dd_QFTV4(int n, dd::Edge state, PERM_POS perm) {
 /// @param perm where and if apply the permutation operator.
 dd::Edge QFT::dd_QFTGNV1(int n, dd::Edge state, PERM_POS perm, engine& unrg){
 //assert(m_ord == INV_C_T);
-
+    int figcounter = 0;
     GateGenerator  gg = GateGenerator(dd);
     dd::Edge e_ans = state;
     Measurement mm = Measurement(dd);
     if(perm == BEG_PERM){
         e_ans = gg.permuteOperatorOnState(n, e_ans);
+        figcounter++;
 dd->garbageCollect();//without garbage collect crash happens on more than 17 qubits on my computer.//TODO: go after finding why crash happens.
     }
-    
     short *line = new short[n]{};// set 'line' for dd->makeGateDD
     for (int i = 0; i < n; ++i){
         line[i] = -1;
@@ -227,15 +227,17 @@ dd->garbageCollect();//without garbage collect crash happens on more than 17 qub
     for (int i = 0; i < n; ++i){// for each of n qubits do:
         gg.lineSet(line, i, -1);
         e_ans = dd->multiply(dd->makeGateDD(Hmat, n, line) ,e_ans); //start by hadamard as in circuit
+        figcounter++;
         gg.lineReset(line, i, -1);
         int res = mm.Measure(e_ans, n, i, unrg);
-        if(res == posControl){
+          if(res == posControl){
             dd::Matrix2x2 Rmat;// put rotation gates in place
             for (int j = 0; j < n - i - 1; ++j){
                 //activate rotation gates
                 gg.lineSet(line, i + j + 1, -1);
-                gg.RmatGenerator(Rmat, j+2);
+                gg.RmatGenerator(Rmat, j + 2);
                 e_ans = dd->multiply(dd->makeGateDD(Rmat, n, line), e_ans);
+                 figcounter++;
                 gg.lineReset(line, i + j + 1, -1);
             }
             gg.lineReset(line, i, n - i - 1);// likely redundant. reset line array

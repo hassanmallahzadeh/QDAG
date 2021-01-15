@@ -30,7 +30,7 @@ array<lli, 2> Factorizer::Factors(){
             factors = {commonfactor, N/commonfactor};
             break;
         }
-        lli period = PeriodFinder(a);//TODO: call period finder
+        lli period = PeriodFinder(a);
         if(period == -1){//period finding limit reached.
             factors = {-1,-1};
             break;

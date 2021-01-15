@@ -386,7 +386,7 @@ dd::Edge RegisterFactory::ExponentiatorModuloN( vector<int> qnum){
     lli cnum = a;
     int m = static_cast<int>(qnum.size());
     int n = no;
-    int nt = ni + 2 * n + 2 + m;//quantum number x Fig5 (n), quantum register y Fig5 (n), carries(n) Fig2, overflow carry(1) Fig2, temp memory qubit Fig4 t (1), quantum exponent(m) which are controls for multipliers.
+    int nt = 3 * n + 2 + m;//quantum number x Fig5 (n), quantum register y Fig5 (n), carries(n) Fig2, overflow carry(1) Fig2, temp memory qubit Fig4 t (1), quantum exponent(m) which are controls for multipliers.
     this->nt = nt;
     short* line = new short[nt];
     gg.lineClear(line, nt);

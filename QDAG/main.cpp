@@ -9,6 +9,7 @@
 #include "commonheaders.h"
 #include "QFT.hpp"
 #include "QFT-Measurement.hpp"
+#include "QFT-DDgenerator.hpp"
 #include "util.h"
 #include <stdio.h>
 #include <random>
@@ -23,19 +24,55 @@ using std::endl;
 void PeriodFinderTest();
 void UniformityTest();
 void QFTexecutionTimes();
+void FactorizerTest();
 void FinalInRegMeasureWithQFTTest();
 int main(){
-    lli N = 35;
-    Factorizer Alice = Factorizer(N);
-    array<lli, 2> f = Alice.Factors();
-    printf("Factors of %lli, are %lli and %lli\n", N, f[0], f[1]);
+//FactorizerTest();
+//PeriodFinderTest();
+   auto* dd = new dd::Package;
+   GateGenerator gg(dd);
+   StateGenerator sg(dd);
+   dd::Edge state = sg.dd_BaseState(2, 2);
+   QFT qft = QFT(dd);
+    std::random_device device;
+    std::mt19937 mt_rand(device());
+    dd->export2Dot(state, "statea.dot", true);
+    state = qft.dd_QFTGNV1(2, state, BEG_PERM, mt_rand);
+    dd->export2Dot(state, "stateb.dot", true);
+//dd::Edge mat1 = gg.NotGenOrApply(line, 1, 2, &state);
+//    dd::Edge mat2 = gg.NotGenOrApply(line, 0, 2, &state);
+//    dd::Edge mat3 = dd->add(mat1, mat2);
+//    dd->export2Dot(mat1, "mat1.dot");
+//    dd->export2Dot(mat2, "mat2.dot");
+//    dd->export2Dot(mat3, "mat3.dot");
+//        dd->export2Dot(state, "statea.dot",true);
+//    delete[] line;
     return 0;
 }
+void FactorizerTest(){
+    int trials = 1;
+    float sum = 0;
+    lli N = 497;
+    for (int i = 0; i < trials; ++i){
+    time_point<system_clock> start, end;
+    start = system_clock::now();
+   
+    Factorizer Alice = Factorizer(N);
+    array<lli, 2> f = Alice.Factors();
+    end = system_clock::now();
+    duration<float> elapsed_seconds = end - start;
+    sum += elapsed_seconds.count();
+ //   printf("Factors of %lli, are %lli and %lli.\nComputed in %f seconds.\n", N, f[0], f[1],elapsed_seconds.count());
+    }
+    printf("Average runtime for factoring of %lli, is %f for %d trials.\n", N, sum/trials, trials);
+    }
 void PeriodFinderTest(){
-    lli N = 200;
-    lli a = 11;
+    lli N = 3;
+    lli a = 2;
     std::pair<lli,lli> p = {-1,-1};
     int counter = 0;
+    time_point<system_clock> start, end;
+    start = system_clock::now();
     do{
         auto* dd = new dd::Package;
         ProbabilisticPeriodFinder pf = ProbabilisticPeriodFinder(N,a,dd);
@@ -43,11 +80,13 @@ void PeriodFinderTest(){
         if(p.second > 0 && p.first > 0)//0 is not measured.
         {
         ++counter;
-        printf("numerator: %lld denominator: %lld run: %d\n",p.first, p.second, counter);
+//        printf("numerator: %lld denominator: %lld run: %d\n",p.first, p.second, counter);
     }
     delete dd;
     } while(!(p.second>0) || shor::modexp(a,p.second,N) != 1/*not good for lli variable to be changed*/);
-    printf("period of %lld mod %lld found: %lld in %d run\n",a,N,p.second, counter);
+    end = system_clock::now();
+    duration<float> elapsed_seconds = end - start;
+    printf("period of %lld mod %lld found: %lld in %d runs and %f seconds\n",a,N,p.second, counter, elapsed_seconds.count());
 }
 void FinalInRegMeasureWithQFTTest(){
     

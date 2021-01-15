@@ -47,6 +47,7 @@ private:
     int QubitMeasurementOutcome(array<fp, dd::RADIX>, engine&);
     void StateCollapseRestrict(Mqinfo mqinfo);
     void StateCollapseMatMul(Mqinfo mqinfo, int n);
+    std::uniform_real_distribution<fp> dis;
 public:
     Measurement(dd::Package* dd);
     int Measure(dd::Edge &edge, int n, int n_target, engine& unrg);

@@ -11,6 +11,7 @@ QFT-DDgenerator.cpp
 QFT-Measurement.cpp
 RegisterFactory.cpp
 shorutil.cpp
-PeriodFinder.cpp
+ProbabilisticPeriodFinder.cpp
+Factorizer.cpp
 main.cpp
 )

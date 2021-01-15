@@ -143,6 +143,33 @@ QDAG/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/build
 .PHONY : QDAG/fast
 
+Factorizer.o: Factorizer.cpp.o
+
+.PHONY : Factorizer.o
+
+# target to build an object file
+Factorizer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/Factorizer.cpp.o
+.PHONY : Factorizer.cpp.o
+
+Factorizer.i: Factorizer.cpp.i
+
+.PHONY : Factorizer.i
+
+# target to preprocess a source file
+Factorizer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/Factorizer.cpp.i
+.PHONY : Factorizer.cpp.i
+
+Factorizer.s: Factorizer.cpp.s
+
+.PHONY : Factorizer.s
+
+# target to generate assembly for a file
+Factorizer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/Factorizer.cpp.s
+.PHONY : Factorizer.cpp.s
+
 IIC-JKU/DDcomplex.o: IIC-JKU/DDcomplex.cpp.o
 
 .PHONY : IIC-JKU/DDcomplex.o
@@ -224,32 +251,32 @@ IIC-JKU/DDpackage.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/IIC-JKU/DDpackage.cpp.s
 .PHONY : IIC-JKU/DDpackage.cpp.s
 
-PeriodFinder.o: PeriodFinder.cpp.o
+ProbabilisticPeriodFinder.o: ProbabilisticPeriodFinder.cpp.o
 
-.PHONY : PeriodFinder.o
+.PHONY : ProbabilisticPeriodFinder.o
 
 # target to build an object file
-PeriodFinder.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/PeriodFinder.cpp.o
-.PHONY : PeriodFinder.cpp.o
+ProbabilisticPeriodFinder.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/ProbabilisticPeriodFinder.cpp.o
+.PHONY : ProbabilisticPeriodFinder.cpp.o
 
-PeriodFinder.i: PeriodFinder.cpp.i
+ProbabilisticPeriodFinder.i: ProbabilisticPeriodFinder.cpp.i
 
-.PHONY : PeriodFinder.i
+.PHONY : ProbabilisticPeriodFinder.i
 
 # target to preprocess a source file
-PeriodFinder.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/PeriodFinder.cpp.i
-.PHONY : PeriodFinder.cpp.i
+ProbabilisticPeriodFinder.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/ProbabilisticPeriodFinder.cpp.i
+.PHONY : ProbabilisticPeriodFinder.cpp.i
 
-PeriodFinder.s: PeriodFinder.cpp.s
+ProbabilisticPeriodFinder.s: ProbabilisticPeriodFinder.cpp.s
 
-.PHONY : PeriodFinder.s
+.PHONY : ProbabilisticPeriodFinder.s
 
 # target to generate assembly for a file
-PeriodFinder.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/PeriodFinder.cpp.s
-.PHONY : PeriodFinder.cpp.s
+ProbabilisticPeriodFinder.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/ProbabilisticPeriodFinder.cpp.s
+.PHONY : ProbabilisticPeriodFinder.cpp.s
 
 QFT-DDgenerator.o: QFT-DDgenerator.cpp.o
 
@@ -422,6 +449,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... QDAG"
+	@echo "... Factorizer.o"
+	@echo "... Factorizer.i"
+	@echo "... Factorizer.s"
 	@echo "... IIC-JKU/DDcomplex.o"
 	@echo "... IIC-JKU/DDcomplex.i"
 	@echo "... IIC-JKU/DDcomplex.s"
@@ -431,9 +461,9 @@ help:
 	@echo "... IIC-JKU/DDpackage.o"
 	@echo "... IIC-JKU/DDpackage.i"
 	@echo "... IIC-JKU/DDpackage.s"
-	@echo "... PeriodFinder.o"
-	@echo "... PeriodFinder.i"
-	@echo "... PeriodFinder.s"
+	@echo "... ProbabilisticPeriodFinder.o"
+	@echo "... ProbabilisticPeriodFinder.i"
+	@echo "... ProbabilisticPeriodFinder.s"
 	@echo "... QFT-DDgenerator.o"
 	@echo "... QFT-DDgenerator.i"
 	@echo "... QFT-DDgenerator.s"

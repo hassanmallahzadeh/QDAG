@@ -6,6 +6,12 @@
 
 #IncludeRegexTransform: 
 
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/Factorizer.hpp
+commonheaders.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
+stdio.h
+-
+
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.h
 iostream
 -
@@ -45,6 +51,20 @@ set
 -
 DDcomplex.h
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.h
+
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/ProbabilisticPeriodFinder.hpp
+stdio.h
+-
+commonheaders.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
+IIC-JKU/DDpackage.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
+QFT-Measurement.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
+RegisterFactory.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.hpp
+bit
+-
 
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
 commonheaders.h
@@ -88,6 +108,16 @@ QFT-DDgenerator.hpp
 stdio.h
 -
 
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.hpp
+commonheaders.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
+IIC-JKU/DDpackage.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
+QFT-DDgenerator.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
+stdio.h
+-
+
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
 vector
 -
@@ -108,6 +138,40 @@ ctime
 random
 -
 iostream
+-
+
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/main.cpp
+commonheaders.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
+QFT.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT.hpp
+QFT-Measurement.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
+QFT-DDgenerator.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
+util.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/util.h
+stdio.h
+-
+random
+-
+shorutil.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp
+RegisterFactory.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.hpp
+ProbabilisticPeriodFinder.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/ProbabilisticPeriodFinder.hpp
+Factorizer.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/Factorizer.hpp
+chrono
+-
+
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp
+commonheaders.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
+IIC-JKU/DDpackage.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
+stdio.h
 -
 
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/util.h
