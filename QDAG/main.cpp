@@ -26,19 +26,20 @@ void UniformityTest();
 void QFTexecutionTimes();
 void FactorizerTest();
 void FinalInRegMeasureWithQFTTest();
+void PeriodFinderAverageRuntime();
 int main(){
 //FactorizerTest();
-//PeriodFinderTest();
-   auto* dd = new dd::Package;
-   GateGenerator gg(dd);
-   StateGenerator sg(dd);
-   dd::Edge state = sg.dd_BaseState(2, 2);
-   QFT qft = QFT(dd);
-    std::random_device device;
-    std::mt19937 mt_rand(device());
-    dd->export2Dot(state, "statea.dot", true);
-    state = qft.dd_QFTGNV1(2, state, BEG_PERM, mt_rand);
-    dd->export2Dot(state, "stateb.dot", true);
+    PeriodFinderAverageRuntime();
+//    auto* dd = new dd::Package;
+//    GateGenerator gg(dd);
+//    StateGenerator sg(dd);
+//    dd::Edge state = sg.dd_BaseState(2, 2);
+//    QFT qft = QFT(dd);
+//    std::random_device device;
+//    std::mt19937 mt_rand(device());
+//    dd->export2Dot(state, "statea.dot", true);
+//    state = qft.dd_QFTGNV1(2, state, BEG_PERM, mt_rand);
+//    dd->export2Dot(state, "stateb.dot", true);
 //dd::Edge mat1 = gg.NotGenOrApply(line, 1, 2, &state);
 //    dd::Edge mat2 = gg.NotGenOrApply(line, 0, 2, &state);
 //    dd::Edge mat3 = dd->add(mat1, mat2);
@@ -87,6 +88,42 @@ void PeriodFinderTest(){
     end = system_clock::now();
     duration<float> elapsed_seconds = end - start;
     printf("period of %lld mod %lld found: %lld in %d runs and %f seconds\n",a,N,p.second, counter, elapsed_seconds.count());
+}
+void PeriodFinderAverageRuntime(){
+    lli N = 9;
+    lli a = 2;
+    int trials = 10;
+    std::pair<lli,lli> p = {-1,-1};
+    float time = 0;
+    int attempts = 0;
+    for (int i = 0; i < trials; ++i){
+    time_point<system_clock> start, end;
+    start = system_clock::now();
+        lli tempperiod = 0;
+    do{
+        auto* dd = new dd::Package;
+        ProbabilisticPeriodFinder pf = ProbabilisticPeriodFinder(N,a,dd);
+        p = pf.AttemptReadingMultipleOfInverseOfPeriod();
+        if(p.second > 0 && p.first > 0)//0 is not measured.
+        {
+        ++attempts;
+//        printf("numerator: %lld denominator: %lld run: %d\n",p.first, p.second, counter);
+    }
+    delete dd;
+    } while(!(p.second>0) || shor::modexp(a,p.second,N) != 1/*not good for lli variable to be changed*/);
+        if(tempperiod){
+            assert(tempperiod == p.second);//make sure period is calculaed consistently
+        }
+        else{
+        tempperiod = p.second;
+        }
+    end = system_clock::now();
+    duration<float> elapsed_seconds = end - start;
+        ++attempts;
+        time += elapsed_seconds.count();
+  
+    }
+    printf("period of %lld mod %lld found to be: %lld. average %f runs and %f average seconds of %d trials\n",a,N,p.second, (float)attempts/trials, time/trials,trials);
 }
 void FinalInRegMeasureWithQFTTest(){
     

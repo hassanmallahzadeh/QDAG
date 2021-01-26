@@ -382,7 +382,7 @@ std::function<void (int, int)> RegisterFactory::StateInitializer(short *line, in
 }
 /// ExponentiatorModuloNDebugger(tester), Fig6 of the paper.
 /// @param qnum quantum number x in fig6, which will be the exponent. coded with arbitrary qubit size in this function.
-dd::Edge RegisterFactory::ExponentiatorModuloN( vector<int> qnum){
+dd::Edge RegisterFactory::ExponentiatorModuloN(vector<int> qnum){
     lli cnum = a;
     int m = static_cast<int>(qnum.size());
     int n = no;
