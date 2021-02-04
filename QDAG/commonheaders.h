@@ -19,6 +19,7 @@
 #include <ctime>
 #include<random>
 #include <iostream>
+#include <functional>
 typedef long long int lli;
 typedef long double ld;
 typedef std::mt19937 engine;
