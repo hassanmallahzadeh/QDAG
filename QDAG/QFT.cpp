@@ -10,6 +10,7 @@
 #include "QFT-DDgenerator.hpp"
 #include "QFT.hpp"
 #include "QFT-Measurement.hpp"
+#include <chrono>
 using namespace std::chrono;
 using std::cout;
 using std::endl;
