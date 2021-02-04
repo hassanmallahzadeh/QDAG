@@ -14,7 +14,6 @@
 #include "IIC-JKU/DDpackage.h"
 #include "QFT-Measurement.hpp"
 #include "RegisterFactory.hpp"
-#include <bit>
 class ProbabilisticPeriodFinder{
     lli N;
     lli a;
