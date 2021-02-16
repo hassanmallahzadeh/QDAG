@@ -394,12 +394,12 @@ dd::Edge RegisterFactory::ExponentiatorModuloN(vector<int> qnum){
     //a0 line does not exist. replaced by classic register.
     auto a0Nbase2 = [Nrep = this->base2N](int i){return Nrep.empty() ? 0 : Nrep[i]; };//return N's digits in base 2.
     //lambdas used for converting digit (of input number) to qubit index.
-    auto tindex = [nt, m, n = this->no](){return nt - 1;};
-    auto xindice = [nt](int i){return nt - i - 2;};//x qubits in fig 6. quantum register
-    auto xpindice = [nt, m](int i){return nt - m - 2 - i;};//= x qubits in fig 5
-    auto c0indice = [nt, m, n = this->no](int i){return nt - m - n - 2 - 2 * i;};
-    auto b0indice = [nt, m, n = this->no](int i){return nt - m - n - 2 - (2 * i + 1);}; //quantum register
-    auto c1indice = [nt, m, n = this->no](int i){return nt - m - n - 2 - 2 * (i + 1);};
+    auto tindex = [nt, m, n = this->no](){return 0;};
+    auto xindice = [nt](int i){return i + 2 -1;};//x qubits in fig 6. quantum register
+    auto xpindice = [nt, m](int i){return  m + 2 + i - 1;};//= x qubits in fig 5
+    auto c0indice = [nt, m, n = this->no](int i){return m + n + 2 + 2 * i - 1;};
+    auto b0indice = [nt, m, n = this->no](int i){return m + n + 2 + (2 * i + 1) - 1;}; //quantum register
+    auto c1indice = [nt, m, n = this->no](int i){return m + n + 2 + 2 * (i + 1) - 1;};
     auto lambdaInitState = StateInitializer(line, nt, state);//load lambda to initilize state in 'x'(from quantum exponent) and 'xp' set to 1
     for(int i = 0; i < m; ++i){
         lambdaInitState(qnum[i], xindice(i));//put quantum number in register

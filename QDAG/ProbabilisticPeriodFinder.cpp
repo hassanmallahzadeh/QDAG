@@ -4,99 +4,470 @@
 //
 //  Created by Hassan Mallahzadeh on 2020-08-08.
 //  Copyright © 2020 Hassan Mallahzadeh. All rights reserved.
-//
+//HRS paper: "FACTORING USING 2n + 2 QUBITS WITH TOFFOLI BASED MODULAR MULTIPLICATION"
+//VBE paper: "Quantum networks for elementary arithmetic operations"
 
 #include "ProbabilisticPeriodFinder.hpp"
 #include "QFT-DDgenerator.hpp"
 #include "shorutil.hpp"
 #include "QFT-Measurement.hpp"
-#include "QFT.hpp"
-//#define DEMONSTRATE
-//BEG: PeriodFinder start of public methods
-/// Period Finder Constructor.
-/// @param N Number to be factorized, modulo number
-/// @param a number to be used as base for finding the period.
-ProbabilisticPeriodFinder::ProbabilisticPeriodFinder(lli N, lli a, dd::Package *dd){
+#include "QFT-DDgenerator.hpp"
+const int ProbabilisticPeriodFinder::posControl = 1;//apply rotation gates on stage i if qubit measrement on stage i had result posControl. refer to Mermin, fig 3.3. Would be 0, 1 or 2 for base 3, etc.
+ProbabilisticPeriodFinder::ProbabilisticPeriodFinder(lli N, lli a, dd::Package *dd): gg(dd){
     this->N = N;
     this->a = a;
     dd ? this->dd = dd : dd = new dd::Package;
-    vector<bool> base2N = shor::base2rep(N);//base 2 representation of N
-     no = static_cast<int>(base2N.size());//num qubits needed to represent N.
-     base2N = shor::base2rep(N*N);//base 2 representation of N^2
-     ni = static_cast<int>(base2N.size());//num qubits needed to represent N^2.
-    p_rf = new RegisterFactory(N, a, ni, no, dd);
+    m_base2N = shor::base2rep(N);//base 2 representation of N
+     n = static_cast<int>(m_base2N.size());//num qubits needed to represent N.
 }
 
 //END: PeriodFinder start of public methods
 
 //BEG: PeriodFinder start of private methods
 
-void ProbabilisticPeriodFinder::InitializeRegisters(){
 
-    vector<int> numq;
-    for(int i = 0; i < ni; ++i){
-        numq.push_back(2);//2 means all qubits in numq will be (|0> + |1>)/2
-    }
-    state = p_rf->ExponentiatorModuloN(numq);
-}
 
-lli ProbabilisticPeriodFinder::MeasureOutputReg(){
-    bool report = false;
-    std::function<int (int)> outputindice = p_rf->OutPutRegIndice();
-    
-    std::random_device device;
-    std::mt19937 mt_rand(device());
-    
-    if(report)
-    std::cout<<"measurement on output register after exponentiator:\n";
-    vector<int> vres;
-    for(int i = 0; i < no; ++i){
-        //TODO: measurement mechanism is 'reset' for every qubit. Look into reusing former calculations.
-        Measurement mm(dd);
-        int res = mm.Measure(state, p_rf->nt, outputindice(i), mt_rand);
-        vres.push_back(res);
-if(report)
-        std::cout<<"qubit "<<outputindice(i)<<" result: "<<res<<std::endl;
-    };
-    return shor::base2to10(vres, false);
-}
-/// Apply QFT to inpput register, perform emasurement with GN scheme, return resulted number in base 10
-///@return number outcome of measurement on input register.
-lli ProbabilisticPeriodFinder::ApplyQFTMeasureInputRegister(){
-    std::function<int (int)> inputindice;
-    inputindice = p_rf->InputRegIndice();
-    QFT *p_qft;//I do on heap since this is a bdd...
-    std::mt19937 mt_rand((std::random_device())());
-    p_qft = new QFT(dd);
-    vector<int> indices;
-    for(int i = 0; i < ni; ++i){
-        indices.push_back(inputindice(i));
-    }
-    std::reverse(indices.begin(), indices.end());
-    vector<int> qftgnmo;//qft griffiths niu measurement outcomes.
-    qftgnmo = p_qft->dd_QFTGNV1(p_rf->nt, state, PERM_POS::NO_PERM, mt_rand, indices);
-    assert(qftgnmo.size() == ni);
-//    std::reverse(qftgnmo.begin(), qftgnmo.end());//QFT has reversed output.
-#ifdef DEMONSTRATE
-    std::cout<<"measurement on input register during qft:\n";
-    for(int i = 0; i < indices.size(); ++i){
-    std::cout<<"qubit "<<indices[i]<<" result: "<<qftgnmo[i]<<std::endl;
-    }
-    std::cout<<"in base 10:\n";
-    std::cout << y << std::endl;
-#endif
-    lli y = shor::base2to10(qftgnmo, false);
-    delete p_qft;
-    return y;
-}
 std::pair<lli,lli> ProbabilisticPeriodFinder::AttemptReadingMultipleOfInverseOfPeriod(){
-    InitializeRegisters();
-    MeasureOutputReg();
-    lli inregout = ApplyQFTMeasureInputRegister();
-    std::pair<lli,lli> p = shor::contfrac(inregout, ni, no);
+    int nt = 3 * n + 3;//quantum number x Fig5 (n), quantum register y Fig5 (n), carries(n) Fig2, overflow carry(1) Fig2, temp memory qubit Fig4 t (1) of VBE paper
+    int m =  2 * n;//number of controlled multiplier steps.
+    short* line = new short[nt];
+    gg = GateGenerator (dd);
+    gg.lineClear(line, nt);
+    Measurement mm = Measurement(dd);
+    dd::Edge state = StateGenerator(dd).dd_BaseState(nt, 0);//start by setting all qubits to zero.
+    //a0 line does not exist. replaced by classic register.
+    auto a0Nbase2 = [Nrep = this->m_base2N](int i){return Nrep.empty() ? 0 : Nrep[i]; };//return N's digits in base 2.
+    auto tindex = [](){return 1;};//temporary memory
+    auto xindex = [](){return 0;};//Top qubit, fig1 of HRS paper
+    auto xpindice = [](int i){return 2 + i;};//= x qubits in fig 5 of VBE
+    auto c0indice = [n = this->n](int i){return n + 2 + 2 * i;};//lower carry in each carry block of fig 2 of VBE(without a qubits which are classical bits so removed)
+    auto b0indice = [n = this->n](int i){return n + 2 + (2 * i + 1);}; //quantum register
+    auto c1indice = [nt, n = this->n](int i){return n + 2 + 2 * (i + 1);};//higher carry in each carry block of fig 2 of VBE
+    gg.NotGenOrApply(line, xpindice(0), nt, &state);//put 1 in x register in fig 5(multiplier)
+    lli cnum = a;//classical number to be multiplied by quantum number.
+    std::random_device rd;
+    engine eng(rd());
+    vector<int> vmres;
+     for(int i = 0; i < m; ++i){
+        //fig 1 of HRS.
+         gg.HadGenOrApply(line, xindex(), nt, &state);
+         lli tempcnum = shor::modexp(cnum, m - i - 1, N);
+         if(i%2 == 0){
+        CMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, tempcnum, line, xindex(), nt, state, tindex, xpindice);
+        lli invcnum = shor::modInverse(tempcnum, N);
+        InvCMultiplierModuloNHalfClassic(a0Nbase2, xpindice, c0indice, c1indice, invcnum, line, xindex(), nt, state, tindex, b0indice);
+     }
+         else{
+             CMultiplierModuloNHalfClassic(a0Nbase2, xpindice, c0indice, c1indice, tempcnum, line, xindex(), nt, state, tindex, b0indice);
+             lli invcnum = shor::modInverse(tempcnum, N);
+             InvCMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, invcnum, line, xindex(), nt, state, tindex, xpindice);
+              }
+         
+         dd::Matrix2x2 Rmat;// put rotation gates in place
+         
+         gg.lineSet(line, xindex(), -1);
+         if(i > 0)
+         for(int j = 0; j < i; ++j){
+             if(vmres[j]){
+                 gg.RmatGenerator(Rmat, i - j);
+                 state = dd->multiply(dd->makeGateDD(Rmat, nt, line), state);
+             }
+         }
+         gg.lineReset(line, xindex(), -1);
+         
+         gg.HadGenOrApply(line, xindex(), nt, &state);
+         int mres = mm.Measure(state, nt, xindex(), eng);
+          vmres.push_back(mres);
+          if(mres == posControl){
+              gg.NotGenOrApply(line, xindex(), nt, &state);
+        }
+    }
+    lli res = shor::base2to10(vmres, false);
+    std::printf("res: %lli\n", res);
+     std::pair<lli,lli> p = shor::contfrac(res, n);
     return p;
 }
+
+/// Extracted by Xcode, Ripple Adder Half Classic for adder modulo N.
+/// @param b0indice b0 indice generated by a lambda
+/// @param c0indice c0 indice generated by a lambda
+/// @param c1indice c1 indice generated by a lambda
+/// @param a0cnumindice a0, classic number indice generated by a lambda
+/// @param line 'line' for gate generation
+/// @param nt total number of needed variables
+/// @param state input state containing input numbers data.
+void ProbabilisticPeriodFinder::HelperRippleAdderHalfClassic(const std::function<int (int)> & a0cnumindice, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state) {
+    auto lambdaCarry = [&state, this, line, nt](int c0, int a0, int b0, int c1){
+        if(a0){
+            gg.CNotGenOrApply(line, c1, b0, nt, &state);
+            gg.NotGenOrApply(line, b0, nt, &state);
+        }
+        gg.ToffoliGenOrApply(line, c1, c0, b0, nt, &state);
+    };
+    auto lambdaCarryInv = [&state, this, line, nt](int c0, int a0, int b0, int c1){
+        gg.ToffoliGenOrApply(line, c1, c0, b0, nt, &state);
+        if(a0){
+            gg.NotGenOrApply(line, b0, nt, &state);
+            gg.CNotGenOrApply(line, c1, b0, nt, &state);
+        }
+    };
+    auto lambdaSum = [&state, this, line, nt](int c0, int a0, int b0){
+        gg.CNotGenOrApply(line, b0, c0, nt, &state);
+        //Problem is here!
+        if(a0){
+            gg.NotGenOrApply(line, b0, nt, &state);
+        }
+    };
+    //execute ripple adder:
+    for (int i = 0; i < n; ++i){
+        lambdaCarry(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
+    }
+    if(a0cnumindice(n-1))
+        gg.NotGenOrApply(line, b0indice(n-1), nt, &state);
+    
+    lambdaSum(c0indice(n-1), a0cnumindice(n-1), b0indice(n-1));
+    for (int i = n - 2; i >= 0; --i){
+        lambdaCarryInv(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
+        lambdaSum(c0indice(i), a0cnumindice(i), b0indice(i));
+    }
+}
+/// Like HelperRippleAdderHalfClassic, int cindex parameter added. qubit cindex negative controls effect of adding classical number to quantum number.
+/// @param b0indice b0 indice generated by a lambda
+/// @param c0indice c0 indice generated by a lambda
+/// @param c1indice c1 indice generated by a lambda
+/// @param a0cnumindice a0, classic number indice generated by a lambda
+/// @param cindex extra control index
+/// @param line 'line' for gate generation
+/// @param n num variables to hold input numbers
+/// @param nt total number of needed variables
+/// @param state input state containing input numbers data.
+void ProbabilisticPeriodFinder::CRippleAdderHalfClassic(const std::function<int (int)> &a0cnumindice, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice,  int cindex, short *line, int n, int nt, dd::Edge &state){
+    auto lambdaCarry = [&state, this, line, nt, cindex](int c0, int a0, int b0, int c1){
+        if(a0){
+            gg.ToffoliGenOrApply(line, c1, b0, cindex, nt, &state, true, false);
+            gg.CNotGenOrApply(line, b0, cindex, nt, &state, false);
+        }
+        gg.ToffoliGenOrApply(line, c1, c0, b0, nt, &state);
+    };
+    auto lambdaCarryInv = [&state, this, line, cindex, nt](int c0, int a0, int b0, int c1){
+        gg.ToffoliGenOrApply(line, c1, c0, b0, nt, &state);
+        if(a0){
+            gg.CNotGenOrApply(line, b0, cindex, nt, &state, false);
+            gg.ToffoliGenOrApply(line, c1, b0, cindex, nt, &state,true ,false);
+        }
+    };
+    auto lambdaSum = [&state, this, line, cindex, nt](int c0, int a0, int b0){
+        gg.CNotGenOrApply(line, b0, c0, nt, &state);
+        if(a0){
+            gg.CNotGenOrApply(line, b0, cindex, nt, &state, false);
+        }
+    };
+    //execute ripple adder:
+    for (int i = 0; i < n; ++i){
+        lambdaCarry(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
+    }
+    if(a0cnumindice(n-1))
+        gg.CNotGenOrApply(line, b0indice(n-1), cindex, nt, &state, false);
+    lambdaSum(c0indice(n-1), a0cnumindice(n-1), b0indice(n-1));
+    for (int i = n - 2; i >= 0; --i){
+        lambdaCarryInv(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
+        lambdaSum(c0indice(i), a0cnumindice(i), b0indice(i));
+    }
+}
+void ProbabilisticPeriodFinder::HelperModuloNAdderHalfClassic(const std::function<int (int)> &a0Nindice, const std::function<int (int)> &a0cnumindice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state, const std::function<int ()> &tindice) {
+    HelperRippleAdderHalfClassic(a0cnumindice, c0indice, b0indice, c1indice, line, nt, state);
+    InvHelperRippleAdderHalfClassic(a0Nindice, c0indice, b0indice, c1indice, line, nt, state);
+    gg.NotGenOrApply(line, c1indice(n - 1)/*nt - 2*/, nt, &state);
+    gg.CNotGenOrApply(line, tindice(), c1indice(n - 1)/*nt - 2*/, nt, &state);
+    gg.NotGenOrApply(line, c1indice(n - 1)/*nt - 2*/, nt, &state);
+    CRippleAdderHalfClassic(a0Nindice, c0indice, b0indice, c1indice, tindice(), line, n, nt, state);
+    InvHelperRippleAdderHalfClassic(a0cnumindice, c0indice, b0indice, c1indice, line, nt, state);
+    gg.CNotGenOrApply(line, tindice(), c1indice(n - 1), nt, &state);
+    HelperRippleAdderHalfClassic(a0cnumindice, c0indice, b0indice, c1indice, line, nt, state);
+}
+/// Controlled-Controlled ModuloNAdder classic number to quantum number.
+/// @param mcindex multiplier controller (c in fig 5)
+/// @param xindex x index (from quantum number)
+/// @param tindex temp memory index
+/// @param a0cnumbase2 a(2^i)
+/// @param a0Nbase2 N (to be factorized) in base 2
+/// @param c0indice current carry
+/// @param b0indice current second number in carry element
+/// @param c1indice next carry
+/// @param line line array for making gates
+/// @param nt total number of qubits
+/// @param state state to operate on
+void ProbabilisticPeriodFinder::CCModuloNAdderHalfClassic(int mcindex, int xindex, int tindex, const std::function<int (int)> &a0cnumbase2, const std::function<int (int)> &a0Nbase2, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state){
+    CCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
+    //TODO: take out first subtractor and second adder by introducting CCC adder and multiplier.
+    InvHelperRippleAdderHalfClassic(a0Nbase2, c0indice, b0indice, c1indice, line, nt, state);
+    gg.NotGenOrApply(line, c1indice(n - 1), nt, &state);
+    gg.CNotGenOrApply(line, tindex, c1indice(n - 1), nt, &state);
+    gg.NotGenOrApply(line, c1indice(n - 1), nt, &state);
+    CRippleAdderHalfClassic(a0Nbase2, c0indice, b0indice, c1indice, tindex, line, n, nt, state);
+    InvCCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
+    gg.CNotGenOrApply(line, tindex, c1indice(n - 1), nt, &state);
+    CCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
+}
+/// Controlled-Controlled ModuloNSubtractor classic number from quantum number. Used in exponentiator (fig 6)
+/// @param mcindex multiplier controller (c in fig 5)
+/// @param xindex x index (from quantum number)
+/// @param tindex temp memory index
+/// @param a0cnumbase2 a(2^i)
+/// @param a0Nbase2 N (to be factorized) in base 2
+/// @param c0indice current carry
+/// @param b0indice current second number in carry element
+/// @param c1indice next carry
+/// @param line line array for making gates
+/// @param nt total number of qubits
+/// @param state state to operate on
+void ProbabilisticPeriodFinder::InvCCModuloNAdderHalfClassic(int mcindex, int xindex, int tindex, const std::function<int (int)> &a0cnumbase2, const std::function<int (int)> &a0Nbase2, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state){
+    InvCCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
+   
+    gg.CNotGenOrApply(line, tindex, c1indice(n - 1), nt, &state);
+    CCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
+    InvCRippleAdderHalfClassic(a0Nbase2, c0indice, b0indice, c1indice, tindex, line, n, nt, state);
+    gg.NotGenOrApply(line, c1indice(n - 1), nt, &state);
+    gg.CNotGenOrApply(line, tindex, c1indice(n - 1), nt, &state);
+    gg.NotGenOrApply(line, c1indice(n - 1), nt, &state);
+    HelperRippleAdderHalfClassic(a0Nbase2, c0indice, b0indice, c1indice, line, nt, state);
+    InvCCRippleAdderHalfClassic(mcindex, xindex, tindex, a0cnumbase2, c0indice, b0indice, c1indice, line, nt, state);
+}
+void ProbabilisticPeriodFinder::InvHelperRippleAdderHalfClassic(const std::function<int (int)> &a0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state) {
+    auto lambdaCarry = [&state, this, line, nt](int c0, int a0, int b0, int c1){
+        if(a0){
+            gg.CNotGenOrApply(line, c1, b0, nt, &state);
+            gg.NotGenOrApply(line, b0, nt, &state);
+        }
+        gg.ToffoliGenOrApply(line, c1, c0, b0, nt, &state);
+    };
+    auto lambdaCarryInv = [&state, this, line, nt](int c0, int a0, int b0, int c1){
+        gg.ToffoliGenOrApply(line, c1, c0, b0, nt, &state);
+        
+        if(a0){
+            gg.NotGenOrApply(line, b0, nt, &state);
+            gg.CNotGenOrApply(line, c1, b0, nt, &state);
+        }
+    };
+    auto lambdaSum = [&state, this, line, nt](int c0, int a0, int b0){
+        gg.CNotGenOrApply(line, b0, c0, nt, &state);
+        if(a0)
+            gg.NotGenOrApply(line, b0, nt, &state);
+    };
+    for (int i = 0; i < n - 1; ++i){
+        lambdaSum(c0indice(i), a0indice(i), b0indice(i));
+        lambdaCarry(c0indice(i), a0indice(i), b0indice(i), c1indice(i));
+    }
+    lambdaSum(c0indice(n - 1), a0indice(n - 1), b0indice(n - 1));
+    if(a0indice(n-1))
+        gg.NotGenOrApply(line, b0indice(n-1), nt, &state);
+    for (int i = n - 1; i >= 0; --i){
+        lambdaCarryInv(c0indice(i), a0indice(i), b0indice(i), c1indice(i));
+    }
+}
+/// Controlled Half Classic Multiplier (fig 5)
+/// @param a0Nbase2 N (to be factorized) in base 2
+/// @param b0indice  quantum register. current second number in carry element
+/// @param c0indice current carry
+/// @param c1indice next carry
+/// @param a0cnum classical number to be multiplied by the quantum number.
+/// @param line line array for making gates
+/// @param mcindex  multiplier controller (c in fig 5)
+/// @param nt total number of qubits
+/// @param state state to operate on
+/// @param tindex temp memory index for moduloNAdder (FIG2)
+/// @param xindice  quantum register. x indice (for input quantum number)
+void ProbabilisticPeriodFinder::CMultiplierModuloNHalfClassic(const std::function<int (int)> &a0Nbase2, const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, lli a0cnum, short *line, int mcindex, int nt, dd::Edge &state, const std::function<int ()> &tindex, const std::function<int (int)> &xindice) {
+    for(int i = 0; i < n; ++i){//fig5 of paper, repeated shift and apply
+        //TODO: make next four opertations not do redundant calculations.
+        lli tempa0cnum = a0cnum;
+        tempa0cnum = tempa0cnum << i;
+        tempa0cnum = tempa0cnum % N;
+        vector<bool> a0clb2 = shor::base2rep(tempa0cnum, n);//classical value in base 2, n digits.
+        auto a0cnumbase2 = [&a0clb2](int i){return a0clb2.empty() ? 0 : a0clb2[i]; };//return cnum's digits in base 2.
+        CCModuloNAdderHalfClassic(mcindex, xindice(i), tindex(), a0cnumbase2, a0Nbase2, c0indice, b0indice ,c1indice, line, nt, state);
+    }
+    gg.NotGenOrApply(line, mcindex, nt, &state);
+    for(int i = 0; i < n; ++i){
+        gg.ToffoliGenOrApply(line, b0indice(i), mcindex, xindice(i), nt, &state);
+    }
+    gg.NotGenOrApply(line, mcindex, nt, &state);
+}
+/// Inverse Controlled Half Classic Multiplier. Used in Modulo Exponentiator (fig 6)
+/// @param a0Nbase2 N (to be factorized) in base 2
+/// @param b0indice  quantum register. current second number in carry element
+/// @param c0indice current carry
+/// @param c1indice next carry
+/// @param a0cnum classical number to be multiplied by the quantum number.
+/// @param line line array for making gates
+/// @param mcindex  multiplier controller (c in fig 5)
+/// @param nt total number of qubits
+/// @param state state to operate on
+/// @param tindex temp memory index for moduloNAdder (FIG2)
+/// @param xindice quantum register. x indice (for input quantum number)
+void ProbabilisticPeriodFinder::InvCMultiplierModuloNHalfClassic(const std::function<int (int)> &a0Nbase2, const std::function<int (int)> &b0indice, const std::function<int (int)> &c0indice, const std::function<int (int)> &c1indice, lli a0cnum, short *line, int mcindex, int nt, dd::Edge &state, const std::function<int ()> &tindex, const std::function<int (int)> &xindice){
+    gg.NotGenOrApply(line, mcindex, nt, &state);
+    for(int i = n - 1 ; i >= 0; --i){
+        gg.ToffoliGenOrApply(line, b0indice(i), mcindex, xindice(i), nt, &state);
+    }
+    gg.NotGenOrApply(line, mcindex, nt, &state);
+    for(int i = n - 1; i >= 0; --i){//fig5 of paper, repeated shift and apply
+        //TODO: make next four opertations not do redundant calculations.
+        lli tempa0cnum = a0cnum;
+        tempa0cnum = tempa0cnum << i;
+        tempa0cnum = tempa0cnum % N;
+        vector<bool> a0clb2 = shor::base2rep(tempa0cnum, n);//classical value in base 2, n digits.
+        auto a0cnumbase2 = [&a0clb2](int i){return a0clb2.empty() ? 0 : a0clb2[i]; };//return cnum's digits in base 2.
+        InvCCModuloNAdderHalfClassic(mcindex, xindice(i), tindex(), a0cnumbase2, a0Nbase2, c0indice, b0indice ,c1indice, line, nt, state);
+    }
+}
+/// Helper function extracted by Xcode to be used in CCRippleAdderHalfClassic() and CCRippleSubtractorHalfClassic(). Prepares lambdaCarry, lambdaCarryInv and lambdaSum
+/// @param lambdaCarry lambdaCarry
+/// @param lambdaCarryInv lambdaCarryInverse
+/// @param lambdaSum lambdaSum
+/// @param line 'line' for gate generation
+/// @param mc multiply control qubit, c in fig 5 of paper
+/// @param nt total number of needed variables
+/// @param state input state containing input numbers data.
+/// @param x individual x qubit index in fig5
+void ProbabilisticPeriodFinder::HelperCCRippleHalfClassic(std::function<void (int, int, int, int)> &lambdaCarry, std::function<void (int, int, int, int)> &lambdaCarryInv, std::function<void (int, int, int)> &lambdaSum, short *line, int mc, int nt, dd::Edge &state, int x) {
+    lambdaCarry = [&state, this, line, mc, x, nt](int c0, int a0, int b0, int c1){
+        if(a0){
+            map<int, bool> m{{mc, true}, {x, true}, {b0,true}};
+            gg.CKNotGenOrApply(line, c1, m, nt, &state);
+            gg.ToffoliGenOrApply(line, b0, mc, x, nt, &state);
+        }
+        gg.ToffoliGenOrApply(line, c1, c0, b0, nt, &state);
+    };
+    lambdaCarryInv = [&state, this, line, mc, x, nt](int c0, int a0, int b0, int c1){
+        gg.ToffoliGenOrApply(line, c1, c0, b0, nt, &state);
+        if(a0){
+            gg.ToffoliGenOrApply(line, b0, mc, x, nt, &state);
+            map<int, bool> m{{mc, true}, {x, true}, {b0,true}};
+            gg.CKNotGenOrApply(line, c1, m, nt, &state);
+        }
+    };
+    lambdaSum = [&state, this, line, mc, x, nt](int c0, int a0, int b0){
+        if(a0){
+            gg.ToffoliGenOrApply(line, b0, mc, x, nt, &state);
+        }
+        gg.CNotGenOrApply(line, b0, c0, nt, &state);
+    };
+}
+
+/// Used in controlled multiplication modulo N. Fig 5 of paper
+/// @param mc multiply control qubit, c in fig 5 of paper
+/// @param x individual x qubit index in fig5
+/// @param t temp memory in qubit in fig 4
+/// @param a0cnumindice a0 (current first number, classic). a2^i in fig 5.
+/// @param c0indice c0 (current carry) produced by lambda
+/// @param b0indice b0 line (current second number) produced by lambda
+/// @param c1indice c1 (next carry) produced by lambda
+/// @param line 'line' for gate generation
+/// @param nt total number of needed variables
+/// @param state input state containing input numbers data.
+void ProbabilisticPeriodFinder::CCRippleAdderHalfClassic(int mc, int x, int t, const std::function<int (int)> &a0cnumindice, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state){
+    std::function<void (int, int, int, int)> lambdaCarry;
+    std::function<void (int, int, int, int)> lambdaCarryInv;
+    std::function<void (int, int, int)> lambdaSum;
+    HelperCCRippleHalfClassic(lambdaCarry, lambdaCarryInv, lambdaSum, line, mc, nt, state, x);
+    {
+        static bool key = false;
+        if(key == false)
+    dd->export2Dot(state, "testtesta.dot");
+        key = true;
+    }
+    //execute ripple adder:
+    for (int i = 0; i < n; ++i){
+    
+        lambdaCarry(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
+    }
+    {
+        static bool key = false;
+        if(key == false)
+    dd->export2Dot(state, "testtestb.dot");
+        key = true;
+    }
+    if(a0cnumindice(n-1))
+        gg.ToffoliGenOrApply(line, b0indice(n-1), mc, x, nt, &state);
+
+    lambdaSum(c0indice(n-1), a0cnumindice(n-1), b0indice(n-1));
+    for (int i = n - 2; i >= 0; --i){
+        lambdaCarryInv(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
+        lambdaSum(c0indice(i), a0cnumindice(i), b0indice(i));
+    }
+}
+/// Used in controlled multiplication modulo N. Fig 5 of paper
+/// @param mc multiply control qubit, c in fig 5 of paper
+/// @param xindex x qubits in fig5
+/// @param t temp memory in qubit in fig 4
+/// @param a0cnumindice a0 (current first number, classic). a2^i in fig 5.
+/// @param c0indice c0 (current carry) produced by lambda
+/// @param b0indice b0 line (current second number) produced by lambda
+/// @param c1indice c1 (next carry) produced by lambda
+/// @param line 'line' for gate generation
+/// @param nt total number of needed variables
+/// @param state input state containing input numbers data.
+void ProbabilisticPeriodFinder::InvCCRippleAdderHalfClassic(int mc, int xindex, int t, const std::function<int (int)> &a0cnumindice, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice, short *line, int nt, dd::Edge &state){
+    std::function<void (int, int, int, int)> lambdaCarry;
+    std::function<void (int, int, int, int)> lambdaCarryInv;
+    std::function<void (int, int, int)> lambdaSum;
+    HelperCCRippleHalfClassic(lambdaCarry, lambdaCarryInv, lambdaSum, line, mc, nt, state, xindex);
+    for (int i = 0; i < n - 1; ++i){
+        lambdaSum(c0indice(i), a0cnumindice(i), b0indice(i));
+        lambdaCarry(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
+    }
+    lambdaSum(c0indice(n-1), a0cnumindice(n-1), b0indice(n-1));
+    if(a0cnumindice(n-1))
+        gg.ToffoliGenOrApply(line, b0indice(n-1), mc, xindex, nt, &state);
+    for (int i = n - 1; i >= 0; --i){
+        lambdaCarryInv(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
+    }
+}
+/// inverse of CRippleAdderHalfClassic used in exponentiator, fig6
+/// @param b0indice b0 indice generated by a lambda
+/// @param c0indice c0 indice generated by a lambda
+/// @param c1indice c1 indice generated by a lambda
+/// @param a0cnumindice a0, classic number indice generated by a lambda
+/// @param cindex extra control index
+/// @param line 'line' for gate generation
+/// @param n num variables to hold input numbers
+/// @param nt total number of needed variables
+/// @param state input state containing input numbers data.
+void ProbabilisticPeriodFinder::InvCRippleAdderHalfClassic(const std::function<int (int)> &a0cnumindice, const std::function<int (int)> &c0indice, const std::function<int (int)> &b0indice, const std::function<int (int)> &c1indice,  int cindex, short *line, int n, int nt, dd::Edge &state) {
+    auto lambdaCarry = [&state, this, line, nt, cindex](int c0, int a0, int b0, int c1){
+        if(a0){
+            gg.ToffoliGenOrApply(line, c1, b0, cindex, nt, &state, true, false);
+            gg.CNotGenOrApply(line, b0, cindex, nt, &state, false);
+        }
+        gg.ToffoliGenOrApply(line, c1, c0, b0, nt, &state);
+    };
+    auto lambdaCarryInv = [&state, this, line, cindex, nt](int c0, int a0, int b0, int c1){
+        gg.ToffoliGenOrApply(line, c1, c0, b0, nt, &state);
+        if(a0){
+            gg.CNotGenOrApply(line, b0, cindex, nt, &state, false);
+            gg.ToffoliGenOrApply(line, c1, b0, cindex, nt, &state,true ,false);
+        }
+    };
+    auto lambdaSum = [&state, this, line, cindex, nt](int c0, int a0, int b0){
+        gg.CNotGenOrApply(line, b0, c0, nt, &state);
+        if(a0){
+            gg.CNotGenOrApply(line, b0, cindex, nt, &state, false);
+        }
+    };
+    for (int i = 0; i < n-1; ++i){
+        lambdaSum(c0indice(i), a0cnumindice(i), b0indice(i));
+        lambdaCarry(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
+    };
+    lambdaSum(c0indice(n-1), a0cnumindice(n-1), b0indice(n-1));
+    if(a0cnumindice(n-1))
+        gg.CNotGenOrApply(line, b0indice(n-1), cindex, nt, &state, false);
+    for (int i = n-1; i >= 0; --i){
+        lambdaCarryInv(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
+    }
+}
+
+
 ProbabilisticPeriodFinder::~ProbabilisticPeriodFinder(){
-    delete p_rf;
 }
 //END: PeriodFinder start of private methods

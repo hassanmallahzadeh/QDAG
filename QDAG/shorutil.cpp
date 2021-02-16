@@ -135,13 +135,13 @@ vector<bool> base2rep(lli N,int n){
 /// Finds j0/r0 where j0 is a natural number and r0 is a factor of period. Refer to Mermin, appendix K.
 /// @param yn input register measurement outcome
 /// @param no num qubits in output register
-/// @param ni num qunits in input register
-std::pair<lli,lli> contfrac(lli yn, int ni, int no){
+std::pair<lli,lli> contfrac(lli yn, int no){
     std::pair<lli,lli> outfrac;
     if(yn <=0 )
         return std::pair<lli,lli>({-1,-1});//bad
     lli ru = 1;//upper limit for period(r)
     lli Q = 1;//Q, notation in Karimipur lecture notes.
+    int ni = 2 * no;//num digits needed to show measured number on input register.
     for(int i = 0; i < no; ++i)
     ru *= 2;
     for(int i = 0; i < ni; ++i)

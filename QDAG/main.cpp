@@ -28,8 +28,9 @@ void FactorizerTest();
 void FinalInRegMeasureWithQFTTest();
 void PeriodFinderAverageRuntime();
 int main(){
+      PeriodFinderTest();
 //FactorizerTest();
-    PeriodFinderAverageRuntime();
+ //   PeriodFinderAverageRuntime();
 //    auto* dd = new dd::Package;
 //    GateGenerator gg(dd);
 //    StateGenerator sg(dd);
@@ -90,9 +91,9 @@ void PeriodFinderTest(){
     printf("period of %lld mod %lld found: %lld in %d runs and %f seconds\n",a,N,p.second, counter, elapsed_seconds.count());
 }
 void PeriodFinderAverageRuntime(){
-    lli N = 9;
-    lli a = 2;
-    int trials = 10;
+    lli N = 21;
+    lli a = 11;
+    int trials = 20;
     std::pair<lli,lli> p = {-1,-1};
     float time = 0;
     int attempts = 0;
@@ -125,35 +126,35 @@ void PeriodFinderAverageRuntime(){
     }
     printf("period of %lld mod %lld found to be: %lld. average %f runs and %f average seconds of %d trials\n",a,N,p.second, (float)attempts/trials, time/trials,trials);
 }
-void FinalInRegMeasureWithQFTTest(){
-    
-    lli N = 21;
-    lli a = 11;
-    int tr = 300;
-    vector<int> v;
-    int i = 0;
-    do{
-        auto* dd = new dd::Package;
-        ProbabilisticPeriodFinder pf = ProbabilisticPeriodFinder(N,a,dd);
-        std::pair<lli,lli> iores = pf.AttemptReadingMultipleOfInverseOfPeriod();
-     //   static lli flag = 1;//pick results with same output reg num.
-        if(true/*iores.second == flag*/){
-            if(v.empty())
-                v =  vector<int>(pow(2, pf.ni), 0);//make the info holder vector.
-        ++v.at(iores.first);
-            ++i;
-        }
-        delete dd;
-    } while(i < tr);
-    std::ofstream datafile;
-    datafile.open ("/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/freqs.txt");
-    if(datafile.is_open()){
-        for (int i = 0; i < v.size(); ++i){
-            datafile << i << " "<< v[i] <<endl;
-        }
-        datafile.close();
-    }
-}
+//void FinalInRegMeasureWithQFTTest(){
+//
+//    lli N = 21;
+//    lli a = 11;
+//    int tr = 300;
+//    vector<int> v;
+//    int i = 0;
+//    do{
+//        auto* dd = new dd::Package;
+//        ProbabilisticPeriodFinder pf = ProbabilisticPeriodFinder(N,a,dd);
+//        std::pair<lli,lli> iores = pf.AttemptReadingMultipleOfInverseOfPeriod();
+//     //   static lli flag = 1;//pick results with same output reg num.
+//        if(true/*iores.second == flag*/){
+//            if(v.empty())
+//                v =  vector<int>(pow(2, pf.ni), 0);//make the info holder vector.
+//        ++v.at(iores.first);
+//            ++i;
+//        }
+//        delete dd;
+//    } while(i < tr);
+//    std::ofstream datafile;
+//    datafile.open ("/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/freqs.txt");
+//    if(datafile.is_open()){
+//        for (int i = 0; i < v.size(); ++i){
+//            datafile << i << " "<< v[i] <<endl;
+//        }
+//        datafile.close();
+//    }
+//}
 /// investigate a single QFT (fixed number of bits)
 void UniformityTest(){
     //examine uniformity of probabilities.
