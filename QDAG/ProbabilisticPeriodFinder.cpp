@@ -69,7 +69,7 @@ std::pair<lli,lli> ProbabilisticPeriodFinder::AttemptReadingMultipleOfInverseOfP
          if(i > 0)
          for(int j = 0; j < i; ++j){
              if(vmres[j]){
-                 gg.RmatGenerator(Rmat, i - j);
+                 gg.RInvmatGenerator(Rmat, i - j);
                  state = dd->multiply(dd->makeGateDD(Rmat, nt, line), state);
              }
          }
@@ -82,8 +82,8 @@ std::pair<lli,lli> ProbabilisticPeriodFinder::AttemptReadingMultipleOfInverseOfP
               gg.NotGenOrApply(line, xindex(), nt, &state);
         }
     }
-    lli res = shor::base2to10(vmres, false);
-    std::printf("res: %lli\n", res);
+    lli res = shor::base2to10(vmres, true);
+    std::printf("res:%lli\n", res);
      std::pair<lli,lli> p = shor::contfrac(res, n);
     return p;
 }
@@ -293,6 +293,7 @@ void ProbabilisticPeriodFinder::CMultiplierModuloNHalfClassic(const std::functio
     }
     gg.NotGenOrApply(line, mcindex, nt, &state);
 }
+
 /// Inverse Controlled Half Classic Multiplier. Used in Modulo Exponentiator (fig 6)
 /// @param a0Nbase2 N (to be factorized) in base 2
 /// @param b0indice  quantum register. current second number in carry element

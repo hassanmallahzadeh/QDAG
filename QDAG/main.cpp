@@ -69,8 +69,9 @@ void FactorizerTest(){
     printf("Average runtime for factoring of %lli, is %f for %d trials.\n", N, sum/trials, trials);
     }
 void PeriodFinderTest(){
-    lli N = 3;
-    lli a = 2;
+    lli N = 5;
+    lli a = 4
+    ;
     std::pair<lli,lli> p = {-1,-1};
     int counter = 0;
     time_point<system_clock> start, end;
