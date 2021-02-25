@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C0012C8B25E483FE001B8559 /* OldProbabilisticPeriodFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0012C8925E483FE001B8559 /* OldProbabilisticPeriodFinder.cpp */; };
 		C0436EAC24B16F6E0027F72E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0436EAB24B16F6E0027F72E /* main.cpp */; };
 		C0475BCA24B57281003F5DC0 /* QFT-Measurement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0475BC824B57281003F5DC0 /* QFT-Measurement.cpp */; };
 		C073EBB824DF0A8400B88991 /* Bob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C073EBB624DF0A8400B88991 /* Bob.cpp */; };
@@ -35,6 +36,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C0012C8925E483FE001B8559 /* OldProbabilisticPeriodFinder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OldProbabilisticPeriodFinder.cpp; sourceTree = "<group>"; };
+		C0012C8A25E483FE001B8559 /* OldProbabilisticPeriodFinder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OldProbabilisticPeriodFinder.hpp; sourceTree = "<group>"; };
 		C0436EAB24B16F6E0027F72E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		C0475BC824B57281003F5DC0 /* QFT-Measurement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "QFT-Measurement.cpp"; sourceTree = "<group>"; };
 		C0475BC924B57281003F5DC0 /* QFT-Measurement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "QFT-Measurement.hpp"; sourceTree = "<group>"; };
@@ -136,6 +139,8 @@
 				C0B4E5C024DF97FB00D6A640 /* ProbabilisticPeriodFinder.hpp */,
 				C0DBF41424F09BC2008B9216 /* RegisterFactory.cpp */,
 				C0DBF41524F09BC2008B9216 /* RegisterFactory.hpp */,
+				C0012C8925E483FE001B8559 /* OldProbabilisticPeriodFinder.cpp */,
+				C0012C8A25E483FE001B8559 /* OldProbabilisticPeriodFinder.hpp */,
 			);
 			name = ShorAlgorithm;
 			sourceTree = "<group>";
@@ -220,6 +225,7 @@
 			files = (
 				C0B4E5C124DF97FB00D6A640 /* ProbabilisticPeriodFinder.cpp in Sources */,
 				C0B4E5BB24DF340A00D6A640 /* Factorizer.cpp in Sources */,
+				C0012C8B25E483FE001B8559 /* OldProbabilisticPeriodFinder.cpp in Sources */,
 				C09D2A2424AE575100188786 /* IIC-JKUmain.cpp in Sources */,
 				C09D2A2324AE575100188786 /* DDcomplex.cpp in Sources */,
 				C0475BCA24B57281003F5DC0 /* QFT-Measurement.cpp in Sources */,

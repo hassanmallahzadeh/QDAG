@@ -25,11 +25,9 @@ ProbabilisticPeriodFinder::ProbabilisticPeriodFinder(lli N, lli a, dd::Package *
 
 //BEG: PeriodFinder start of private methods
 
-
-
 std::pair<lli,lli> ProbabilisticPeriodFinder::AttemptReadingMultipleOfInverseOfPeriod(){
     int nt = 3 * n + 3;//quantum number x Fig5 (n), quantum register y Fig5 (n), carries(n) Fig2, overflow carry(1) Fig2, temp memory qubit Fig4 t (1) of VBE paper
-    int m =  2 * n;//number of controlled multiplier steps.
+    int m =  (int)shor::base2rep(N*N).size();
     short* line = new short[nt];
     gg = GateGenerator (dd);
     gg.lineClear(line, nt);
@@ -43,48 +41,60 @@ std::pair<lli,lli> ProbabilisticPeriodFinder::AttemptReadingMultipleOfInverseOfP
     auto c0indice = [n = this->n](int i){return n + 2 + 2 * i;};//lower carry in each carry block of fig 2 of VBE(without a qubits which are classical bits so removed)
     auto b0indice = [n = this->n](int i){return n + 2 + (2 * i + 1);}; //quantum register
     auto c1indice = [nt, n = this->n](int i){return n + 2 + 2 * (i + 1);};//higher carry in each carry block of fig 2 of VBE
+    
     gg.NotGenOrApply(line, xpindice(0), nt, &state);//put 1 in x register in fig 5(multiplier)
     lli cnum = a;//classical number to be multiplied by quantum number.
+   
     std::random_device rd;
     engine eng(rd());
-    vector<int> vmres;
+    vector<int> vmres;//binary representation of one full set of measurements
+    vector<lli> factors;//stores classical multiplication factor, fig 6 of VBE
+    for (int i = 0; i < m; ++i){
+        factors.push_back(cnum);
+        cnum = cnum * cnum % N;
+    }
      for(int i = 0; i < m; ++i){
+         int ii = m - i - 1;
         //fig 1 of HRS.
+
          gg.HadGenOrApply(line, xindex(), nt, &state);
-         lli tempcnum = shor::modexp(cnum, m - i - 1, N);
-         if(i%2 == 0){
-        CMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, tempcnum, line, xindex(), nt, state, tindex, xpindice);
-        lli invcnum = shor::modInverse(tempcnum, N);
+         if(ii % 2 == 0){
+         
+        CMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, factors[ii], line, xindex(), nt, state, tindex, xpindice);
+        lli invcnum = shor::modInverse(factors[ii], N);
         InvCMultiplierModuloNHalfClassic(a0Nbase2, xpindice, c0indice, c1indice, invcnum, line, xindex(), nt, state, tindex, b0indice);
      }
          else{
-             CMultiplierModuloNHalfClassic(a0Nbase2, xpindice, c0indice, c1indice, tempcnum, line, xindex(), nt, state, tindex, b0indice);
-             lli invcnum = shor::modInverse(tempcnum, N);
+             CMultiplierModuloNHalfClassic(a0Nbase2, xpindice, c0indice, c1indice, factors[ii], line, xindex(), nt, state, tindex, b0indice);
+             lli invcnum = shor::modInverse(factors[ii], N);
              InvCMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, invcnum, line, xindex(), nt, state, tindex, xpindice);
               }
-         
          dd::Matrix2x2 Rmat;// put rotation gates in place
-         
          gg.lineSet(line, xindex(), -1);
-         if(i > 0)
          for(int j = 0; j < i; ++j){
              if(vmres[j]){
-                 gg.RInvmatGenerator(Rmat, i - j);
+                 gg.RmatGenerator(Rmat, i - j + 1);
                  state = dd->multiply(dd->makeGateDD(Rmat, nt, line), state);
              }
          }
          gg.lineReset(line, xindex(), -1);
          
          gg.HadGenOrApply(line, xindex(), nt, &state);
+        
          int mres = mm.Measure(state, nt, xindex(), eng);
+        // assert(0);
           vmres.push_back(mres);
           if(mres == posControl){
               gg.NotGenOrApply(line, xindex(), nt, &state);
         }
     }
-    lli res = shor::base2to10(vmres, true);
-    std::printf("res:%lli\n", res);
-     std::pair<lli,lli> p = shor::contfrac(res, n);
+    lli res = shor::base2to10(vmres, false);
+//    std::cout<<"measurement on input register during qft:\n";
+//    for(int i = 0; i < vmres.size(); ++i){
+//    std::cout<<vmres[i]<<std::endl;
+//    }
+//    std::printf("res:%lli\n", res);
+     std::pair<lli,lli> p = shor::contfrac(res, m,n);
     return p;
 }
 
@@ -372,22 +382,10 @@ void ProbabilisticPeriodFinder::CCRippleAdderHalfClassic(int mc, int x, int t, c
     std::function<void (int, int, int, int)> lambdaCarryInv;
     std::function<void (int, int, int)> lambdaSum;
     HelperCCRippleHalfClassic(lambdaCarry, lambdaCarryInv, lambdaSum, line, mc, nt, state, x);
-    {
-        static bool key = false;
-        if(key == false)
-    dd->export2Dot(state, "testtesta.dot");
-        key = true;
-    }
     //execute ripple adder:
     for (int i = 0; i < n; ++i){
     
         lambdaCarry(c0indice(i), a0cnumindice(i), b0indice(i), c1indice(i));
-    }
-    {
-        static bool key = false;
-        if(key == false)
-    dd->export2Dot(state, "testtestb.dot");
-        key = true;
     }
     if(a0cnumindice(n-1))
         gg.ToffoliGenOrApply(line, b0indice(n-1), mc, x, nt, &state);

@@ -17,7 +17,7 @@ lli modexp( lli x,  lli a,  lli n);
 lli modInverse(lli a, lli m);
 int bddNumVar(dd::Edge root, bool isVector);
 vector<bool> base2rep(lli N, int n = -1);
-std::pair<lli,lli> contfrac(lli, int);
+std::pair<lli,lli> contfrac(lli, int, int);
 lli base2to10(vector<int>,bool);
 lli pow(lli,lli);
 lli bfpf(lli,lli);

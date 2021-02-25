@@ -8,6 +8,7 @@
 
 #include "Factorizer.hpp"
 #include "shorutil.hpp"
+#include "OldProbabilisticPeriodFinder.hpp"
 #include "ProbabilisticPeriodFinder.hpp"
 Factorizer::Factorizer(lli N){
     this->N = N;
@@ -63,7 +64,7 @@ lli Factorizer::PeriodFinder(lli a){
             break;
         }
         auto* dd = new dd::Package;
-        ProbabilisticPeriodFinder pf = ProbabilisticPeriodFinder(N,a,dd);
+        OldProbabilisticPeriodFinder pf = OldProbabilisticPeriodFinder(N,a,dd);
         p = pf.AttemptReadingMultipleOfInverseOfPeriod();
         if(p.second > 0 && p.first > 0)//if 0 is not measured (input register).
             ++counter;

@@ -16,6 +16,8 @@
 #include "shorutil.hpp"
 #include "RegisterFactory.hpp"
 #include "ProbabilisticPeriodFinder.hpp"
+#include "OldProbabilisticPeriodFinder.hpp"
+
 #include "Factorizer.hpp"
 #include <chrono>
 using namespace std::chrono;
@@ -28,7 +30,7 @@ void FactorizerTest();
 void FinalInRegMeasureWithQFTTest();
 void PeriodFinderAverageRuntime();
 int main(){
-      PeriodFinderTest();
+      PeriodFinderAverageRuntime();
 //FactorizerTest();
  //   PeriodFinderAverageRuntime();
 //    auto* dd = new dd::Package;
@@ -49,7 +51,7 @@ int main(){
 //    dd->export2Dot(mat3, "mat3.dot");
 //        dd->export2Dot(state, "statea.dot",true);
 //    delete[] line;
-    return 0;
+ //   return 0;
 }
 void FactorizerTest(){
     int trials = 1;
@@ -69,8 +71,8 @@ void FactorizerTest(){
     printf("Average runtime for factoring of %lli, is %f for %d trials.\n", N, sum/trials, trials);
     }
 void PeriodFinderTest(){
-    lli N = 5;
-    lli a = 4
+    lli N = 21;
+    lli a = 11
     ;
     std::pair<lli,lli> p = {-1,-1};
     int counter = 0;
@@ -94,7 +96,7 @@ void PeriodFinderTest(){
 void PeriodFinderAverageRuntime(){
     lli N = 21;
     lli a = 11;
-    int trials = 20;
+    int trials = 50;
     std::pair<lli,lli> p = {-1,-1};
     float time = 0;
     int attempts = 0;
@@ -123,7 +125,7 @@ void PeriodFinderAverageRuntime(){
     duration<float> elapsed_seconds = end - start;
         ++attempts;
         time += elapsed_seconds.count();
-  
+
     }
     printf("period of %lld mod %lld found to be: %lld. average %f runs and %f average seconds of %d trials\n",a,N,p.second, (float)attempts/trials, time/trials,trials);
 }

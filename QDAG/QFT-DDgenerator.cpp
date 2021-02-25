@@ -260,7 +260,7 @@ void GateGenerator::RInvmatGenerator(dd::Matrix2x2 &m, int k) {
     m[0][0] = { 1, 0 };
     m[0][1] = { 0, 0 };
     m[1][0] = { 0, 0 };
-    fp angle = -dd::PI/pow(2,k);
+    fp angle = 2 * dd::PI/pow(2,k);
     m[1][1] = { cos(angle), sin(angle) };;
 }
 /// permute operator. can be placed at beginning or end of circuit
