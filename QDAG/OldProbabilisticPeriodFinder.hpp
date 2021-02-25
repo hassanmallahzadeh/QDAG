@@ -31,5 +31,5 @@ public:
     OldProbabilisticPeriodFinder(lli, lli, dd::Package * = nullptr);
     ~OldProbabilisticPeriodFinder();
 };
-#endif /* PeriodFinder_hpp */
+#endif /* OldPeriodFinder_hpp */
 
