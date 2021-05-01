@@ -154,10 +154,14 @@ void GateGenerator::lineSet(short *line, int t, int c0, int c1, bool c0p, bool c
             line[c1] = 0;
     }
 }
-void GateGenerator::lineSet(short* line, int t, const map<int,bool> &m){
+/// set 'line' for controlled gates.//NOTE: Just for base 2
+/// @param line line array
+/// @param t target index
+/// @param c control qubits map. key is the qubit index and value 'true:=positive control', 'false:=negative control'
+void GateGenerator::lineSet(short* line, int t, const map<int,bool> &c){
     if(t >= 0)
         line[t] = 2;
-    for(auto it = m.cbegin(); it != m.cend(); ++it){
+    for(auto it = c.cbegin(); it != c.cend(); ++it){
         it->second ? line[it->first] = 1: line[it->first] = 0;
     }
 }
@@ -260,7 +264,7 @@ void GateGenerator::RInvmatGenerator(dd::Matrix2x2 &m, int k) {
     m[0][0] = { 1, 0 };
     m[0][1] = { 0, 0 };
     m[1][0] = { 0, 0 };
-    fp angle = 2 * dd::PI/pow(2,k);
+    fp angle = - 2 * dd::PI/pow(2,k);
     m[1][1] = { cos(angle), sin(angle) };;
 }
 /// permute operator. can be placed at beginning or end of circuit
@@ -377,4 +381,43 @@ dd::Edge GateGenerator::HadGenOrApply(short *line, int t, int nt, dd::Edge* stat
     }
     return e;
 }
+
+/// Create and apply(if desired) a rotation gate ([1 , 0; 0 , exp(2*pi*1i/(2^k))]
+/// @param line gate generator line
+/// @param t target index
+/// @param k rotation index
+/// @param nt max index(exclusive)
+/// @param state optional state value for gate to be applied to before return.
+dd::Edge GateGenerator::RmatGenOrApply(short *line, int t, int k, int nt, dd::Edge *state) {
+    dd::Matrix2x2 m;
+    RmatGenerator(m, k);
+    lineSet(line, t);
+    dd::Edge e = dd->makeGateDD(m, nt, line);
+    lineReset(line, t);
+    if(state){
+        *state = dd->multiply(e, *state);
+    }
+    return e;
+}
+/// Create and apply(if desired) a rotation gate ([1 , 0; 0 , exp(2*pi*1i/(2^k))]
+/// @param line gate generator line
+/// @param t target index
+/// @param k rotation index
+/// @param c control qubits map. key is the qubit index and value 'true:=positive control', 'false:=negative control'
+/// @param nt max index(exclusive)
+/// @param state optional state value for gate to be applied to before return.
+dd::Edge GateGenerator::CKRmatGenOrApply(short *line, int t, int k, const map<int, bool> &c, int nt, dd::Edge *state) {
+    dd::Matrix2x2 m;
+    RmatGenerator(m, k);
+    lineSet(line, t, c);
+    dd::Edge e = dd->makeGateDD(m, nt, line);
+    lineReset(line, t, c);
+    if(state){
+        *state = dd->multiply(e, *state);
+    }
+    return e;
+
+}
+
+
 /*---END GATE GENERATOR DEFINITIONS---*/

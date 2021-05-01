@@ -10,6 +10,7 @@
 		C0012C8B25E483FE001B8559 /* OldProbabilisticPeriodFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0012C8925E483FE001B8559 /* OldProbabilisticPeriodFinder.cpp */; };
 		C0436EAC24B16F6E0027F72E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0436EAB24B16F6E0027F72E /* main.cpp */; };
 		C0475BCA24B57281003F5DC0 /* QFT-Measurement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0475BC824B57281003F5DC0 /* QFT-Measurement.cpp */; };
+		C05D63462603EBD700568743 /* SB-ProbabilisticPeriodFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C05D63442603EBD700568743 /* SB-ProbabilisticPeriodFinder.cpp */; };
 		C073EBB824DF0A8400B88991 /* Bob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C073EBB624DF0A8400B88991 /* Bob.cpp */; };
 		C09D2A2224AE575100188786 /* DDpackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A1A24AE575100188786 /* DDpackage.cpp */; };
 		C09D2A2324AE575100188786 /* DDcomplex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C09D2A1C24AE575100188786 /* DDcomplex.cpp */; };
@@ -41,6 +42,8 @@
 		C0436EAB24B16F6E0027F72E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		C0475BC824B57281003F5DC0 /* QFT-Measurement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "QFT-Measurement.cpp"; sourceTree = "<group>"; };
 		C0475BC924B57281003F5DC0 /* QFT-Measurement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "QFT-Measurement.hpp"; sourceTree = "<group>"; };
+		C05D63442603EBD700568743 /* SB-ProbabilisticPeriodFinder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "SB-ProbabilisticPeriodFinder.cpp"; sourceTree = "<group>"; };
+		C05D63452603EBD700568743 /* SB-ProbabilisticPeriodFinder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "SB-ProbabilisticPeriodFinder.hpp"; sourceTree = "<group>"; };
 		C06685FD24AE565B00594215 /* QDAG */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = QDAG; sourceTree = BUILT_PRODUCTS_DIR; };
 		C073EBB624DF0A8400B88991 /* Bob.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Bob.cpp; sourceTree = "<group>"; };
 		C073EBB724DF0A8400B88991 /* Bob.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Bob.hpp; sourceTree = "<group>"; };
@@ -141,6 +144,8 @@
 				C0DBF41524F09BC2008B9216 /* RegisterFactory.hpp */,
 				C0012C8925E483FE001B8559 /* OldProbabilisticPeriodFinder.cpp */,
 				C0012C8A25E483FE001B8559 /* OldProbabilisticPeriodFinder.hpp */,
+				C05D63442603EBD700568743 /* SB-ProbabilisticPeriodFinder.cpp */,
+				C05D63452603EBD700568743 /* SB-ProbabilisticPeriodFinder.hpp */,
 			);
 			name = ShorAlgorithm;
 			sourceTree = "<group>";
@@ -236,6 +241,7 @@
 				C09D2A2624AE575100188786 /* QFT.cpp in Sources */,
 				C0436EAC24B16F6E0027F72E /* main.cpp in Sources */,
 				C09D2A2224AE575100188786 /* DDpackage.cpp in Sources */,
+				C05D63462603EBD700568743 /* SB-ProbabilisticPeriodFinder.cpp in Sources */,
 				C09D2A2524AE575100188786 /* DDexport.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

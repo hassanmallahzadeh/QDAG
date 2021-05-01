@@ -72,7 +72,7 @@ lli OldProbabilisticPeriodFinder::ApplyQFTMeasureInputRegister(){
     for(int i = 0; i < ni; ++i){
         indices.push_back(inputindice(i));
     }
-    std::reverse(indices.begin(), indices.end());
+    std::reverse(indices.begin(), indices.end());//reverse order of qubits (effect of permutation gate)
     vector<int> qftgnmo;//qft griffiths niu measurement outcomes.
     qftgnmo = p_qft->dd_QFTGNV1(p_rf->nt, state, PERM_POS::NO_PERM, mt_rand, indices);
     assert(qftgnmo.size() == ni);

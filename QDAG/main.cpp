@@ -96,7 +96,7 @@ void PeriodFinderTest(){
 void PeriodFinderAverageRuntime(){
     lli N = 21;
     lli a = 11;
-    int trials = 50;
+    int trials = 10;
     std::pair<lli,lli> p = {-1,-1};
     float time = 0;
     int attempts = 0;

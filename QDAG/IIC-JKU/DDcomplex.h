@@ -84,7 +84,7 @@ namespace dd {
         constexpr static Complex ONE{ (&oneEntry), (&zeroEntry) };
 
         long cacheCount = INIT_SIZE * 6;
-        static constexpr fp TOLERANCE = 1e-13l;
+        static constexpr fp TOLERANCE = 0.01;
         static constexpr unsigned int GCLIMIT1 = 100000;
         static constexpr unsigned int GCLIMIT_INC = 0;
 

@@ -76,7 +76,9 @@ dd::Edge QFT::dd_QFTV1(int n, PERM_POS perm) {
 /// @param n number of qubits
 /// @param state input state
 /// @param perm where and if apply permutation gate.
-dd::Edge QFT::dd_QFTV2(int n, dd::Edge state, PERM_POS perm) {
+/// @param inv is it inverse Fourier transform?
+/// @param indice indices on which Fourier transform is to be applied.
+dd::Edge QFT::dd_QFTV2(int n, dd::Edge state, PERM_POS perm, vector<int> indice, bool inv) {
     GateGenerator  gg = GateGenerator(dd);
     dd::Edge e_ans = state;
     if(perm == BEG_PERM){
@@ -88,28 +90,27 @@ dd::Edge QFT::dd_QFTV2(int n, dd::Edge state, PERM_POS perm) {
     for (int i = 0; i < n; ++i){
         line[i] = -1;
     }
-    for (int i = 0; i < n; ++i){// for each of n qubits do:
-        gg.lineSet(line,i,-1);
+    for (int i = 0; i < indice.size(); ++i){// for each of n qubits do:
+        gg.lineSet(line, indice[i], -1);
         dd::Edge e_line = dd->makeGateDD(Hmat, n, line);// start by hadamard as in circuit
         e_ans = dd->multiply(e_line ,e_ans);
         dd::Matrix2x2 Rmat;// put rotation gates in place
-        for (int j = 0; j < n - i - 1; ++j){
+        for (int j = 0; j < indice.size() - i - 1; ++j){
             if(m_ord == REG_C_T)
-                gg.lineSet(line, i, i + j + 1);
+                gg.lineSet(line, indice[i], indice[i + j + 1]);
             else
-                gg.lineSet(line, i + j + 1, i);
-            gg.RmatGenerator(Rmat, j+2);
+                gg.lineSet(line, indice[i + j + 1], indice[i]);
+            !inv ? gg.RmatGenerator(Rmat, j+2) : gg.RInvmatGenerator(Rmat, j+2);
             e_ans = dd->multiply(dd->makeGateDD(Rmat, n, line), e_ans);
             if(m_ord == REG_C_T)
-                gg.lineReset(line, i, i + j + 1);
+                gg.lineReset(line, indice[i], indice[i + j + 1]);
             else
-                gg.lineReset(line, i + j + 1, i);
+                gg.lineReset(line, indice[i + j + 1], indice[i]);
         }
     }
     if(perm == END_PERM){
         e_ans = gg.permuteOperatorOnState(n, e_ans);
     }
-    
     delete[] line;
     return e_ans;
 }
@@ -203,8 +204,76 @@ dd::Edge QFT::dd_QFTV4(int n, dd::Edge state, PERM_POS perm) {
     return e_ans;
 }
 
-
-
+/// QFT, apply the gates one by one to the input state. avoid making the overal operator first. Do permutation sanely by just permuting indices.
+/// @param n number of qubits
+/// @param state input state
+/// @param inv is it inverse Fourier transform?
+/// @param indice indices on which Fourier transform is to be applied.
+dd::Edge QFT::dd_QFTV5(int n, dd::Edge state, vector<int> indice, bool inv) {
+    std::reverse(indice.begin(), indice.end());//reverse order of qubits (effect of permutation gate, effectively and sanely)
+    GateGenerator  gg = GateGenerator(dd);
+    dd::Edge e_ans = state;
+    short *line = new short[n]{};// set 'line' for dd->makeGateDD
+    for (int i = 0; i < n; ++i){
+        line[i] = -1;
+    }
+    for (int i = 0; i < indice.size(); ++i){// for each of n qubits do:
+        gg.lineSet(line, indice[i], -1);
+        dd::Edge e_line = dd->makeGateDD(Hmat, n, line);// start by hadamard as in circuit
+        e_ans = dd->multiply(e_line ,e_ans);
+        dd::Matrix2x2 Rmat;// put rotation gates in place
+        for (int j = 0; j < indice.size() - i - 1; ++j){
+            if(m_ord == REG_C_T)
+                gg.lineSet(line, indice[i], indice[i + j + 1]);
+            else
+                gg.lineSet(line, indice[i + j + 1], indice[i]);
+            !inv ? gg.RmatGenerator(Rmat, j+2) : gg.RInvmatGenerator(Rmat, j+2);
+            e_ans = dd->multiply(dd->makeGateDD(Rmat, n, line), e_ans);
+            if(m_ord == REG_C_T)
+                gg.lineReset(line, indice[i], indice[i + j + 1]);
+            else
+                gg.lineReset(line, indice[i + j + 1], indice[i]);
+        }
+        gg.lineReset(line, indice[i], -1);
+    }
+    delete[] line;
+    return e_ans;
+}
+/// Reverse of QFT. apply the gates one by one to the input state, in reversed order. avoid making the overal operator first. Do permutation sanely by just permuting indices.
+/// @param n number of qubits
+/// @param state input state
+/// @param inv is it inverse Fourier transform?
+/// @param indice indices on which Fourier transform is to be applied.
+dd::Edge QFT::dd_QFTV5Reverse(int n, dd::Edge state, vector<int> indice, bool inv) {
+   GateGenerator  gg = GateGenerator(dd);
+    dd::Edge e_ans = state;
+    short *line = new short[n]{};// set 'line' for dd->makeGateDD
+    for (int i = 0; i < n; ++i){
+        line[i] = -1;
+    }
+    for (int i = (int)indice.size() - 1; i >= 0; ++i){// for each of n qubits do:
+        gg.lineSet(line, indice[i], -1);
+        dd::Matrix2x2 Rmat;// put rotation gates in place
+        for (int j = (int)indice.size() - i - 2; j >= 0; --j){
+            if(m_ord == REG_C_T)
+                gg.lineSet(line, indice[i], indice[i + j + 1]);
+            else
+                gg.lineSet(line, indice[i + j + 1], indice[i]);
+            !inv ? gg.RmatGenerator(Rmat, j+2) : gg.RInvmatGenerator(Rmat, j+2);
+            e_ans = dd->multiply(dd->makeGateDD(Rmat, n, line), e_ans);
+            if(m_ord == REG_C_T)
+                gg.lineReset(line, indice[i], indice[i + j + 1]);
+            else
+                gg.lineReset(line, indice[i + j + 1], indice[i]);
+        }
+        dd::Edge e_line = dd->makeGateDD(Hmat, n, line);// end by hadamard
+        e_ans = dd->multiply(e_line ,e_ans);
+        gg.lineReset(line, indice[i], -1);
+    }
+    std::reverse(indice.begin(), indice.end());//reverse order of qubits (effect of permutation gate, effectively and sanely)
+    delete[] line;
+    return e_ans;
+}
 /// QFT with Griffiths-Niu scheme.
 /// @return state after act of QFT.
 /// @param n number of qubits

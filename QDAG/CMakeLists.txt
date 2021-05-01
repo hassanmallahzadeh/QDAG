@@ -12,6 +12,7 @@ QFT-Measurement.cpp
 RegisterFactory.cpp
 shorutil.cpp
 ProbabilisticPeriodFinder.cpp
+OldProbabilisticPeriodFinder.cpp
 Factorizer.cpp
 main.cpp
 )
