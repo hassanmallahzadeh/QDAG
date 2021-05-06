@@ -250,6 +250,33 @@ IIC-JKU/DDpackage.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/IIC-JKU/DDpackage.cpp.s
 .PHONY : IIC-JKU/DDpackage.cpp.s
 
+OldProbabilisticPeriodFinder.o: OldProbabilisticPeriodFinder.cpp.o
+
+.PHONY : OldProbabilisticPeriodFinder.o
+
+# target to build an object file
+OldProbabilisticPeriodFinder.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o
+.PHONY : OldProbabilisticPeriodFinder.cpp.o
+
+OldProbabilisticPeriodFinder.i: OldProbabilisticPeriodFinder.cpp.i
+
+.PHONY : OldProbabilisticPeriodFinder.i
+
+# target to preprocess a source file
+OldProbabilisticPeriodFinder.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.i
+.PHONY : OldProbabilisticPeriodFinder.cpp.i
+
+OldProbabilisticPeriodFinder.s: OldProbabilisticPeriodFinder.cpp.s
+
+.PHONY : OldProbabilisticPeriodFinder.s
+
+# target to generate assembly for a file
+OldProbabilisticPeriodFinder.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.s
+.PHONY : OldProbabilisticPeriodFinder.cpp.s
+
 ProbabilisticPeriodFinder.o: ProbabilisticPeriodFinder.cpp.o
 
 .PHONY : ProbabilisticPeriodFinder.o
@@ -385,6 +412,33 @@ RegisterFactory.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/RegisterFactory.cpp.s
 .PHONY : RegisterFactory.cpp.s
 
+SB-ProbabilisticPeriodFinder.o: SB-ProbabilisticPeriodFinder.cpp.o
+
+.PHONY : SB-ProbabilisticPeriodFinder.o
+
+# target to build an object file
+SB-ProbabilisticPeriodFinder.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o
+.PHONY : SB-ProbabilisticPeriodFinder.cpp.o
+
+SB-ProbabilisticPeriodFinder.i: SB-ProbabilisticPeriodFinder.cpp.i
+
+.PHONY : SB-ProbabilisticPeriodFinder.i
+
+# target to preprocess a source file
+SB-ProbabilisticPeriodFinder.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.i
+.PHONY : SB-ProbabilisticPeriodFinder.cpp.i
+
+SB-ProbabilisticPeriodFinder.s: SB-ProbabilisticPeriodFinder.cpp.s
+
+.PHONY : SB-ProbabilisticPeriodFinder.s
+
+# target to generate assembly for a file
+SB-ProbabilisticPeriodFinder.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/QDAG.dir/build.make CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.s
+.PHONY : SB-ProbabilisticPeriodFinder.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -460,6 +514,9 @@ help:
 	@echo "... IIC-JKU/DDpackage.o"
 	@echo "... IIC-JKU/DDpackage.i"
 	@echo "... IIC-JKU/DDpackage.s"
+	@echo "... OldProbabilisticPeriodFinder.o"
+	@echo "... OldProbabilisticPeriodFinder.i"
+	@echo "... OldProbabilisticPeriodFinder.s"
 	@echo "... ProbabilisticPeriodFinder.o"
 	@echo "... ProbabilisticPeriodFinder.i"
 	@echo "... ProbabilisticPeriodFinder.s"
@@ -475,6 +532,9 @@ help:
 	@echo "... RegisterFactory.o"
 	@echo "... RegisterFactory.i"
 	@echo "... RegisterFactory.s"
+	@echo "... SB-ProbabilisticPeriodFinder.o"
+	@echo "... SB-ProbabilisticPeriodFinder.i"
+	@echo "... SB-ProbabilisticPeriodFinder.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

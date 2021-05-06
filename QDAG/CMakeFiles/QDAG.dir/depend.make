@@ -5,6 +5,7 @@ CMakeFiles/QDAG.dir/Factorizer.cpp.o: Factorizer.cpp
 CMakeFiles/QDAG.dir/Factorizer.cpp.o: Factorizer.hpp
 CMakeFiles/QDAG.dir/Factorizer.cpp.o: IIC-JKU/DDcomplex.h
 CMakeFiles/QDAG.dir/Factorizer.cpp.o: IIC-JKU/DDpackage.h
+CMakeFiles/QDAG.dir/Factorizer.cpp.o: OldProbabilisticPeriodFinder.hpp
 CMakeFiles/QDAG.dir/Factorizer.cpp.o: ProbabilisticPeriodFinder.hpp
 CMakeFiles/QDAG.dir/Factorizer.cpp.o: QFT-DDgenerator.hpp
 CMakeFiles/QDAG.dir/Factorizer.cpp.o: QFT-Measurement.hpp
@@ -23,6 +24,17 @@ CMakeFiles/QDAG.dir/IIC-JKU/DDexport.cpp.o: IIC-JKU/DDpackage.h
 CMakeFiles/QDAG.dir/IIC-JKU/DDpackage.cpp.o: IIC-JKU/DDcomplex.h
 CMakeFiles/QDAG.dir/IIC-JKU/DDpackage.cpp.o: IIC-JKU/DDpackage.cpp
 CMakeFiles/QDAG.dir/IIC-JKU/DDpackage.cpp.o: IIC-JKU/DDpackage.h
+
+CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o: IIC-JKU/DDcomplex.h
+CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o: IIC-JKU/DDpackage.h
+CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o: OldProbabilisticPeriodFinder.cpp
+CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o: OldProbabilisticPeriodFinder.hpp
+CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o: QFT-DDgenerator.hpp
+CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o: QFT-Measurement.hpp
+CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o: QFT.hpp
+CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o: RegisterFactory.hpp
+CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o: commonheaders.h
+CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o: shorutil.hpp
 
 CMakeFiles/QDAG.dir/ProbabilisticPeriodFinder.cpp.o: IIC-JKU/DDcomplex.h
 CMakeFiles/QDAG.dir/ProbabilisticPeriodFinder.cpp.o: IIC-JKU/DDpackage.h
@@ -66,14 +78,27 @@ CMakeFiles/QDAG.dir/RegisterFactory.cpp.o: commonheaders.h
 CMakeFiles/QDAG.dir/RegisterFactory.cpp.o: shorutil.hpp
 CMakeFiles/QDAG.dir/RegisterFactory.cpp.o: util.h
 
+CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o: IIC-JKU/DDcomplex.h
+CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o: IIC-JKU/DDpackage.h
+CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o: QFT-DDgenerator.hpp
+CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o: QFT-Measurement.hpp
+CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o: QFT.hpp
+CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o: RegisterFactory.hpp
+CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o: SB-ProbabilisticPeriodFinder.cpp
+CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o: SB-ProbabilisticPeriodFinder.hpp
+CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o: commonheaders.h
+CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o: shorutil.hpp
+
 CMakeFiles/QDAG.dir/main.cpp.o: Factorizer.hpp
 CMakeFiles/QDAG.dir/main.cpp.o: IIC-JKU/DDcomplex.h
 CMakeFiles/QDAG.dir/main.cpp.o: IIC-JKU/DDpackage.h
+CMakeFiles/QDAG.dir/main.cpp.o: OldProbabilisticPeriodFinder.hpp
 CMakeFiles/QDAG.dir/main.cpp.o: ProbabilisticPeriodFinder.hpp
 CMakeFiles/QDAG.dir/main.cpp.o: QFT-DDgenerator.hpp
 CMakeFiles/QDAG.dir/main.cpp.o: QFT-Measurement.hpp
 CMakeFiles/QDAG.dir/main.cpp.o: QFT.hpp
 CMakeFiles/QDAG.dir/main.cpp.o: RegisterFactory.hpp
+CMakeFiles/QDAG.dir/main.cpp.o: SB-ProbabilisticPeriodFinder.hpp
 CMakeFiles/QDAG.dir/main.cpp.o: commonheaders.h
 CMakeFiles/QDAG.dir/main.cpp.o: main.cpp
 CMakeFiles/QDAG.dir/main.cpp.o: shorutil.hpp

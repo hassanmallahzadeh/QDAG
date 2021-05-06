@@ -82,7 +82,6 @@ std::pair<lli,lli> ProbabilisticPeriodFinder::AttemptReadingMultipleOfInverseOfP
          gg.HadGenOrApply(line, xindex(), nt, &state);
         
          int mres = mm.Measure(state, nt, xindex(), eng);
-        // assert(0);
           vmres.push_back(mres);
           if(mres == posControl){
               gg.NotGenOrApply(line, xindex(), nt, &state);

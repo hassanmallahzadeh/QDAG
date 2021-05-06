@@ -6,6 +6,7 @@ CMakeFiles/QDAG.dir/Factorizer.cpp.o
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/Factorizer.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.h
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/OldProbabilisticPeriodFinder.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/ProbabilisticPeriodFinder.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
@@ -24,6 +25,17 @@ CMakeFiles/QDAG.dir/IIC-JKU/DDpackage.cpp.o
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.h
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.cpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
+CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.h
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/OldProbabilisticPeriodFinder.cpp
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/OldProbabilisticPeriodFinder.hpp
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT.hpp
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.hpp
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp
 CMakeFiles/QDAG.dir/ProbabilisticPeriodFinder.cpp.o
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.h
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
@@ -66,15 +78,28 @@ CMakeFiles/QDAG.dir/RegisterFactory.cpp.o
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/util.h
+CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.h
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT.hpp
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.hpp
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/SB-ProbabilisticPeriodFinder.cpp
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/SB-ProbabilisticPeriodFinder.hpp
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp
 CMakeFiles/QDAG.dir/main.cpp.o
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/Factorizer.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.h
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/OldProbabilisticPeriodFinder.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/ProbabilisticPeriodFinder.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.hpp
+ /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/SB-ProbabilisticPeriodFinder.hpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/main.cpp
  /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp

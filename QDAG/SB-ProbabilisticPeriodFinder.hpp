@@ -38,6 +38,6 @@ public:
     std::pair<lli,lli> AttemptReadingMultipleOfInverseOfPeriod();
     
     SB_PPF(lli, lli, dd::Package * = nullptr);
-    ~SB_PPF();
+   // ~SB_PPF();
 };
 #endif /* SB_ProbabilisticPeriodFinder_hpp */

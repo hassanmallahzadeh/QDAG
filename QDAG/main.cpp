@@ -17,6 +17,7 @@
 #include "RegisterFactory.hpp"
 #include "ProbabilisticPeriodFinder.hpp"
 #include "OldProbabilisticPeriodFinder.hpp"
+#include "SB-ProbabilisticPeriodFinder.hpp"
 
 #include "Factorizer.hpp"
 #include <chrono>
@@ -30,17 +31,18 @@ void FactorizerTest();
 void FinalInRegMeasureWithQFTTest();
 void PeriodFinderAverageRuntime();
 int main(){
-      PeriodFinderAverageRuntime();
+   //   PeriodFinderAverageRuntime();
+    PeriodFinderTest();
 //FactorizerTest();
  //   PeriodFinderAverageRuntime();
-//    auto* dd = new dd::Package;
+  //  auto* dd = new dd::Package;
 //    GateGenerator gg(dd);
 //    StateGenerator sg(dd);
 //    dd::Edge state = sg.dd_BaseState(2, 2);
 //    QFT qft = QFT(dd);
 //    std::random_device device;
 //    std::mt19937 mt_rand(device());
-//    dd->export2Dot(state, "statea.dot", true);
+ //   dd->export2Dot(state, "statea.dot", true);
 //    state = qft.dd_QFTGNV1(2, state, BEG_PERM, mt_rand);
 //    dd->export2Dot(state, "stateb.dot", true);
 //dd::Edge mat1 = gg.NotGenOrApply(line, 1, 2, &state);
@@ -60,9 +62,8 @@ void FactorizerTest(){
     for (int i = 0; i < trials; ++i){
     time_point<system_clock> start, end;
     start = system_clock::now();
-   
     Factorizer Alice = Factorizer(N);
-    array<lli, 2> f = Alice.Factors();
+  //  array<lli, 2> f = Alice.Factors();
     end = system_clock::now();
     duration<float> elapsed_seconds = end - start;
     sum += elapsed_seconds.count();
@@ -71,16 +72,15 @@ void FactorizerTest(){
     printf("Average runtime for factoring of %lli, is %f for %d trials.\n", N, sum/trials, trials);
     }
 void PeriodFinderTest(){
-    lli N = 21;
-    lli a = 11
-    ;
+    lli N = 3;
+    lli a = 2;
     std::pair<lli,lli> p = {-1,-1};
     int counter = 0;
     time_point<system_clock> start, end;
     start = system_clock::now();
     do{
         auto* dd = new dd::Package;
-        ProbabilisticPeriodFinder pf = ProbabilisticPeriodFinder(N,a,dd);
+        SB_PPF pf = SB_PPF(N,a,dd);
         p = pf.AttemptReadingMultipleOfInverseOfPeriod();
         if(p.second > 0 && p.first > 0)//0 is not measured.
         {

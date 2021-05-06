@@ -28,7 +28,7 @@ public:
     dd::Edge dd_QFTV2(int n, dd::Edge state, PERM_POS perm, vector<int> v, bool = false);
     dd::Edge dd_QFTV3(int n,  PERM_POS perm);
     dd::Edge dd_QFTV4(int n, dd::Edge state, PERM_POS perm);
-    dd::Edge dd_QFTV5(int n, dd::Edge state, vector<int> indice, bool inv);
+    dd::Edge dd_QFTV5(int n, dd::Edge state, vector<int> indice, bool inv);//TODO: pass state by reference and cahnge directly.
     dd::Edge dd_QFTV5Reverse(int n, dd::Edge state, vector<int> indice, bool inv);
     dd::Edge dd_QFTGNV1(int n, dd::Edge state, PERM_POS perm, engine& unrg);//Griffiths–Niu
     dd::Edge dd_QFTGNV2(int n, dd::Edge state, PERM_POS perm, engine& urng);//Griffiths–Niu,

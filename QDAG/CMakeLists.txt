@@ -13,6 +13,7 @@ RegisterFactory.cpp
 shorutil.cpp
 ProbabilisticPeriodFinder.cpp
 OldProbabilisticPeriodFinder.cpp
+SB-ProbabilisticPeriodFinder.cpp
 Factorizer.cpp
 main.cpp
 )

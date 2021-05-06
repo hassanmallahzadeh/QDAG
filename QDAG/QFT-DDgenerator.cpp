@@ -406,9 +406,12 @@ dd::Edge GateGenerator::RmatGenOrApply(short *line, int t, int k, int nt, dd::Ed
 /// @param c control qubits map. key is the qubit index and value 'true:=positive control', 'false:=negative control'
 /// @param nt max index(exclusive)
 /// @param state optional state value for gate to be applied to before return.
-dd::Edge GateGenerator::CKRmatGenOrApply(short *line, int t, int k, const map<int, bool> &c, int nt, dd::Edge *state) {
+dd::Edge GateGenerator::CKRmatGenOrApply(short *line, int t, int k, const map<int, bool> &c, int nt, dd::Edge *state, bool isinverse) {
     dd::Matrix2x2 m;
+    if(!isinverse)
     RmatGenerator(m, k);
+    else
+    RInvmatGenerator(m, k);
     lineSet(line, t, c);
     dd::Edge e = dd->makeGateDD(m, nt, line);
     lineReset(line, t, c);
@@ -416,7 +419,6 @@ dd::Edge GateGenerator::CKRmatGenOrApply(short *line, int t, int k, const map<in
         *state = dd->multiply(e, *state);
     }
     return e;
-
 }
 
 

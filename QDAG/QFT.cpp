@@ -221,6 +221,7 @@ dd::Edge QFT::dd_QFTV5(int n, dd::Edge state, vector<int> indice, bool inv) {
         gg.lineSet(line, indice[i], -1);
         dd::Edge e_line = dd->makeGateDD(Hmat, n, line);// start by hadamard as in circuit
         e_ans = dd->multiply(e_line ,e_ans);
+ 
         dd::Matrix2x2 Rmat;// put rotation gates in place
         for (int j = 0; j < indice.size() - i - 1; ++j){
             if(m_ord == REG_C_T)
@@ -236,6 +237,11 @@ dd::Edge QFT::dd_QFTV5(int n, dd::Edge state, vector<int> indice, bool inv) {
         }
         gg.lineReset(line, indice[i], -1);
     }
+    bool static test =  false;
+    if(!test){
+        dd->export2Dot(e_ans, "inqft.dot");
+        test = true;
+    }
     delete[] line;
     return e_ans;
 }
@@ -248,10 +254,10 @@ dd::Edge QFT::dd_QFTV5Reverse(int n, dd::Edge state, vector<int> indice, bool in
    GateGenerator  gg = GateGenerator(dd);
     dd::Edge e_ans = state;
     short *line = new short[n]{};// set 'line' for dd->makeGateDD
-    for (int i = 0; i < n; ++i){
+    for (int i = 0; i < n + 1; ++i){//plus one to accomodate for overflow
         line[i] = -1;
     }
-    for (int i = (int)indice.size() - 1; i >= 0; ++i){// for each of n qubits do:
+    for (int i = static_cast<int>(indice.size()) - 1; i >= 0; --i){// for each of n qubits do:
         gg.lineSet(line, indice[i], -1);
         dd::Matrix2x2 Rmat;// put rotation gates in place
         for (int j = (int)indice.size() - i - 2; j >= 0; --j){
@@ -266,7 +272,8 @@ dd::Edge QFT::dd_QFTV5Reverse(int n, dd::Edge state, vector<int> indice, bool in
             else
                 gg.lineReset(line, indice[i + j + 1], indice[i]);
         }
-        dd::Edge e_line = dd->makeGateDD(Hmat, n, line);// end by hadamard
+        
+        dd::Edge e_line = dd->makeGateDD(Hmat, n + 1, line);// end by hadamard//plus one to accomodate for overflow
         e_ans = dd->multiply(e_line ,e_ans);
         gg.lineReset(line, indice[i], -1);
     }

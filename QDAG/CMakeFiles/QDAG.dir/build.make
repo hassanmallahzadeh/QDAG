@@ -193,9 +193,35 @@ CMakeFiles/QDAG.dir/ProbabilisticPeriodFinder.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/QDAG.dir/ProbabilisticPeriodFinder.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/ProbabilisticPeriodFinder.cpp -o CMakeFiles/QDAG.dir/ProbabilisticPeriodFinder.cpp.s
 
+CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o: CMakeFiles/QDAG.dir/flags.make
+CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o: OldProbabilisticPeriodFinder.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/OldProbabilisticPeriodFinder.cpp
+
+CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/OldProbabilisticPeriodFinder.cpp > CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.i
+
+CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/OldProbabilisticPeriodFinder.cpp -o CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.s
+
+CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o: CMakeFiles/QDAG.dir/flags.make
+CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o: SB-ProbabilisticPeriodFinder.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/SB-ProbabilisticPeriodFinder.cpp
+
+CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/SB-ProbabilisticPeriodFinder.cpp > CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.i
+
+CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/SB-ProbabilisticPeriodFinder.cpp -o CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.s
+
 CMakeFiles/QDAG.dir/Factorizer.cpp.o: CMakeFiles/QDAG.dir/flags.make
 CMakeFiles/QDAG.dir/Factorizer.cpp.o: Factorizer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/QDAG.dir/Factorizer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/QDAG.dir/Factorizer.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/QDAG.dir/Factorizer.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/Factorizer.cpp
 
 CMakeFiles/QDAG.dir/Factorizer.cpp.i: cmake_force
@@ -208,7 +234,7 @@ CMakeFiles/QDAG.dir/Factorizer.cpp.s: cmake_force
 
 CMakeFiles/QDAG.dir/main.cpp.o: CMakeFiles/QDAG.dir/flags.make
 CMakeFiles/QDAG.dir/main.cpp.o: main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/QDAG.dir/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/QDAG.dir/main.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/QDAG.dir/main.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/main.cpp
 
 CMakeFiles/QDAG.dir/main.cpp.i: cmake_force
@@ -230,6 +256,8 @@ QDAG_OBJECTS = \
 "CMakeFiles/QDAG.dir/RegisterFactory.cpp.o" \
 "CMakeFiles/QDAG.dir/shorutil.cpp.o" \
 "CMakeFiles/QDAG.dir/ProbabilisticPeriodFinder.cpp.o" \
+"CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o" \
+"CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o" \
 "CMakeFiles/QDAG.dir/Factorizer.cpp.o" \
 "CMakeFiles/QDAG.dir/main.cpp.o"
 
@@ -245,11 +273,13 @@ QDAG: CMakeFiles/QDAG.dir/QFT-Measurement.cpp.o
 QDAG: CMakeFiles/QDAG.dir/RegisterFactory.cpp.o
 QDAG: CMakeFiles/QDAG.dir/shorutil.cpp.o
 QDAG: CMakeFiles/QDAG.dir/ProbabilisticPeriodFinder.cpp.o
+QDAG: CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o
+QDAG: CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o
 QDAG: CMakeFiles/QDAG.dir/Factorizer.cpp.o
 QDAG: CMakeFiles/QDAG.dir/main.cpp.o
 QDAG: CMakeFiles/QDAG.dir/build.make
 QDAG: CMakeFiles/QDAG.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable QDAG"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable QDAG"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/QDAG.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

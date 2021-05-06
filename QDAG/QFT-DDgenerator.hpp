@@ -51,6 +51,6 @@ public:
     dd::Edge CKNotGenOrApply(short* line, int t, const map<int,bool> &m, int nt, dd::Edge* state = nullptr);
     dd::Edge HadGenOrApply(short* line, int, int, dd::Edge* state = nullptr);
     dd::Edge RmatGenOrApply(short* line, int, int, int, dd::Edge* state = nullptr);
-    dd::Edge CKRmatGenOrApply(short* line, int , int , const map<int,bool> & , int , dd::Edge* = nullptr);
+    dd::Edge CKRmatGenOrApply(short* line, int , int , const map<int,bool> & , int , dd::Edge* = nullptr, bool isinverse = false);
 };
 #endif /* QFT_DDgenerator_hpp */
