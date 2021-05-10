@@ -30,31 +30,31 @@ void QFTexecutionTimes();
 void FactorizerTest();
 void FinalInRegMeasureWithQFTTest();
 void PeriodFinderAverageRuntime();
-int main(){
-   //   PeriodFinderAverageRuntime();
-    PeriodFinderTest();
-//FactorizerTest();
- //   PeriodFinderAverageRuntime();
-  //  auto* dd = new dd::Package;
-//    GateGenerator gg(dd);
-//    StateGenerator sg(dd);
-//    dd::Edge state = sg.dd_BaseState(2, 2);
-//    QFT qft = QFT(dd);
-//    std::random_device device;
-//    std::mt19937 mt_rand(device());
- //   dd->export2Dot(state, "statea.dot", true);
-//    state = qft.dd_QFTGNV1(2, state, BEG_PERM, mt_rand);
-//    dd->export2Dot(state, "stateb.dot", true);
-//dd::Edge mat1 = gg.NotGenOrApply(line, 1, 2, &state);
-//    dd::Edge mat2 = gg.NotGenOrApply(line, 0, 2, &state);
-//    dd::Edge mat3 = dd->add(mat1, mat2);
-//    dd->export2Dot(mat1, "mat1.dot");
-//    dd->export2Dot(mat2, "mat2.dot");
-//    dd->export2Dot(mat3, "mat3.dot");
-//        dd->export2Dot(state, "statea.dot",true);
-//    delete[] line;
- //   return 0;
-}
+//int main(){
+//   //   PeriodFinderAverageRuntime();
+//    PeriodFinderTest();
+////FactorizerTest();
+// //   PeriodFinderAverageRuntime();
+//  //  auto* dd = new dd::Package;
+////    GateGenerator gg(dd);
+////    StateGenerator sg(dd);
+////    dd::Edge state = sg.dd_BaseState(2, 2);
+////    QFT qft = QFT(dd);
+////    std::random_device device;
+////    std::mt19937 mt_rand(device());
+// //   dd->export2Dot(state, "statea.dot", true);
+////    state = qft.dd_QFTGNV1(2, state, BEG_PERM, mt_rand);
+////    dd->export2Dot(state, "stateb.dot", true);
+////dd::Edge mat1 = gg.NotGenOrApply(line, 1, 2, &state);
+////    dd::Edge mat2 = gg.NotGenOrApply(line, 0, 2, &state);
+////    dd::Edge mat3 = dd->add(mat1, mat2);
+////    dd->export2Dot(mat1, "mat1.dot");
+////    dd->export2Dot(mat2, "mat2.dot");
+////    dd->export2Dot(mat3, "mat3.dot");
+////        dd->export2Dot(state, "statea.dot",true);
+////    delete[] line;
+// //   return 0;
+//}
 void FactorizerTest(){
     int trials = 1;
     float sum = 0;

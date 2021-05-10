@@ -14,9 +14,9 @@
             filePath = "QDAG/SB-ProbabilisticPeriodFinder.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "187"
-            endingLineNumber = "187"
-            landmarkName = "SB_PPF::phi_CMultiplier(a0cnum, bindice, xindice, tindex, c, line, state)"
+            startingLineNumber = "154"
+            endingLineNumber = "154"
+            landmarkName = "SB_PPF::phi_CMultiplier(a0cnum, tindex, c, line, state)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -30,9 +30,9 @@
             filePath = "QDAG/SB-ProbabilisticPeriodFinder.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "184"
-            endingLineNumber = "184"
-            landmarkName = "SB_PPF::phi_CMultiplier(a0cnum, bindice, xindice, tindex, c, line, state)"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
+            landmarkName = "SB_PPF::phi_CMultiplier(a0cnum, tindex, c, line, state)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -46,9 +46,9 @@
             filePath = "QDAG/SB-ProbabilisticPeriodFinder.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
-            landmarkName = "SB_PPF::phi_AdderModN(acnum, bindice, tindex, c, line, state)"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
+            landmarkName = "SB_PPF::phi_AdderModN(acnum, tindex, c, line, state)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -62,9 +62,9 @@
             filePath = "QDAG/SB-ProbabilisticPeriodFinder.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "188"
-            endingLineNumber = "188"
-            landmarkName = "SB_PPF::phi_CMultiplier(a0cnum, bindice, xindice, tindex, c, line, state)"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
+            landmarkName = "SB_PPF::phi_CMultiplier(a0cnum, tindex, c, line, state)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -103,32 +103,48 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "4B4F1EFF-75A6-46F5-B967-B05448FE2C6E"
-            shouldBeEnabled = "No"
+            uuid = "4068E59D-0F87-43C1-9482-99875284F657"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QDAG/SB-ProbabilisticPeriodFinder.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "244"
-            endingLineNumber = "244"
-            landmarkName = "SB_PPF::phi_CUa(acnum, bindice, xindice, tindex, c, line, state)"
+            startingLineNumber = "240"
+            endingLineNumber = "240"
+            landmarkName = "SB_PPF::AttemptReadingMultipleOfInverseOfPeriod()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1562D460-6590-45BB-9DE0-3037C8062A38"
-            shouldBeEnabled = "No"
+            uuid = "B5B79F40-17FB-4A51-95B3-680B119D4F77"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "QDAG/QFT-DDgenerator.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "363"
+            endingLineNumber = "363"
+            landmarkName = "GateGenerator::NotGenOrApply(line, t, nt, state)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "49132DFB-0858-4B14-911A-8EC290E230EF"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QDAG/SB-ProbabilisticPeriodFinder.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
-            landmarkName = "SB_PPF::phi_CMultiplier(a0cnum, bindice, xindice, tindex, c, line, state)"
+            startingLineNumber = "224"
+            endingLineNumber = "224"
+            landmarkName = "SB_PPF::AttemptReadingMultipleOfInverseOfPeriod()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

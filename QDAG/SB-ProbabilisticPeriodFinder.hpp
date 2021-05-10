@@ -21,14 +21,16 @@ class SB_PPF{
     dd::Package *dd = nullptr;
     dd::Edge m_state;
     GateGenerator gg;
+    bool m_bbased = true;
     QFT m_qft;
-    void phi_Adder(const std::function<int (int)> &acnum, const std::function<int (int)> &bindice, const map<int,bool> &c, short *line, dd::Edge &state);
-    void phi_Subtractor(const std::function<int (int)> &acnum, const std::function<int (int)> &bindice, const map<int,bool> &c, short *line, dd::Edge &state);
-    void phi_AdderModN(const std::function<int (int)> &acnum, const std::function<int (int)> &bindice, const std::function<int ()> &tindex, const map<int,bool> &c, short *line, dd::Edge &state);
-    void phi_SubtractorModN(const std::function<int (int)> &acnum, const std::function<int (int)> &bindice, const std::function<int ()> &tindex, const map<int,bool> &c, short *line, dd::Edge &state);
-    void phi_CMultiplier(const lli &acnum, const std::function<int (int)> &bindice, const std::function<int (int)> &xindice, const std::function<int ()> &tindex, map<int,bool> c, short *line, dd::Edge &state);
-    void phi_CDivider(const lli &acnum, const std::function<int (int)> &bindice, const std::function<int (int)> &xindice, const std::function<int ()> &tindex, map<int,bool> c, short *line, dd::Edge &state);
-    void phi_CUa(const lli &acnum, const std::function<int (int)> &bindice, const std::function<int (int)> &xindice, const std::function<int ()> &tindex, map<int,bool> c, short *line, dd::Edge &state);
+    std::function<int (int)> m_currentholder;
+    void phi_Adder(const std::function<int (int)> &acnum, const map<int,bool> &c, short *line, dd::Edge &state);
+    void phi_Subtractor(const std::function<int (int)> &acnum, const map<int,bool> &c, short *line, dd::Edge &state);
+    void phi_AdderModN(const std::function<int (int)> &acnum, const std::function<int ()> &tindex, const map<int,bool> &c, short *line, dd::Edge &state);
+    void phi_SubtractorModN(const std::function<int (int)> &acnum, const std::function<int ()> &tindex, const map<int,bool> &c, short *line, dd::Edge &state);
+    void phi_CMultiplier(const lli &acnum, const std::function<int ()> &tindex, map<int,bool> c, short *line, dd::Edge &state);
+    void phi_CDivider(const lli &acnum, const std::function<int ()> &tindex, map<int,bool> c, short *line, dd::Edge &state);
+    void phi_CUa(const lli &acnum, const std::function<int ()> &tindex, map<int,bool> c, short *line, dd::Edge &state);
     std::function<int (int)> m_base2N;//wrapper to read N classic bits.
 //    void out_Circuit(const std::function<int (int)> &bindice, const std::function<int (int)> &xindice, const std::function<int ()> &tindex, , const std::function<int ()> &mindex, map<int,bool> c, short *line, dd::Edge &state);
     dd::Matrix2x2 Rmat;// rotation gate
