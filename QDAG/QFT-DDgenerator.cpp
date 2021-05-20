@@ -231,17 +231,23 @@ dd::Edge GateGenerator::Smatv1(int n, int b1, int b2) {
 /// @param n number of bits
 /// @param b1 first bit in swap
 /// @param b2 second bit in swap
-dd::Edge GateGenerator::Smatv2(int n, int b1, int b2){
+/// @param cmap (optional) control qubit
+dd::Edge GateGenerator::Smatv2(int n, int b1, int b2, map<int,bool> cmap){
     short *line = new short[n]{};//HM: set 'line' for dd->makeGateDD
     for (int i = 0; i < n; ++i){
         line[i] = -1;
     }
-    line[b1] = 2;//HM: set target and control
-    line[b2] = 1;
+  //positive control assumed.
+    cmap.insert({b2,true});
+    lineSet(line, b1, cmap);
     dd::Edge c12_gate = dd->makeGateDD(Xmat, n, line);
-    line[b1] = 1;
-    line[b2] = 2;
+    lineReset(line, b1, cmap);
+    cmap.erase(cmap.find(b2));
+    cmap.insert({b1,true});
+    lineSet(line, b2, cmap);
     dd::Edge c21_gate = dd->makeGateDD(Xmat, n, line);
+    lineReset(line, b2, cmap);
+    cmap.erase(cmap.find(b1));
     dd::Edge temp_gate = dd->multiply(c21_gate, c12_gate);
     dd::Edge s_gate = dd->multiply(temp_gate, c21_gate);
     delete[] line;
@@ -283,10 +289,11 @@ dd::Edge GateGenerator::permuteOperator(int n) {
 /// @param v1 vector containing first group of qubits for swap
 /// @param v2 vector containing second group of qubits for swap
 /// @param state state for operator to be appiled to.
-dd::Edge GateGenerator::swapRegistersOnState(int nt, vector<int> v1, vector<int> v2, dd::Edge state) {
+/// @param cmap (optional) control qubits
+dd::Edge GateGenerator::swapRegistersOnState(int nt, vector<int> v1, vector<int> v2, dd::Edge state, map<int,bool> cmap) {
     assert (v1.size() == v2.size());
     for(int i = 0; i < v1.size(); ++i){
-        state = dd->multiply(Smatv1(nt, v1[i], v2[i]), state);
+        state = dd->multiply(Smatv2(nt, v1[i], v2[i], cmap), state);
     }
     return state;
 }

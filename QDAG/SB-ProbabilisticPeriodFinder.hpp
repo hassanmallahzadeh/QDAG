@@ -14,7 +14,7 @@
 #include "RegisterFactory.hpp"
 #include "QFT.hpp"
 #include <stdio.h>
-class SB_PPF{
+class SB_ProbabilisticPeriodFinder{
     lli N;
     lli a;
     int nt;
@@ -22,8 +22,8 @@ class SB_PPF{
     dd::Edge m_state;
     GateGenerator gg;
     bool m_bbased = true;
+    vector<int> m_qftindices;
     QFT m_qft;
-    std::function<int (int)> m_currentholder;
     void phi_Adder(const std::function<int (int)> &acnum, const map<int,bool> &c, short *line, dd::Edge &state);
     void phi_Subtractor(const std::function<int (int)> &acnum, const map<int,bool> &c, short *line, dd::Edge &state);
     void phi_AdderModN(const std::function<int (int)> &acnum, const std::function<int ()> &tindex, const map<int,bool> &c, short *line, dd::Edge &state);
@@ -32,6 +32,7 @@ class SB_PPF{
     void phi_CDivider(const lli &acnum, const std::function<int ()> &tindex, map<int,bool> c, short *line, dd::Edge &state);
     void phi_CUa(const lli &acnum, const std::function<int ()> &tindex, map<int,bool> c, short *line, dd::Edge &state);
     std::function<int (int)> m_base2N;//wrapper to read N classic bits.
+    int currentHolder (int i);
 //    void out_Circuit(const std::function<int (int)> &bindice, const std::function<int (int)> &xindice, const std::function<int ()> &tindex, , const std::function<int ()> &mindex, map<int,bool> c, short *line, dd::Edge &state);
     dd::Matrix2x2 Rmat;// rotation gate
 public:
@@ -39,7 +40,7 @@ public:
     int n = -1;//output register size
     std::pair<lli,lli> AttemptReadingMultipleOfInverseOfPeriod();
     
-    SB_PPF(lli, lli, dd::Package * = nullptr);
+    SB_ProbabilisticPeriodFinder(lli, lli, dd::Package * = nullptr);
    // ~SB_PPF();
 };
 #endif /* SB_ProbabilisticPeriodFinder_hpp */

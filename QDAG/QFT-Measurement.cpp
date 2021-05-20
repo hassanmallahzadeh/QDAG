@@ -118,7 +118,6 @@ array<fp,dd::RADIX> Measurement::QubitMeasurementProbs(int v) {
     traverseset.insert(dd::Package::terminalNode);//base case
     l.push_back(curnode);
     while(!l.empty()){// breath first search
-        
         curnode = l.front();
         l.pop_front();
         if(traverseset.find(curnode) != traverseset.cend()) continue;

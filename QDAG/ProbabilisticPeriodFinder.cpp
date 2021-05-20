@@ -56,10 +56,8 @@ std::pair<lli,lli> ProbabilisticPeriodFinder::AttemptReadingMultipleOfInverseOfP
      for(int i = 0; i < m; ++i){
          int ii = m - i - 1;
         //fig 1 of HRS.
-
          gg.HadGenOrApply(line, xindex(), nt, &state);
          if(ii % 2 == 0){
-         
         CMultiplierModuloNHalfClassic(a0Nbase2, b0indice, c0indice, c1indice, factors[ii], line, xindex(), nt, state, tindex, xpindice);
         lli invcnum = shor::modInverse(factors[ii], N);
         InvCMultiplierModuloNHalfClassic(a0Nbase2, xpindice, c0indice, c1indice, invcnum, line, xindex(), nt, state, tindex, b0indice);

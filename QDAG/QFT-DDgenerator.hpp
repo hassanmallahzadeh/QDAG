@@ -39,12 +39,12 @@ public:
     static void lineClear(short* line, int n);
     GateGenerator(dd::Package* dd);
     dd::Edge Smatv1(int n, int b1, int b2);
-    dd::Edge Smatv2(int n, int b1, int b2);
+    dd::Edge Smatv2(int n, int b1, int b2, map<int,bool> cmap = {});
     void RmatGenerator(dd::Matrix2x2 &m, int k);
     void RInvmatGenerator(dd::Matrix2x2 &m, int k);
     dd::Edge permuteOperator(int n);
     dd::Edge permuteOperatorOnState(int n, dd::Edge state);
-    dd::Edge swapRegistersOnState(int nt, vector<int> v1, vector<int> v2, dd::Edge state);
+    dd::Edge swapRegistersOnState(int nt, vector<int> v1, vector<int> v2, dd::Edge state, map<int,bool> cmap = {});
     dd::Edge ToffoliGenOrApply(short* line, int, int, int, int, dd::Edge* state = nullptr ,bool = true, bool = true);
     dd::Edge CNotGenOrApply(short* line, int, int, int, dd::Edge* state = nullptr, bool = true);
     dd::Edge NotGenOrApply(short* line, int, int, dd::Edge* state = nullptr);

@@ -1,0 +1,100 @@
+.numvars 32
+.variables x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15 x16 x17 x18 x19 x20 x21 x22 x23 x24 x25 x26 x27 x28 x29 x30 x31
+.constants 00000000000000000000000000000001
+.garbage --------------------------------
+.begin
+h1 x0
+h1 x1
+h1 x2
+h1 x3
+h1 x4
+h1 x5
+h1 x6
+h1 x7
+h1 x8
+h1 x9
+h1 x10
+h1 x11
+h1 x12
+h1 x13
+h1 x14
+h1 x15
+h1 x16
+h1 x17
+h1 x18
+h1 x19
+h1 x20
+h1 x21
+h1 x22
+h1 x23
+h1 x24
+h1 x25
+h1 x26
+h1 x27
+h1 x28
+h1 x29
+h1 x30
+h1 x31
+c x0 x31
+c x1 x31
+c x2 x31
+c x3 x31
+c x4 x31
+c x5 x31
+c x6 x31
+c x7 x31
+c x8 x31
+c x9 x31
+c x10 x31
+c x11 x31
+c x12 x31
+c x13 x31
+c x14 x31
+c x15 x31
+c x16 x31
+c x17 x31
+c x18 x31
+c x19 x31
+c x20 x31
+c x21 x31
+c x22 x31
+c x23 x31
+c x24 x31
+c x25 x31
+c x26 x31
+c x27 x31
+c x28 x31
+c x29 x31
+c x30 x31
+h1 x0
+h1 x1
+h1 x2
+h1 x3
+h1 x4
+h1 x5
+h1 x6
+h1 x7
+h1 x8
+h1 x9
+h1 x10
+h1 x11
+h1 x12
+h1 x13
+h1 x14
+h1 x15
+h1 x16
+h1 x17
+h1 x18
+h1 x19
+h1 x20
+h1 x21
+h1 x22
+h1 x23
+h1 x24
+h1 x25
+h1 x26
+h1 x27
+h1 x28
+h1 x29
+h1 x30
+.end

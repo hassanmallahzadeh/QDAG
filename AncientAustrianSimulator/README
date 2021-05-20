@@ -1,0 +1,93 @@
+## A quantum simulator based on decision diagrams written in C++
+Copyright (c) 2017 
+by Alwin Zulehner (alwin.zulehner@jku.at) and Robert Wille (robert.wille@jku.at)
+Johannes Kepler University Linz, Austria
+http://www.jku.at/iic/eda/quantum_simulation
+
+Please note that this software is a preliminary version. We will add more 
+detailed descriptions and documentations soon.
+
+The software is intellectual property of the above mentioned authors. You 
+can freely redistribute this software for non-commercial purposes as long as 
+it includes a reference to its origin.
+
+Use at your own risk!
+In no event shall the authors be liable for any 
+damages whatsoever (including without limitation damages for loss of business 
+profits, business interruption, loss of business information, or any other 
+pecuniary loss) arising from the use of or inability to use the software, even 
+if the authors have been advised of the possibility of such 
+damages.
+
+If you have any questions feel free to contact us using
+alwin.zulehner@jku.at or robert.wille@jku.at
+
+## Overview
+
+Quantum computation is a promising emerging technology which, compared to 
+classical computation, allows for substantial speed-ups e.g. for integer
+factorization or database search. However, since physical realizations of
+quantum computers are in their infancy, a significant amount of research
+in this domain still relies on simulations of quantum computations on 
+classical machines. This causes a significant complexity which current
+state-of-the-art simulators tackle by applying massive hardware power. Here,
+we present the implementation of an alternative quantum simulator which works
+differently to the state-of-the-art and is capable of simulating quantum
+computations with more qubits than before, and in significantly less run-time.
+
+## Usage
+
+=================== System Requirements ====================
+
+The package has been tested under Linux (Ubuntu 17.04, 64-bit) and should be
+compatible with any current version of g++/cmake. The packages Boost program_options
+and MPFRC++ (a C++ wrapper for the MPFR library) are required.
+
+Note that the simulator uses parts of the QMDD package 
+(see http://www.informatik.uni-bremen.de/agra/eng/qmdd.php).
+  
+=================== Build and Run ====================
+
+To build the quantum simulator type:
+  mkdir build
+  cd build 
+  cmake ..
+  make
+  cd ..
+
+A simulation can be conducted in three ways:
+
+* (1)   './build/qmdd_simulator --simulate_circuit <file>' simulates the quantum
+circuit given in .real-format. The real-format is specified in the following document:
+http://www.informatik.uni-bremen.de/rev_lib/doc/docu/revlib_2_0_1.pdf
+In addition to this specification, we also support the Hadamard gate, the Z gate, and
+Phase shift gates. For example the gate 'q2:8 x1 x2' describes a controlled Phase shift
+gate that includes two qubits (x1 as control qubit and x2 as target qubit). The phase of 
+x2 is shifted by pi/8 (indicated by the '8' after the colon). Therefore, the gate is a
+controlled T-gate. The initial state in the simulation is given by the '.constants'-line. 
+After the simulation is completed, all qubits are measured and the result is printed to
+the console. The folder 'Examples' contains several quantum simulations including entanglement,
+the Deutsch-Josza algorithm, and QFT.
+
+* (2)   './build/qmdd_simulator --simulate_shor <n>' simulates Shor's algorithm to factor an
+integer <n>. Since this is a probabilistic algorithm, determining factors of <n> may not succeed.
+The quantum circuit is based on Beauregards realization of Shor's algorithm:
+Circuit for Shor's algorithm using 2n+3 qubits (https://arxiv.org/abs/quant-ph/0205095).
+
+* (3)   './build/qmdd_simulator --simulate_grover <n>' simulates Grover's algorithm for a database
+of size 2^n. The element to find is chosen randomly.
+
+The seed for the random number generator can be set with the argument '--set_seed <n>'.
+This allows for reproducing measurement of qubits (which is a probabilistic process).
+	
+## Reference
+
+If you use the quantum simulator for your research, we would be thankful if you referred to it
+by citing the following publication: 
+
+@article{zulehner2018simulation,
+   title={Advanced Simulation of Quantum Computations},
+   author={Zulehner, Alwin and Wille, Robert},
+   journal={IEEE Transactions on Computer Aided Design of Integrated Circuits and Systems (TCAD)},
+   year={2018}
+}

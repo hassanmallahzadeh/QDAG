@@ -30,9 +30,9 @@ void QFTexecutionTimes();
 void FactorizerTest();
 void FinalInRegMeasureWithQFTTest();
 void PeriodFinderAverageRuntime();
-//int main(){
+int main(){
 //   //   PeriodFinderAverageRuntime();
-//    PeriodFinderTest();
+   PeriodFinderTest();
 ////FactorizerTest();
 // //   PeriodFinderAverageRuntime();
 //  //  auto* dd = new dd::Package;
@@ -53,8 +53,8 @@ void PeriodFinderAverageRuntime();
 ////    dd->export2Dot(mat3, "mat3.dot");
 ////        dd->export2Dot(state, "statea.dot",true);
 ////    delete[] line;
-// //   return 0;
-//}
+       return 0;
+}
 void FactorizerTest(){
     int trials = 1;
     float sum = 0;
@@ -72,15 +72,15 @@ void FactorizerTest(){
     printf("Average runtime for factoring of %lli, is %f for %d trials.\n", N, sum/trials, trials);
     }
 void PeriodFinderTest(){
-    lli N = 3;
-    lli a = 2;
+    lli N = 21;
+    lli a = 11;
     std::pair<lli,lli> p = {-1,-1};
     int counter = 0;
     time_point<system_clock> start, end;
     start = system_clock::now();
     do{
         auto* dd = new dd::Package;
-        SB_PPF pf = SB_PPF(N,a,dd);
+        ProbabilisticPeriodFinder pf = ProbabilisticPeriodFinder(N,a,dd);
         p = pf.AttemptReadingMultipleOfInverseOfPeriod();
         if(p.second > 0 && p.first > 0)//0 is not measured.
         {

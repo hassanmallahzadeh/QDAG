@@ -13,7 +13,7 @@
 /// @param N Number to be find period of base a
 /// @param a base for finding the period on N
 /// @param dd pointer to qmdd object.
-SB_PPF::SB_PPF(lli N, lli a, dd::Package* dd): gg(dd) , posControl(1), m_qft(dd){
+SB_ProbabilisticPeriodFinder::SB_ProbabilisticPeriodFinder(lli N, lli a, dd::Package* dd): gg(dd) , posControl(1), m_qft(dd){
     dd ? this->dd = dd : dd = new dd::Package;
     this->N = N;
     this->a = a;
@@ -31,11 +31,11 @@ SB_PPF::SB_PPF(lli N, lli a, dd::Package* dd): gg(dd) , posControl(1), m_qft(dd)
 /// @param c map of control qubit indices. value 'true' measns positive control and value 'false' means negative control. This is needed for modN adder (fig 5)
 /// @param line 'line' for gate generation
 /// @param state input quantum state
-void SB_PPF::phi_Adder(const std::function<int (int)> &acnum, const map<int, bool> &c, short *line, dd::Edge &state){
+void SB_ProbabilisticPeriodFinder::phi_Adder(const std::function<int (int)> &acnum, const map<int, bool> &c, short *line, dd::Edge &state){
     for (int i = n; i >= 0; --i){//plus one to accomodate for overflow
         for(int j = i; j >= 0; --j){
             if(acnum(j) == posControl){
-                gg.CKRmatGenOrApply(line, m_currentholder(i), i - j + 1, c, nt, &state);
+                gg.CKRmatGenOrApply(line, currentHolder(i), i - j + 1, c, nt, &state);
             }
         }
     }
@@ -47,7 +47,7 @@ void SB_PPF::phi_Adder(const std::function<int (int)> &acnum, const map<int, boo
 /// @param c map of control qubit indices. value 'true' measns positive control and value 'false' means negative control. This is needed for modN adder (fig 5)
 /// @param line 'line' for gate generation
 /// @param state input quantum state
-void SB_PPF::phi_Subtractor(const std::function<int (int)> &acnum, const map<int, bool> &c, short *line, dd::Edge &state){
+void SB_ProbabilisticPeriodFinder::phi_Subtractor(const std::function<int (int)> &acnum, const map<int, bool> &c, short *line, dd::Edge &state){
     //    Measurement mm = Measurement(dd);
     //     std::random_device rd;
     //     engine eng(rd());
@@ -55,7 +55,7 @@ void SB_PPF::phi_Subtractor(const std::function<int (int)> &acnum, const map<int
     for (int i = 0; i < n + 1; ++i){//plus 1 to accomodate for overflow.
         for(int j = 0; j <= i; ++j){
             if(acnum(j) == posControl){
-                gg.CKRmatGenOrApply(line, m_currentholder(i), i - j + 1, c, nt, &state, true);
+                gg.CKRmatGenOrApply(line, currentHolder(i), i - j + 1, c, nt, &state, true);
             }
         }
     }
@@ -63,61 +63,51 @@ void SB_PPF::phi_Subtractor(const std::function<int (int)> &acnum, const map<int
 /// Adds in mod N, classical number 'a' to fourier transform of quantum number 'b' in fourier space.
 /// Answer will be 'a+b'  mod N in Fourier space. Figure 5 of SB.
 /// @param acnum classical number to be added mod N (in base 2) to quantum number b
-/// @param currentholder current info holder. b qubits before swap of fig 7 of SB.
 /// @param tindex temporary (ancilla) qubit in fig 5 of SB.
 /// @param c map of control qubit indices. value 'true' measns positive control and value 'false' means negative control. (c1 and c2 in fig 5)
 /// @param line 'line' for gate generation
 /// @param state input quantum state
-void SB_PPF::phi_AdderModN(const std::function<int (int)> &acnum, const std::function<int ()> &tindex, const map<int, bool> &c, short *line, dd::Edge &state){
+void SB_ProbabilisticPeriodFinder::phi_AdderModN(const std::function<int (int)> &acnum, const std::function<int ()> &tindex, const map<int, bool> &c, short *line, dd::Edge &state){
     gg = GateGenerator (dd);
-    vector<int> indice;
-    for(int i = 0; i < n + 1; ++i){
-        indice.push_back(m_currentholder(i));
-    }
     phi_Adder(acnum, c, line, state);
     map<int, bool> temp;//to have an empty map to pass and later use for temp qubit control
     phi_Subtractor(m_base2N, temp, line, state);
-    m_qft.dd_QFTV5(nt, state, indice, true);//inverse qft
-    gg.CNotGenOrApply(line, tindex(), m_currentholder(n), nt, &state);
-    m_qft.dd_QFTV5(nt, state, indice, false);//qft
+    m_qft.dd_QFTV5(nt, state, m_qftindices, true);//inverse qft
+    gg.CNotGenOrApply(line, tindex(), currentHolder(n), nt, &state);
+    m_qft.dd_QFTV5(nt, state, m_qftindices, false);//qft
     //qft
     temp = {{tindex(), true}};
     phi_Adder(m_base2N, temp, line, state);
     phi_Subtractor(acnum, c, line, state);
-    m_qft.dd_QFTV5(nt, state, indice, true);//inverse qft
-    gg.NotGenOrApply(line, m_currentholder(n), nt, &state);
-    gg.CNotGenOrApply(line, tindex(), m_currentholder(n), nt, &state);
-    gg.NotGenOrApply(line, m_currentholder(n), nt, &state);
-    m_qft.dd_QFTV5(nt, state, indice, false);//qft
+    m_qft.dd_QFTV5(nt, state, m_qftindices, true);//inverse qft
+    gg.NotGenOrApply(line, currentHolder(n), nt, &state);
+    gg.CNotGenOrApply(line, tindex(), currentHolder(n), nt, &state);
+    gg.NotGenOrApply(line, currentHolder(n), nt, &state);
+    m_qft.dd_QFTV5(nt, state, m_qftindices, false);//qft
     phi_Adder(acnum, c, line, state);
 }
 /// Subtracts in mod N, classical number 'a' from fourier transform of quantum number 'b' in fourier space.
 /// Answer will be 'b - a'  mod N in Fourier space. Figure 5 of SB (for addition case).
 /// @param acnum classical number to be subtracted mod N (in base 2) from quantum number b
-/// @param bindice b indice generated by a lambda. n + 1 th element is the overflow qubit.
 /// @param tindex temporary (ancilla) qubit in fig 5 of SB.
 /// @param c map of control qubit indices. value 'true' measns positive control and value 'false' means negative control. (c1 and c2 in fig 5)
 /// @param line 'line' for gate generation
 /// @param state input quantum state
-void SB_PPF::phi_SubtractorModN(const std::function<int (int)> &acnum, const std::function<int ()> &tindex, const map<int, bool> &c, short *line, dd::Edge &state){
+void SB_ProbabilisticPeriodFinder::phi_SubtractorModN(const std::function<int (int)> &acnum, const std::function<int ()> &tindex, const map<int, bool> &c, short *line, dd::Edge &state){
     gg = GateGenerator (dd);
-    vector<int> indice;
-    for(int i = 0; i < n + 1; ++i){
-        indice.push_back(m_currentholder(i));
-    }
     phi_Subtractor(acnum, c, line, state);
-    m_qft.dd_QFTV5(nt, state, indice, true);//qftreverse
-    gg.NotGenOrApply(line, m_currentholder(n), nt, &state);
-    gg.CNotGenOrApply(line, tindex(), m_currentholder(n), nt, &state);
-    gg.NotGenOrApply(line, m_currentholder(n), nt, &state);
-    m_qft.dd_QFTV5(nt, state, indice, false);//inverse qft
-    phi_Adder(acnum, c, line, state);
+    m_qft.dd_QFTV5(nt, state, m_qftindices, true);//qftreverse
+    gg.NotGenOrApply(line, currentHolder(n), nt, &state);
+    gg.CNotGenOrApply(line, tindex(), currentHolder(n), nt, &state);
+    gg.NotGenOrApply(line, currentHolder(n), nt, &state);
+    m_qft.dd_QFTV5(nt, state, m_qftindices, false);//inverse qft
     map<int, bool> temp;//temp control
     temp = {{tindex(), true}};
+    phi_Adder(acnum, c, line, state);
     phi_Subtractor(m_base2N, temp, line, state);
-    m_qft.dd_QFTV5(nt, state, indice, true);
-    gg.CNotGenOrApply(line, tindex(), m_currentholder(n), nt, &state);
-    m_qft.dd_QFTV5(nt, state, indice, false);//inverse qft
+    m_qft.dd_QFTV5(nt, state, m_qftindices, true);
+    gg.CNotGenOrApply(line, tindex(), currentHolder(n), nt, &state);
+    m_qft.dd_QFTV5(nt, state, m_qftindices, false);//inverse qft
     temp.clear();
     phi_Adder(m_base2N, temp, line, state);
     phi_Subtractor(acnum, c, line, state);//
@@ -131,21 +121,14 @@ void SB_PPF::phi_SubtractorModN(const std::function<int (int)> &acnum, const std
 /// @param c map of control qubit indices. value 'true' measns positive control and value 'false' means negative control. map leaves potential for more than 1 control qubit.
 /// @param line 'line' for gate generation
 /// @param state input quantum state
-void SB_PPF::phi_CMultiplier(const lli &a0cnum, const std::function<int ()> &tindex, map<int,bool> c, short *line, dd::Edge &state){
-    vector<int> indice;
+void SB_ProbabilisticPeriodFinder::phi_CMultiplier(const lli &a0cnum, const std::function<int ()> &tindex, map<int,bool> c, short *line, dd::Edge &state){
+    
     int shiftedn = n + 1;
+    m_qftindices.clear();
     for(int i = 0; i < shiftedn; ++i){
-        indice.push_back(m_currentholder(i));
+        m_qftindices.push_back(currentHolder(i));
     }
-    static bool test = false;
-    if(!test){
-        dd->export2Dot(state, "before.dot");
-    }
-    m_qft.dd_QFTV5(nt, state, indice, false);//qft
-    if(!test){
-        dd->export2Dot(state, "after.dot");
-        test = true;
-    }
+    m_qft.dd_QFTV5(nt, state, m_qftindices, false);//qft
     for(int i = 0; i < n; ++i){//fig6 of paper, repeated shift and apply
         //TODO: make next four opertations not do redundant calculations.
         lli tempa0cnum = a0cnum;
@@ -153,61 +136,88 @@ void SB_PPF::phi_CMultiplier(const lli &a0cnum, const std::function<int ()> &tin
         tempa0cnum = tempa0cnum % N;
         vector<bool> a0clb2 = shor::base2rep(tempa0cnum, shiftedn);//classical value in base 2, n digits.
         auto a0cnumbase2 = [&a0clb2](int i){return ((a0clb2.empty() || i >= a0clb2.size()) ? 0 : a0clb2[i]); };//return cnum's digits in base 2.
-        c.insert({m_currentholder(i),posControl});//watch for map random insert.
+        m_bbased = !m_bbased;//when b is current data holder, x gives control and vice versa.
+        int currentholder = currentHolder(i);
+        c.insert({currentholder,posControl});
+        m_bbased = !m_bbased;
         phi_AdderModN(a0cnumbase2, tindex ,c , line, state);
-        c.erase(--c.end());
+        c.erase(c.find(currentholder));
     }
-    m_qft.dd_QFTV5(nt, state, indice, true);//inverse qft
+    m_qft.dd_QFTV5(nt, state, m_qftindices, true);//inverse qft
+    gg.NotGenOrApply(line, c.begin()->first, nt, &state);
+    for(int i = 0; i < n; ++i){
+        m_bbased = !m_bbased;//when b is current data holder, x gives control and vice versa.
+        int currentcontrol = currentHolder(i);
+        m_bbased = !m_bbased;//when b is current data holder, x gives control and vice versa.
+        gg.ToffoliGenOrApply(line, currentHolder(i), c.begin()->first, currentcontrol, nt, &state);
+    }
+    gg.NotGenOrApply(line, c.begin()->first, nt, &state);
 }
 /// Divides quantum number x by classical number 'a' and subtracts the result from quantum number in 'b' register, if 'c'  qubit is 1, else leave b qubits unchanged.
 /// Figure 6 of SB. x is unchanged in any case
-/// @param a0cnum classical number to divide x, mod N (in base 2)
-/// @param bindice b indice generated by a lambda.  n + 1 th element is the overflow qubit.
-/// @param xindice x indice generated by a lambda.  this is the qunatum number to be divided by classical number a0cnum
 /// @param tindex temporary (ancilla) qubit in fig 5 of SB.
 /// @param c map of control qubit indices. value 'true' measns positive control and value 'false' means negative control. map leaves potential for more than 1 control qubit.
 /// @param line 'line' for gate generation
 /// @param state input quantum state
-void SB_PPF::phi_CDivider(const lli &acnum, const std::function<int ()> &tindex, map<int,bool> c, short *line, dd::Edge &state){
-    vector<int> indice;
-    for(int i = 0; i < n + 1; ++i){
-        indice.push_back(m_currentholder(i));
+void SB_ProbabilisticPeriodFinder::phi_CDivider(const lli &acnum, const std::function<int ()> &tindex, map<int,bool> c, short *line, dd::Edge &state){
+    gg.NotGenOrApply(line, c.begin()->first, nt, &state);
+    for(int i = n - 1; i >= 0; --i){
+        m_bbased = !m_bbased;//when b is current data holder, x gives control and vice versa.
+        int currentcontrol = currentHolder(i);
+        m_bbased = !m_bbased;//when b is current data holder, x gives control and vice versa.
+        gg.ToffoliGenOrApply(line, currentHolder(i), c.begin()->first, currentcontrol, nt, &state);
     }
-    m_qft.dd_QFTV5(nt, state, indice, true);//inverse qft
+    gg.NotGenOrApply(line, c.begin()->first, nt, &state);
+    int shiftedn = n + 1;
+
+    m_qftindices.clear();
+    for(int i = 0; i < shiftedn; ++i){
+        m_qftindices.push_back(currentHolder(i));
+    }
+    m_qft.dd_QFTV5(nt, state, m_qftindices, false);//
     for(int i = n - 1 ; i >= 0; --i){//fig5 of paper, repeated shift and apply
         //TODO: make next four opertations not do redundant calculations.
         lli tempa0cnum = acnum;
         tempa0cnum = tempa0cnum << i;
         tempa0cnum = tempa0cnum % N;
-        vector<bool> a0clb2 = shor::base2rep(tempa0cnum, n);//classical value in base 2, n digits.
+        vector<bool> a0clb2 = shor::base2rep(tempa0cnum, shiftedn);//classical value in base 2, n digits.
         auto a0cnumbase2 = [&a0clb2](int i){return ((a0clb2.empty() || i >= a0clb2.size()) ? 0 : a0clb2[i]); };//return cnum's digits in base 2
-        c.insert({m_currentholder(i),posControl});//watch for map random insert.
-        phi_SubtractorModN(a0cnumbase2,tindex ,c , line, state);//temp remove
-        c.erase(--c.end());
+        m_bbased = !m_bbased;//when b is current data holder, x gives control and vice versa.
+        int currentholder = currentHolder(i);
+        c.insert({currentholder,posControl});
+         m_bbased = !m_bbased;
+        phi_SubtractorModN(a0cnumbase2,tindex ,c , line, state);
+        c.erase(c.find(currentholder));
     }
-    m_qft.dd_QFTV5(nt, state, indice, false);//qft
+    m_qft.dd_QFTV5(nt, state, m_qftindices, true);//inverse qft
 }
 /// 'Multiplies quantum number x to classical number 'a' and adds the result to quantum number in 'b' register (|0> in this case), puts result to x register, resets b to inital value' if 'c'  qubit is 1, else leave x and b qubits unchanged.
 /// Figure 7 of SB and equation 3.
 /// @param acnum classical number to be multiplied mod N (in base 2)
-/// @param currentholder current info holder. b qubits before swap of fig 7 of SB.
 /// @param tindex temporary (ancilla) qubit in fig 5 of SB.
 /// @param c map of control qubit indices. value 'true' measns positive control and value 'false' means negative control. map leaves potential for more than 1 control qubit.
 /// 'c' qubits in Fig 7 of SB
 /// @param line 'line' for gate generation
 /// @param state input quantum state
-   void SB_PPF::phi_CUa(const lli &acnum, const std::function<int ()> &tindex, map<int,bool> c, short *line, dd::Edge &state){
-  
+   void SB_ProbabilisticPeriodFinder::phi_CUa(const lli &acnum, const std::function<int ()> &tindex, map<int,bool> c, short *line, dd::Edge &state){
     phi_CMultiplier(acnum,tindex, c, line, state);
-
     lli invacnum = shor::modInverse(acnum, N);
-       m_bbased = !m_bbased;//swap
+       m_bbased = !m_bbased;
+//       vector<int> vec0;
+//       vector<int> vec1;
+//       for(int i = 0 ; i < n ; ++i)
+//      vec0.push_back(currentHolder(i));//watch for map random insert.
+//      m_bbased = !m_bbased;//when b is current data holder, x gives control and vice versa.
+//       for(int i = 0 ; i < n ; ++i)
+//      vec1.push_back(currentHolder(i));//watch for map random insert.
+//       m_bbased = !m_bbased;
+//       state = gg.swapRegistersOnState(nt,vec0,vec1,state,c);
     phi_CDivider(invacnum, tindex, c, line, state);//temp, change
     
     //  phi_CMultiplier(acnum,bindice,xindice,tindex, c, line, state);
 }
 
-std::pair<lli,lli> SB_PPF::AttemptReadingMultipleOfInverseOfPeriod(){
+std::pair<lli,lli> SB_ProbabilisticPeriodFinder::AttemptReadingMultipleOfInverseOfPeriod(){
     int m =  (int)shor::base2rep(N*N).size();
     short* line = new short[nt];
     gg = GateGenerator (dd);
@@ -216,28 +226,8 @@ std::pair<lli,lli> SB_PPF::AttemptReadingMultipleOfInverseOfPeriod(){
     dd::Edge state = StateGenerator(dd).dd_BaseState(nt, 0);//start by setting all qubits to zero.
     std::function<int (void)> cindex =  [](){return 0;};//top control qubit on which measurements are performed to read and report the result. Fig 8 of SB.
     std::function<int (void)> tindex =  [](){return 1;};//temporary (ancilla) qubit in fig 5 of SB.
-    auto b0indice = [n = this->n](int i){assert(i >= 0 && i < n);
-        return i + 2;}; //qft is applied to this registers.
-    auto overflow = [n = this->n](){return n + 2;};//by default over flow set one above b indices
-    auto xindice = [n = this->n](int i){return n + i + 3;}; // x qubits used in multiplier and U_a. They store result (a*x Mod N) in U_a. n qubits.
-    m_currentholder = [n = this->n, m_bbased= &this->m_bbased, overflow, xindice, b0indice](int i){//x and b qubits are swapped as per fig 7 of SB. But, we must fix one qubit for overflow on current qubit number holder.
-        if(i < n){
-            if(m_bbased){
-                return b0indice(i);
-            }
-            else{
-                return xindice(i);
-            }
-        }
-        else if(i == n){
-            return overflow();
-        }
-        else {
-            assert(0);
-        }
-    };
     m_bbased = false;
-    gg.NotGenOrApply(line, m_currentholder(0), nt, &state);//put 1 in x register to start(fig8 of SB)
+    gg.NotGenOrApply(line, currentHolder(0), nt, &state);//put 1 in x register to start(fig8 of SB)
     m_bbased = true;
     lli cnum = a;//classical number to be multiplied by quantum number.
     std::random_device rd;
@@ -253,12 +243,6 @@ std::pair<lli,lli> SB_PPF::AttemptReadingMultipleOfInverseOfPeriod(){
         int ii = m - i - 1;
         //fig 1 of HRS.
         gg.HadGenOrApply(line, cindex(), nt, &state);
-        if(i % 2 == 0){
-            assert(m_bbased == true);
-        }
-        else{//swap
-            assert(m_bbased == false);
-        }
         phi_CUa(factors[ii], tindex, c, line, state);
         dd::Matrix2x2 Rmat;// put rotation gates in place
         gg.lineSet(line, cindex(), -1);
@@ -270,10 +254,7 @@ std::pair<lli,lli> SB_PPF::AttemptReadingMultipleOfInverseOfPeriod(){
         }
         gg.lineReset(line, cindex(), -1);
         gg.HadGenOrApply(line, cindex(), nt, &state);
-        //  dd->export2Dot(state, "test1.dot");
-        
         int mres = mm.Measure(state, nt, cindex(), eng);//warning: watch for random number generator something fishy might be here. I once saw something...
-        //   dd->export2Dot(state, "test2.dot");
         vmres.push_back(mres);
         if(mres == posControl){
             gg.NotGenOrApply(line, cindex(), nt, &state);
@@ -330,9 +311,27 @@ std::pair<lli,lli> SB_PPF::AttemptReadingMultipleOfInverseOfPeriod(){
 //    lli invacnum = shor::modInverse(cnum, N);
 //    phi_CDivider(invacnum, xindice, bindice, tindex, c, line, state);
 //}
-int main(){
-    auto* dd = new dd::Package;
-    SB_PPF pf = SB_PPF(3,2,dd);
-    pf.AttemptReadingMultipleOfInverseOfPeriod();
-    delete dd;
+int SB_ProbabilisticPeriodFinder::currentHolder(int i){
+    if(i < n){
+        if(
+           m_bbased){
+            return i + 2;//b qubits
+        }
+        else{
+            return n + i + 3;//x qubits
+        }
+    }
+    else if(i == n){
+        return n + 2;//overflow qubit
+    }
+    else {
+        assert(0);
+        return -1;
+    }
 }
+//int main(){
+//    auto* dd = new dd::Package;
+//    SB_PPF pf = SB_PPF(3,2,dd);
+//    pf.AttemptReadingMultipleOfInverseOfPeriod();
+//    delete dd;
+//}
