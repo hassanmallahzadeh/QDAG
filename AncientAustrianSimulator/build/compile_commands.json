@@ -1,0 +1,42 @@
+[
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/usr/local/include -I/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src -Wall -g3 -O3 -D_REENTRANT -DVERSION=\"$(VERSION)\" -std=c++11 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/quantum_simulator.dir/src/main.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/main.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/main.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/usr/local/include -I/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src -Wall -g3 -O3 -D_REENTRANT -DVERSION=\"$(VERSION)\" -std=c++11 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/quantum_simulator.dir/src/QMDDpackage.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/QMDDpackage.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/QMDDpackage.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/usr/local/include -I/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src -Wall -g3 -O3 -D_REENTRANT -DVERSION=\"$(VERSION)\" -std=c++11 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/quantum_simulator.dir/src/textFileUtilities.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/textFileUtilities.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/textFileUtilities.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/usr/local/include -I/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src -Wall -g3 -O3 -D_REENTRANT -DVERSION=\"$(VERSION)\" -std=c++11 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/quantum_simulator.dir/src/qcost.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/qcost.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/qcost.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/usr/local/include -I/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src -Wall -g3 -O3 -D_REENTRANT -DVERSION=\"$(VERSION)\" -std=c++11 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/quantum_simulator.dir/src/timing.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/timing.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/timing.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/usr/local/include -I/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src -Wall -g3 -O3 -D_REENTRANT -DVERSION=\"$(VERSION)\" -std=c++11 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/quantum_simulator.dir/src/QMDDcircuit.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/QMDDcircuit.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/QMDDcircuit.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/usr/local/include -I/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src -Wall -g3 -O3 -D_REENTRANT -DVERSION=\"$(VERSION)\" -std=c++11 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/quantum_simulator.dir/src/QMDDcomplexD.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/QMDDcomplexD.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/QMDDcomplexD.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/usr/local/include -I/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src -Wall -g3 -O3 -D_REENTRANT -DVERSION=\"$(VERSION)\" -std=c++11 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/quantum_simulator.dir/src/QMDDreorder.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/QMDDreorder.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/src/QMDDreorder.cpp"
+}
+]

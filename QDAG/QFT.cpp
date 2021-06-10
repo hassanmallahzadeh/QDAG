@@ -221,6 +221,7 @@ void QFT::dd_QFTV5(int n, dd::Edge &state, vector<int> &indice, bool inv) {
         gg.lineSet(line, indice[i]);
         dd::Edge e_line = dd->makeGateDD(Hmat, n, line);// start by hadamard as in circuit
         e_ans = dd->multiply(e_line ,e_ans);
+        dd->garbageCollect();
         gg.lineReset(line, indice[i]);
         dd::Matrix2x2 Rmat;// put rotation gates in place
         for (int j = 0; j < indice.size() - i - 1; ++j){
@@ -230,6 +231,7 @@ void QFT::dd_QFTV5(int n, dd::Edge &state, vector<int> &indice, bool inv) {
                 gg.lineSet(line, indice[i + j + 1], indice[i]);
             !inv ? gg.RmatGenerator(Rmat, j+2) : gg.RInvmatGenerator(Rmat, j+2);
             e_ans = dd->multiply(dd->makeGateDD(Rmat, n, line), e_ans);
+            dd->garbageCollect();
             if(m_ord == REG_C_T)
                 gg.lineReset(line, indice[i], indice[i + j + 1]);
             else

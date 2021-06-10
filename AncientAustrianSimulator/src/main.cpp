@@ -8,7 +8,7 @@
 #include <boost/program_options.hpp>
 #include <sys/time.h>
 #include <vector>
-#include "mpreal.h"
+#include <mpreal.h>
 
 using namespace std;
 using mpfr::mpreal;

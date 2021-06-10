@@ -6,11 +6,25 @@
 
 #IncludeRegexTransform: 
 
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/Factorizer.cpp
+Factorizer.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/Factorizer.hpp
+shorutil.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp
+OldProbabilisticPeriodFinder.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/OldProbabilisticPeriodFinder.hpp
+ProbabilisticPeriodFinder.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/ProbabilisticPeriodFinder.hpp
+
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/Factorizer.hpp
 commonheaders.h
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
 stdio.h
 -
+
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.cpp
+DDcomplex.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.h
 
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.h
 iostream
@@ -23,6 +37,20 @@ cassert
 -
 algorithm
 -
+
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDexport.cpp
+DDexport.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDexport.h
+
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDexport.h
+iomanip
+-
+DDpackage.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
+
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.cpp
+DDpackage.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
 
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
 unordered_set
@@ -52,6 +80,18 @@ set
 DDcomplex.h
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.h
 
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/OldProbabilisticPeriodFinder.cpp
+OldProbabilisticPeriodFinder.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/OldProbabilisticPeriodFinder.hpp
+QFT-DDgenerator.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
+shorutil.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp
+QFT-Measurement.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
+QFT.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT.hpp
+
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/OldProbabilisticPeriodFinder.hpp
 stdio.h
 -
@@ -63,6 +103,18 @@ QFT-Measurement.hpp
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
 RegisterFactory.hpp
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.hpp
+
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/ProbabilisticPeriodFinder.cpp
+ProbabilisticPeriodFinder.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/ProbabilisticPeriodFinder.hpp
+QFT-DDgenerator.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
+shorutil.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp
+QFT-Measurement.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
+QFT-DDgenerator.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
 
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/ProbabilisticPeriodFinder.hpp
 stdio.h
@@ -76,11 +128,29 @@ QFT-Measurement.hpp
 RegisterFactory.hpp
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.hpp
 
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.cpp
+IIC-JKU/DDpackage.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.h
+IIC-JKU/DDcomplex.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.h
+util.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/util.h
+QFT-DDgenerator.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
+commonheaders.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
+
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
 commonheaders.h
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
 random
 -
+
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.cpp
+QFT-Measurement.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
+util.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/util.h
 
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
 IIC-JKU/DDpackage.h
@@ -96,6 +166,20 @@ unordered_set
 stdio.h
 -
 
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT.cpp
+util.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/util.h
+IIC-JKU/DDcomplex.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.h
+QFT-DDgenerator.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
+QFT.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT.hpp
+QFT-Measurement.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.hpp
+chrono
+-
+
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT.hpp
 commonheaders.h
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/commonheaders.h
@@ -104,6 +188,18 @@ IIC-JKU/DDpackage.h
 QFT-DDgenerator.hpp
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
 stdio.h
+-
+
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.cpp
+util.h
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/util.h
+RegisterFactory.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.hpp
+QFT-DDgenerator.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.hpp
+shorutil.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp
+functional
 -
 
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.hpp
@@ -191,6 +287,10 @@ Factorizer.hpp
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/Factorizer.hpp
 chrono
 -
+
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.cpp
+shorutil.hpp
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp
 
 /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.hpp
 commonheaders.h

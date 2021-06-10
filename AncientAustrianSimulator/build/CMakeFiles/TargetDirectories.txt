@@ -1,0 +1,3 @@
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/build/CMakeFiles/rebuild_cache.dir
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/build/CMakeFiles/edit_cache.dir
+/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/AncientAustrianSimulator/build/CMakeFiles/quantum_simulator.dir

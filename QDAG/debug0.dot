@@ -1,0 +1,144 @@
+digraph "DD" {
+graph [center=true, ordering=out];
+node [shape=circle, center=true];
+"T" [ shape = box, label="1" ];
+"R" [label="", shape=point];
+"0" [ label="q8" ,style=filled, fillcolor=lightgray ];
+"0h0"  [label="", shape=point];
+"0h1"  [label="", shape=point , fillcolor=red, color=red];
+"0h2"  [label="", shape=point , fillcolor=red, color=red];
+"0h3"  [label="", shape=point , fillcolor=red, color=red];
+"1" [ label="q7" ,style=filled, fillcolor=lightgray ];
+"1h0"  [label="", shape=point];
+"1h1"  [label="", shape=point , fillcolor=red, color=red];
+"1h2"  [label="", shape=point , fillcolor=red, color=red];
+"1h3"  [label="", shape=point , fillcolor=red, color=red];
+"2" [ label="q6" ,style=filled, fillcolor=lightgray ];
+"2h0"  [label="", shape=point];
+"2h1"  [label="", shape=point , fillcolor=red, color=red];
+"2h2"  [label="", shape=point , fillcolor=red, color=red];
+"2h3"  [label="", shape=point , fillcolor=red, color=red];
+"3" [ label="q5" ,style=filled, fillcolor=lightgray ];
+"3h0"  [label="", shape=point];
+"3h1"  [label="", shape=point , fillcolor=red, color=red];
+"3h2"  [label="", shape=point , fillcolor=red, color=red];
+"3h3"  [label="", shape=point , fillcolor=red, color=red];
+"4" [ label="q4" ,style=filled, fillcolor=lightgray ];
+"4h0"  [label="", shape=point];
+"4h1"  [label="", shape=point , fillcolor=red, color=red];
+"4h2"  [label="", shape=point , fillcolor=red, color=red];
+"4h3"  [label="", shape=point , fillcolor=red, color=red];
+"5" [ label="q3" ,style=filled, fillcolor=lightgray ];
+"5h0"  [label="", shape=point];
+"5h1"  [label="", shape=point , fillcolor=red, color=red];
+"5h2"  [label="", shape=point];
+"5h3"  [label="", shape=point , fillcolor=red, color=red];
+"6" [ label="q2" ,style=filled, fillcolor=lightgray ];
+"6h0"  [label="", shape=point , fillcolor=red, color=red];
+"6h1"  [label="", shape=point , fillcolor=red, color=red];
+"6h2"  [label="", shape=point];
+"6h3"  [label="", shape=point , fillcolor=red, color=red];
+"7" [ label="q2" ,style=filled, fillcolor=lightgray ];
+"7h0"  [label="", shape=point];
+"7h1"  [label="", shape=point , fillcolor=red, color=red];
+"7h2"  [label="", shape=point , fillcolor=red, color=red];
+"7h3"  [label="", shape=point , fillcolor=red, color=red];
+"8" [ label="q1" ,style=filled, fillcolor=lightgray ];
+"8h0"  [label="", shape=point];
+"8h1"  [label="", shape=point , fillcolor=red, color=red];
+"8h2"  [label="", shape=point , fillcolor=red, color=red];
+"8h3"  [label="", shape=point , fillcolor=red, color=red];
+"9" [ label="q1" ,style=filled, fillcolor=lightgray ];
+"9h0"  [label="", shape=point];
+"9h1"  [label="", shape=point , fillcolor=red, color=red];
+"9h2"  [label="", shape=point , fillcolor=red, color=red];
+"9h3"  [label="", shape=point , fillcolor=red, color=red];
+"10" [ label="q0" ,style=filled, fillcolor=lightgray ];
+"10h0"  [label="", shape=point ];
+"10h1"  [label="", shape=point , fillcolor=red, color=red];
+"10h2"  [label="", shape=point ];
+"10h3"  [label="", shape=point , fillcolor=red, color=red];
+"11" [ label="q0" ,style=filled, fillcolor=lightgray ];
+"11h0"  [label="", shape=point ];
+"11h1"  [label="", shape=point , fillcolor=red, color=red];
+"11h2"  [label="", shape=point ];
+"11h3"  [label="", shape=point , fillcolor=red, color=red];
+
+"R" -> "0"
+{rank=same; "0h0" "0h1" "0h2" "0h3"}
+"0" -> "0h0" [arrowhead=none,color=darkgreen];
+"0h0" -> "1";
+"0" -> "0h1" [arrowhead=none,color=blue];
+"0" -> "0h2" [arrowhead=none,color=red];
+"0" -> "0h3" [arrowhead=none,color=gold];
+{rank=same; "1h0" "1h1" "1h2" "1h3"}
+"1" -> "1h0" [arrowhead=none,color=darkgreen];
+"1h0" -> "2";
+"1" -> "1h1" [arrowhead=none,color=blue];
+"1" -> "1h2" [arrowhead=none,color=red];
+"1" -> "1h3" [arrowhead=none,color=gold];
+{rank=same; "2h0" "2h1" "2h2" "2h3"}
+"2" -> "2h0" [arrowhead=none,color=darkgreen];
+"2h0" -> "3";
+"2" -> "2h1" [arrowhead=none,color=blue];
+"2" -> "2h2" [arrowhead=none,color=red];
+"2" -> "2h3" [arrowhead=none,color=gold];
+{rank=same; "3h0" "3h1" "3h2" "3h3"}
+"3" -> "3h0" [arrowhead=none,color=darkgreen];
+"3h0" -> "4";
+"3" -> "3h1" [arrowhead=none,color=blue];
+"3" -> "3h2" [arrowhead=none,color=red];
+"3" -> "3h3" [arrowhead=none,color=gold];
+{rank=same; "4h0" "4h1" "4h2" "4h3"}
+"4" -> "4h0" [arrowhead=none,color=darkgreen];
+"4h0" -> "5";
+"4" -> "4h1" [arrowhead=none,color=blue];
+"4" -> "4h2" [arrowhead=none,color=red];
+"4" -> "4h3" [arrowhead=none,color=gold];
+{rank=same; "5h0" "5h1" "5h2" "5h3"}
+"5" -> "5h0" [arrowhead=none,color=darkgreen];
+"5h0" -> "6" [label=" (√½)" ];
+"5" -> "5h1" [arrowhead=none,color=blue];
+"5" -> "5h2" [arrowhead=none,color=red];
+"5h2" -> "7" [label=" (√½)" ];
+"5" -> "5h3" [arrowhead=none,color=gold];
+{rank=same; "6h0" "6h1" "6h2" "6h3"}
+"6" -> "6h0" [arrowhead=none,color=darkgreen];
+"6" -> "6h1" [arrowhead=none,color=blue];
+"6" -> "6h2" [arrowhead=none,color=red];
+"6h2" -> "8";
+"6" -> "6h3" [arrowhead=none,color=gold];
+{rank=same; "7h0" "7h1" "7h2" "7h3"}
+"7" -> "7h0" [arrowhead=none,color=darkgreen];
+"7h0" -> "9";
+"7" -> "7h1" [arrowhead=none,color=blue];
+"7" -> "7h2" [arrowhead=none,color=red];
+"7" -> "7h3" [arrowhead=none,color=gold];
+{rank=same; "8h0" "8h1" "8h2" "8h3"}
+"8" -> "8h0" [arrowhead=none,color=darkgreen];
+"8h0" -> "10";
+"8" -> "8h1" [arrowhead=none,color=blue];
+"8" -> "8h2" [arrowhead=none,color=red];
+"8" -> "8h3" [arrowhead=none,color=gold];
+{rank=same; "9h0" "9h1" "9h2" "9h3"}
+"9" -> "9h0" [arrowhead=none,color=darkgreen];
+"9h0" -> "11";
+"9" -> "9h1" [arrowhead=none,color=blue];
+"9" -> "9h2" [arrowhead=none,color=red];
+"9" -> "9h3" [arrowhead=none,color=gold];
+{rank=same; "10h0" "10h1" "10h2" "10h3"}
+"10" -> "10h0" [arrowhead=none,color=darkgreen];
+"10h0"-> "T" [label= "(√½)", ];
+"10" -> "10h1" [arrowhead=none,color=blue];
+"10" -> "10h2" [arrowhead=none,color=red];
+"10h2"-> "T" [label= "(√½)", ];
+"10" -> "10h3" [arrowhead=none,color=gold];
+{rank=same; "11h0" "11h1" "11h2" "11h3"}
+"11" -> "11h0" [arrowhead=none,color=darkgreen];
+"11h0"-> "T" [label= "(√½)", ];
+"11" -> "11h1" [arrowhead=none,color=blue];
+"11" -> "11h2" [arrowhead=none,color=red];
+"11h2"-> "T" [label= "(-√½)", ];
+"11" -> "11h3" [arrowhead=none,color=gold];
+
+}
