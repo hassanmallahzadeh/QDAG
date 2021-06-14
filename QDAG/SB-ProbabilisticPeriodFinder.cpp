@@ -42,7 +42,6 @@ void SB_ProbabilisticPeriodFinder::phi_Adder(const std::function<int(int)> &acnu
             if (acnum(j) == posControl)
             {
                 gg.CKRmatGenOrApply(line, currentHolder(i), i - j + 1, c, nt, &state);
-                dd->garbageCollect();
             }
         }
     }
@@ -67,7 +66,6 @@ void SB_ProbabilisticPeriodFinder::phi_Subtractor(const std::function<int(int)> 
             if (acnum(j) == posControl)
             {
                 gg.CKRmatGenOrApply(line, currentHolder(i), i - j + 1, c, nt, &state, true);
-                dd->garbageCollect();
             }
         }
     }
@@ -87,7 +85,6 @@ void SB_ProbabilisticPeriodFinder::phi_AdderModN(const std::function<int(int)> &
     phi_Subtractor(m_base2N, temp, line, state);
     m_qft.dd_QFTV5(nt, state, m_qftindices, true); //inverse qft
     gg.CNotGenOrApply(line, tindex(), currentHolder(n), nt, &state);
-    dd->garbageCollect();
     m_qft.dd_QFTV5(nt, state, m_qftindices, false); //qft
     //qft
     temp = {{tindex(), true}};
@@ -95,11 +92,8 @@ void SB_ProbabilisticPeriodFinder::phi_AdderModN(const std::function<int(int)> &
     phi_Subtractor(acnum, c, line, state);
     m_qft.dd_QFTV5(nt, state, m_qftindices, true); //inverse qft
     gg.NotGenOrApply(line, currentHolder(n), nt, &state);
-    dd->garbageCollect();
     gg.CNotGenOrApply(line, tindex(), currentHolder(n), nt, &state);
-    dd->garbageCollect();
     gg.NotGenOrApply(line, currentHolder(n), nt, &state);
-    dd->garbageCollect();
     m_qft.dd_QFTV5(nt, state, m_qftindices, false); //qft
     phi_Adder(acnum, c, line, state);
 }
@@ -116,11 +110,8 @@ void SB_ProbabilisticPeriodFinder::phi_SubtractorModN(const std::function<int(in
     phi_Subtractor(acnum, c, line, state);
     m_qft.dd_QFTV5(nt, state, m_qftindices, true); //qftreverse
     gg.NotGenOrApply(line, currentHolder(n), nt, &state);
-    dd->garbageCollect();
     gg.CNotGenOrApply(line, tindex(), currentHolder(n), nt, &state);
-    dd->garbageCollect();
     gg.NotGenOrApply(line, currentHolder(n), nt, &state);
-    dd->garbageCollect();
     m_qft.dd_QFTV5(nt, state, m_qftindices, false); //inverse qft
     map<int, bool> temp;                            //temp control
     temp = {{tindex(), true}};
@@ -128,7 +119,6 @@ void SB_ProbabilisticPeriodFinder::phi_SubtractorModN(const std::function<int(in
     phi_Subtractor(m_base2N, temp, line, state);
     m_qft.dd_QFTV5(nt, state, m_qftindices, true);
     gg.CNotGenOrApply(line, tindex(), currentHolder(n), nt, &state);
-    dd->garbageCollect();
     m_qft.dd_QFTV5(nt, state, m_qftindices, false); //inverse qft
     temp.clear();
     phi_Adder(m_base2N, temp, line, state);
@@ -171,17 +161,14 @@ void SB_ProbabilisticPeriodFinder::phi_CMultiplier(const lli &a0cnum, const std:
     }
     m_qft.dd_QFTV5(nt, state, m_qftindices, true); //inverse qft
     gg.NotGenOrApply(line, c.begin()->first, nt, &state);
-    dd->garbageCollect();
     for (int i = 0; i < n; ++i)
     {
         m_bbased = !m_bbased; //when b is current data holder, x gives control and vice versa.
         int currentcontrol = currentHolder(i);
         m_bbased = !m_bbased; //when b is current data holder, x gives control and vice versa.
         gg.ToffoliGenOrApply(line, currentHolder(i), c.begin()->first, currentcontrol, nt, &state);
-        dd->garbageCollect();
     }
     gg.NotGenOrApply(line, c.begin()->first, nt, &state);
-    dd->garbageCollect();
 }
 /// Divides quantum number x by classical number 'a' and subtracts the result from quantum number in 'b' register, if 'c'  qubit is 1, else leave b qubits unchanged.
 /// Figure 6 of SB. x is unchanged in any case
@@ -192,17 +179,14 @@ void SB_ProbabilisticPeriodFinder::phi_CMultiplier(const lli &a0cnum, const std:
 void SB_ProbabilisticPeriodFinder::phi_CDivider(const lli &acnum, const std::function<int()> &tindex, map<int, bool> c, short *line, dd::Edge &state)
 {
     gg.NotGenOrApply(line, c.begin()->first, nt, &state);
-    dd->garbageCollect();
     for (int i = n - 1; i >= 0; --i)
     {
         m_bbased = !m_bbased; //when b is current data holder, x gives control and vice versa.
         int currentcontrol = currentHolder(i);
         m_bbased = !m_bbased; //when b is current data holder, x gives control and vice versa.
         gg.ToffoliGenOrApply(line, currentHolder(i), c.begin()->first, currentcontrol, nt, &state);
-        dd->garbageCollect();
     }
     gg.NotGenOrApply(line, c.begin()->first, nt, &state);
-    dd->garbageCollect();
     int shiftedn = n + 1;
 
     m_qftindices.clear();
@@ -270,7 +254,6 @@ std::pair<lli, lli> SB_ProbabilisticPeriodFinder::AttemptReadingMultipleOfInvers
     { return 0; }; //temporary (ancilla) qubit in fig 5 of SB.
     m_bbased = false;
     gg.NotGenOrApply(line, currentHolder(0), nt, &state); //put 1 in x register to start(fig8 of SB)
-    dd->garbageCollect();
     m_bbased = true;
     lli cnum = a; //classical number to be multiplied by quantum number.
     std::random_device rd;
@@ -288,7 +271,6 @@ std::pair<lli, lli> SB_ProbabilisticPeriodFinder::AttemptReadingMultipleOfInvers
         int ii = m - i - 1;
         //fig 1 of HRS.
         gg.HadGenOrApply(line, cindex(), nt, &state);
-        dd->garbageCollect();
         phi_CUa(factors[ii], tindex, c, line, state);
         dd::Matrix2x2 Rmat; // put rotation gates in place
         gg.lineSet(line, cindex(), -1);
@@ -298,19 +280,15 @@ std::pair<lli, lli> SB_ProbabilisticPeriodFinder::AttemptReadingMultipleOfInvers
             {
                 gg.RmatGenerator(Rmat, i - j + 1);
                 state = dd->multiply(dd->makeGateDD(Rmat, nt, line), state);
-                dd->garbageCollect();
             }
         }
         gg.lineReset(line, cindex(), -1);
         gg.HadGenOrApply(line, cindex(), nt, &state);
-        dd->garbageCollect();
         int mres = mm.Measure(state, nt, cindex(), eng); //warning: watch for random number generator something fishy might be here. I once saw something...
-         dd->garbageCollect();
         vmres.push_back(mres);
         if (mres == posControl)
         {
             gg.NotGenOrApply(line, cindex(), nt, &state);
-            dd->garbageCollect();
         }
     }
     lli res = shor::base2to10(vmres, false);
@@ -327,10 +305,9 @@ int SB_ProbabilisticPeriodFinder::currentHolder(int i)
 {
     if (i < n)
     {
-        if (
-            m_bbased)
+        if (m_bbased)
         {
-            return nt - i; //b qubits
+            return nt - i - 1; //b qubits
         }
         else
         {

@@ -80,12 +80,12 @@ void PeriodFinderTest(){
     start = system_clock::now();
  //  do{
         auto* dd = new dd::Package;
-        ProbabilisticPeriodFinder pf = ProbabilisticPeriodFinder(N,a,dd);
+        SB_ProbabilisticPeriodFinder pf = SB_ProbabilisticPeriodFinder(N,a,dd);
         p = pf.AttemptReadingMultipleOfInverseOfPeriod();
         if(p.second > 0 && p.first > 0)//0 is not measured.
         {
     //    ++counter;
-//        printf("numerator: %lld denominator: %lld run: %d\n",p.first, p.second, counter);
+        printf("numerator: %lld denominator: %lld run: %d\n",p.first, p.second, counter);
     }
     delete dd;
   //  } while(!(p.second>0) || shor::modexp(a,p.second,N) != 1/*not good for lli variable to be changed*/);
