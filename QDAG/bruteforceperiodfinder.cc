@@ -11,5 +11,5 @@ int bfpf(int N,int a){
     return -1;
 }
 int main(){
-	printf("period is:%d", bfpf(1007,529));
+	printf("period is:%d", bfpf(55,6));
 }

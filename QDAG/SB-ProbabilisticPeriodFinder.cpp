@@ -264,10 +264,10 @@ std::pair<lli, lli> SB_ProbabilisticPeriodFinder::AttemptReadingMultipleOfInvers
     gg.lineClear(line, nt);
     Measurement mm = Measurement(dd);
     dd::Edge state = StateGenerator(dd).dd_BaseState(nt, 0); //start by setting all qubits to zero.
-    std::function<int(void)> cindex = []()
-    { return 0; }; //top control qubit on which measurements are performed to read and report the result. Fig 8 of SB.
+    std::function<int(void)> cindex = [this]()
+    { return nt - 1; }; //top control qubit on which measurements are performed to read and report the result. Fig 8 of SB.
     std::function<int(void)> tindex = []()
-    { return 1; }; //temporary (ancilla) qubit in fig 5 of SB.
+    { return 0; }; //temporary (ancilla) qubit in fig 5 of SB.
     m_bbased = false;
     gg.NotGenOrApply(line, currentHolder(0), nt, &state); //put 1 in x register to start(fig8 of SB)
     dd->garbageCollect();
@@ -305,6 +305,7 @@ std::pair<lli, lli> SB_ProbabilisticPeriodFinder::AttemptReadingMultipleOfInvers
         gg.HadGenOrApply(line, cindex(), nt, &state);
         dd->garbageCollect();
         int mres = mm.Measure(state, nt, cindex(), eng); //warning: watch for random number generator something fishy might be here. I once saw something...
+         dd->garbageCollect();
         vmres.push_back(mres);
         if (mres == posControl)
         {
@@ -329,11 +330,11 @@ int SB_ProbabilisticPeriodFinder::currentHolder(int i)
         if (
             m_bbased)
         {
-            return i + 2; //b qubits
+            return nt - i; //b qubits
         }
         else
         {
-            return n + i + 3; //x qubits
+            return nt - n + i + 1; //x qubits
         }
     }
     else if (i == n)
@@ -346,9 +347,3 @@ int SB_ProbabilisticPeriodFinder::currentHolder(int i)
         return -1;
     }
 }
-//int main(){
-//    auto* dd = new dd::Package;
-//    SB_PPF pf = SB_PPF(3,2,dd);
-//    pf.AttemptReadingMultipleOfInverseOfPeriod();
-//    delete dd;
-//}

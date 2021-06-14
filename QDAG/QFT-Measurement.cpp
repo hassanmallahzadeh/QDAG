@@ -147,7 +147,7 @@ int Measurement::QubitMeasurementOutcome(array<fp, dd::RADIX> a, engine& unrg) {
     for(int i = 1; i < dd::RADIX; ++i){
         aincsum[i] = aincsum[i-1] + a[i];
     }
-    assert(aincsum[dd::RADIX-1] > 0.99 && aincsum[dd::RADIX-1] < 1.01);//if state not normalized to 1.
+    assert(aincsum[dd::RADIX-1] > 0.9 && aincsum[dd::RADIX-1] < 1.1);//if state not normalized to 1.
     
     fp randnum = dis(unrg);
     for (int i = 0; i < dd::RADIX; ++i){

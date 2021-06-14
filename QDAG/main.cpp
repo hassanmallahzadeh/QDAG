@@ -72,26 +72,29 @@ void FactorizerTest(){
     printf("Average runtime for factoring of %lli, is %f for %d trials.\n", N, sum/trials, trials);
     }
 void PeriodFinderTest(){
-    lli N = 21;
-    lli a = 11;
+    lli N = 55;
+    lli a = 6;
     std::pair<lli,lli> p = {-1,-1};
     int counter = 0;
     time_point<system_clock> start, end;
     start = system_clock::now();
-    do{
+ //  do{
         auto* dd = new dd::Package;
         ProbabilisticPeriodFinder pf = ProbabilisticPeriodFinder(N,a,dd);
         p = pf.AttemptReadingMultipleOfInverseOfPeriod();
         if(p.second > 0 && p.first > 0)//0 is not measured.
         {
-        ++counter;
+    //    ++counter;
 //        printf("numerator: %lld denominator: %lld run: %d\n",p.first, p.second, counter);
     }
     delete dd;
-    } while(!(p.second>0) || shor::modexp(a,p.second,N) != 1/*not good for lli variable to be changed*/);
+  //  } while(!(p.second>0) || shor::modexp(a,p.second,N) != 1/*not good for lli variable to be changed*/);
     end = system_clock::now();
     duration<float> elapsed_seconds = end - start;
-    printf("period of %lld mod %lld found: %lld in %d runs and %f seconds\n",a,N,p.second, counter, elapsed_seconds.count());
+    if((p.second>0) && shor::modexp(a,p.second,N) == 1/*not good for lli variable to be changed*/)
+    printf("period of %lld mod %lld found: %lld and %f seconds\n",a,N,p.second, elapsed_seconds.count());
+    else
+    printf("period finding failed in %f seconds\n",a,N,p.second, counter, elapsed_seconds.count());
 }
 void PeriodFinderAverageRuntime(){
     lli N = 21;

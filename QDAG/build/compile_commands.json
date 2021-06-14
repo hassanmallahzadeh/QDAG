@@ -1,0 +1,67 @@
+[
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/build",
+  "command": "/usr/bin/clang++   -std=c++17 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/QDAG.dir/QFT.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/build",
+  "command": "/usr/bin/clang++   -std=c++17 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/QDAG.dir/IIC-JKU/DDcomplex.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDcomplex.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/build",
+  "command": "/usr/bin/clang++   -std=c++17 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/QDAG.dir/IIC-JKU/DDexport.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDexport.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDexport.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/build",
+  "command": "/usr/bin/clang++   -std=c++17 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/QDAG.dir/IIC-JKU/DDpackage.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/IIC-JKU/DDpackage.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/build",
+  "command": "/usr/bin/clang++   -std=c++17 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/QDAG.dir/QFT-DDgenerator.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-DDgenerator.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/build",
+  "command": "/usr/bin/clang++   -std=c++17 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/QDAG.dir/QFT-Measurement.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/QFT-Measurement.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/build",
+  "command": "/usr/bin/clang++   -std=c++17 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/QDAG.dir/RegisterFactory.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/RegisterFactory.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/build",
+  "command": "/usr/bin/clang++   -std=c++17 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/QDAG.dir/shorutil.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/shorutil.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/build",
+  "command": "/usr/bin/clang++   -std=c++17 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/QDAG.dir/ProbabilisticPeriodFinder.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/ProbabilisticPeriodFinder.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/ProbabilisticPeriodFinder.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/build",
+  "command": "/usr/bin/clang++   -std=c++17 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/QDAG.dir/OldProbabilisticPeriodFinder.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/OldProbabilisticPeriodFinder.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/OldProbabilisticPeriodFinder.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/build",
+  "command": "/usr/bin/clang++   -std=c++17 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/QDAG.dir/SB-ProbabilisticPeriodFinder.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/SB-ProbabilisticPeriodFinder.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/SB-ProbabilisticPeriodFinder.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/build",
+  "command": "/usr/bin/clang++   -std=c++17 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/QDAG.dir/Factorizer.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/Factorizer.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/Factorizer.cpp"
+},
+{
+  "directory": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/build",
+  "command": "/usr/bin/clang++   -std=c++17 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o CMakeFiles/QDAG.dir/main.cpp.o -c /Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/main.cpp",
+  "file": "/Users/hassanmallahzadeh/UBCLife/CPSC448/QDAG/QDAG/main.cpp"
+}
+]
